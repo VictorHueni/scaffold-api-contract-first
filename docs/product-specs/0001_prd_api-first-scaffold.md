@@ -45,7 +45,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 **Acceptance Criteria:**
 
 - [ ] Repo has a clear README explaining the folder structure and purpose of each directory
-- [ ] Running `ls` at the root reveals an intuitive layout: `specs/`, `rules/`, `tests/`, `docs/`, `ci/`
+- [ ] Running `ls` at the root reveals an intuitive layout: `specs/` (with `components/` subdirectories), `rules/`, `tests/`, `docs/`, `ci/`
 - [ ] README lists all prerequisites and a single setup command to install dependencies
 - [ ] README mentions that the spec can be imported into any API client (Bruno, Postman, Insomnia, Hoppscotch, Scalar, Yaak) for manual exploration — the scaffold is unopinionated about personal tooling
 
@@ -59,7 +59,13 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 **Acceptance Criteria:**
 
-- [ ] `specs/order-api.yaml` exists with complete endpoints: GET/POST/PUT/DELETE for orders, GET for order items
+- [ ] `specs/order-api.yaml` exists as the main spec file with `$ref` pointers to component files under `specs/components/`
+- [ ] Schemas (`Order`, `Customer`, `OrderItem`, `ErrorResponse`) live in `specs/components/schemas/*.yaml`
+- [ ] Examples live in `specs/components/examples/{responses,requests,errors}/*.yaml`
+- [ ] Reusable parameters live in `specs/components/parameters/*.yaml`
+- [ ] `npx @scalar/cli bundle specs/order-api.yaml -o specs/order-api.bundled.yaml` produces a valid single-file spec
+- [ ] Main spec is clean and readable — not bloated with inline examples or schemas
+- [ ] Complete endpoints in bundled output: GET/POST/PUT/DELETE for orders, GET for order items
 - [ ] Spec includes schemas with `type`, `format`, `example`, `x-faker`, `description`, and constraints (`minimum`, `maximum`, `enum`, `pattern`)
 - [ ] Spec includes `servers` block with mock, dev, staging, and production URLs
 - [ ] Spec includes security schemes (API key and OAuth2)

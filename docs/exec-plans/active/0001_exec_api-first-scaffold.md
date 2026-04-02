@@ -61,41 +61,75 @@ Exit criteria:
 
 Scope:
 
-1. Create `specs/order-api.yaml` with OpenAPI 3.1 structure
-2. Define `info`, `servers` (mock, dev, staging, production), and `security` blocks
-3. Define security schemes: API key (`X-API-Key` header) and OAuth2 (client credentials)
-4. Define schemas: `Order`, `Customer`, `OrderItem`, `ErrorResponse` with `type`, `format`, `example`, `x-faker`, `description`, and constraints
-5. Define endpoints: `GET /orders` (paginated), `GET /orders/{orderId}`, `POST /orders`, `PUT /orders/{orderId}`, `DELETE /orders/{orderId}`, `GET /orders/{orderId}/items`
-6. Each endpoint has `operationId`, `tags`, parameters, request body (where applicable), success + error responses
-7. Add OpenAPI `links` on `POST /orders` 201 response for stateful testing
-8. Add multiple named `examples` on responses to showcase Scalar's example picker:
-   - `GET /orders/{orderId}` 200: "Pending order", "Shipped order with tracking", "Delivered order with notes"
-   - `POST /orders` 201: "Single item order", "Multi-item order with notes"
-   - `GET /orders` 200: "First page of results", "Filtered by status"
-9. Add multiple named `examples` on request bodies for Scalar's "Try it out" pre-fill:
-   - `POST /orders` body: "Basic order", "Order with multiple items and notes"
-   - `PUT /orders/{orderId}` body: "Update status to shipped", "Add tracking number"
-10. Add error response examples with realistic bodies:
-    - 400: validation error (missing required field, with `message` and `code`)
-    - 401: unauthorized (invalid or missing API key)
-    - 404: order not found
-    - 429: rate limit exceeded (with `Retry-After` header example)
+1. Create multi-file spec structure under `specs/`:
+
+   ```
+   specs/
+     order-api.yaml                       # Main spec — paths, info, servers, security, $ref pointers
+     components/
+       schemas/
+         Order.yaml
+         Customer.yaml
+         OrderItem.yaml
+         ErrorResponse.yaml
+       examples/
+         responses/
+           pending-order.yaml             # GET /orders/{id} — order in pending state
+           shipped-order.yaml             # GET /orders/{id} — shipped with tracking
+           delivered-order.yaml           # GET /orders/{id} — delivered with notes
+           single-item-order.yaml         # POST /orders 201 — one item
+           multi-item-order.yaml          # POST /orders 201 — multiple items
+           orders-first-page.yaml         # GET /orders — first page
+           orders-filtered.yaml           # GET /orders — filtered by status
+         requests/
+           create-basic-order.yaml        # POST /orders body — minimal
+           create-multi-item-order.yaml   # POST /orders body — multiple items + notes
+           update-status-shipped.yaml     # PUT /orders/{id} body — status change
+           update-add-tracking.yaml       # PUT /orders/{id} body — add tracking number
+         errors/
+           validation-error.yaml          # 400 — missing required field
+           unauthorized.yaml              # 401 — invalid API key
+           not-found.yaml                 # 404 — order not found
+           rate-limited.yaml              # 429 — with Retry-After header
+       parameters/
+         pagination.yaml                  # Reusable page, limit, status filter params
+   ```
+
+2. Main `specs/order-api.yaml` references components via `$ref`:
+   - Schemas: `$ref: ./components/schemas/Order.yaml`
+   - Examples: `$ref: ./components/examples/responses/pending-order.yaml`
+   - Parameters: `$ref: ./components/parameters/pagination.yaml`
+3. Define `info`, `servers` (mock, dev, staging, production), and `security` blocks in main spec
+4. Define security schemes: API key (`X-API-Key` header) and OAuth2 (client credentials)
+5. Each schema has `type`, `format`, `example`, `x-faker`, `description`, and constraints
+6. Define endpoints: `GET /orders` (paginated), `GET /orders/{orderId}`, `POST /orders`, `PUT /orders/{orderId}`, `DELETE /orders/{orderId}`, `GET /orders/{orderId}/items`
+7. Each endpoint has `operationId`, `tags`, parameters, request body (where applicable), success + error responses
+8. Add OpenAPI `links` on `POST /orders` 201 response for stateful testing
+9. Bundle into a single file for downstream tools: `npx @scalar/cli bundle specs/order-api.yaml -o specs/order-api.bundled.yaml`
 
 Primary files:
 
-1. `specs/order-api.yaml`
+1. `specs/order-api.yaml` (main spec with `$ref` pointers)
+2. `specs/components/schemas/*.yaml` (4 schema files)
+3. `specs/components/examples/**/*.yaml` (15 example files)
+4. `specs/components/parameters/pagination.yaml`
+5. `specs/order-api.bundled.yaml` (generated — single file for tools)
 
 Test gate:
 
-1. `npx @scalar/cli validate specs/order-api.yaml` — exits 0, no errors
-2. `grep -c "examples:" specs/order-api.yaml` — multiple `examples` blocks present (at least 5)
+1. `npx @scalar/cli validate specs/order-api.yaml` — exits 0 (validates multi-file spec)
+2. `npx @scalar/cli bundle specs/order-api.yaml -o specs/order-api.bundled.yaml` — exits 0, bundled file exists
+3. `grep -c "\\$ref:" specs/order-api.yaml` — at least 15 `$ref` pointers in main spec
+4. `grep -c "examples:" specs/order-api.bundled.yaml` — at least 5 `examples` blocks in bundled output
 
 Exit criteria:
 
-1. The spec is valid OpenAPI 3.1 with all 6 endpoints, 4 schemas, security schemes, and x-faker annotations
-2. Every schema property has `type`, `format` (where applicable), `example`, and `x-faker`
-3. Key endpoints have multiple named examples for both responses and request bodies
-4. Error responses (400, 401, 404, 429) have realistic example bodies
+1. Main spec is clean and readable — schemas, examples, and parameters live in separate files
+2. Bundled spec is valid OpenAPI 3.1 with all 6 endpoints, 4 schemas, security schemes, and x-faker annotations
+3. Every schema property has `type`, `format` (where applicable), `example`, and `x-faker`
+4. Key endpoints have multiple named examples for both responses and request bodies
+5. Error responses (400, 401, 404, 429) have realistic example bodies
+6. All downstream tools (Prism, Schemathesis, openapi-typescript, openapi-generator, Scalar) consume the bundled file
 
 ---
 
@@ -187,8 +221,8 @@ Primary files:
 
 Test gate:
 
-1. `prism mock specs/order-api.yaml --port 4010 &` then `curl -sf http://localhost:4010/orders/test-123 | jq .id` — returns the static example ID
-2. `prism mock -d specs/order-api.yaml --port 4011 &` then run `curl` twice and diff outputs — responses differ
+1. `prism mock specs/order-api.bundled.yaml --port 4010 &` then `curl -sf http://localhost:4010/orders/test-123 | jq .id` — returns the static example ID
+2. `prism mock -d specs/order-api.bundled.yaml --port 4011 &` then run `curl` twice and diff outputs — responses differ
 3. `curl -s -o /dev/null -w '%{http_code}' -X POST http://localhost:4010/orders -H 'Content-Type: application/json' -d '{"customer":{"name":"Test"}}'` — returns 400
 
 Alternatives:
@@ -212,7 +246,7 @@ Exit criteria:
 
 Scope:
 
-1. Run `npx openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts` to generate TypeScript types from the spec
+1. Run `npx openapi-typescript specs/order-api.bundled.yaml -o generated/api-types.d.ts` to generate TypeScript types from the bundled spec
 2. Install `openapi-fetch` and create a minimal usage example (`examples/client-usage.ts`) showing a typed GET request with autocompletion
 3. Verify generated types include interfaces for Order, Customer, OrderItem, ErrorResponse
 4. Verify all field names, types, and optionality match the spec exactly
@@ -224,7 +258,7 @@ Primary files:
 
 Test gate:
 
-1. `npx openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts` — exits 0
+1. `npx openapi-typescript specs/order-api.bundled.yaml -o generated/api-types.d.ts` — exits 0
 2. `grep -c "Order\|Customer\|OrderItem\|ErrorResponse" generated/api-types.d.ts` — all 4 schemas present
 3. `npx tsc --noEmit examples/client-usage.ts` — usage example compiles without errors
 
@@ -261,12 +295,12 @@ Primary files:
 
 Test gate:
 
-1. `openapi-generator-cli generate -i specs/order-api.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true` — exits 0
+1. `openapi-generator-cli generate -i specs/order-api.bundled.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true` — exits 0
 2. `cd generated/server-spring && mvn spring-boot:run &` then `curl -sf http://localhost:8080/orders/test-123 | jq .id` — returns a valid order ID
 
 Alternatives:
 
-- **Quarkus (JAX-RS)** — `openapi-generator-cli generate -i specs/order-api.yaml -g jaxrs-spec -o generated/server-quarkus`. Same tool, generates JAX-RS interfaces for Quarkus. Same spec, same workflow.
+- **Quarkus (JAX-RS)** — `openapi-generator-cli generate -i specs/order-api.bundled.yaml -g jaxrs-spec -o generated/server-quarkus`. Same tool, generates JAX-RS interfaces for Quarkus. Same spec, same workflow.
 - **Node.js Express** — `openapi-generator-cli generate -g nodejs-express-server`. Full scaffold with validation middleware. Use for Node-based teams.
 - **Connexion (Python/Flask)** — routes and validates directly from the spec. Good for Python shops.
 - **NSwag / Kiota (.NET)** — strong typing and middleware generation for .NET teams.
@@ -299,7 +333,7 @@ Primary files:
 
 Test gate:
 
-1. `schemathesis run specs/order-api.yaml --base-url http://localhost:4010 --checks all --stateful=links --hypothesis-max-examples=100` — all pass
+1. `schemathesis run specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --stateful=links --hypothesis-max-examples=100` — all pass
 2. Schemathesis output shows 100+ test cases
 3. Against the buggy stub server — Schemathesis reports schema violation for `total`
 
@@ -392,7 +426,7 @@ Exit criteria:
 
 Scope:
 
-1. Bundle static Scalar docs: `npx @scalar/cli bundle specs/order-api.yaml -o docs/scalar-reference.html`
+1. Generate Scalar docs from the bundled spec: `npx @scalar/cli bundle specs/order-api.bundled.yaml -o docs/scalar-reference.html`
 2. Create a CDN-based HTML wrapper (`docs/index.html`) using the `kepler` theme
 3. Verify `npx @scalar/cli serve` provides live preview with `--watch`
 4. Document the docs generation in the README
@@ -404,9 +438,9 @@ Primary files:
 
 Test gate:
 
-1. `npx @scalar/cli bundle specs/order-api.yaml -o docs/scalar-reference.html` — exits 0, file exists
+1. `npx @scalar/cli bundle specs/order-api.bundled.yaml -o docs/scalar-reference.html` — exits 0, file exists
 2. `cat docs/index.html | grep "scalar"` — HTML references Scalar CDN
-3. `npx @scalar/cli serve specs/order-api.yaml --port 8081 &` then `curl -sf http://localhost:8081 | grep -i "order"` — docs serve successfully
+3. `npx @scalar/cli serve specs/order-api.bundled.yaml --port 8081 &` then `curl -sf http://localhost:8081 | grep -i "order"` — docs serve successfully
 
 Alternatives:
 
@@ -590,7 +624,7 @@ Exit criteria:
 1. One increment per commit.
 2. Each increment must be independently verifiable via its test gate.
 3. No IBM environment dependencies in any increment — IBM is slides only.
-4. The OpenAPI spec (`specs/order-api.yaml`) is the single source of truth — all downstream artifacts derive from it.
+4. The OpenAPI spec source lives in `specs/order-api.yaml` + `specs/components/` (multi-file, committed). The bundled file `specs/order-api.bundled.yaml` is generated and gitignored — all downstream tools consume the bundled file.
 5. API exploration tooling is bring-your-own — the scaffold is opinionated about automation (Spectral, Prism, Schemathesis, Hurl, Scalar, CI) and unopinionated about personal clients (Bruno, Postman, Insomnia, etc.).
 6. All tools used are open source and free tier. No paid licenses required.
 7. Video clips are recorded as separate files and edited together — never as one continuous take.
