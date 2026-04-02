@@ -29,8 +29,8 @@ Principles:
 
 Scope:
 
-1. Create the full directory scaffold: `specs/`, `rules/`, `mocks/`, `tests/`, `generated/`, `docs/`, `ci/`
-2. Create a README.md with folder purpose descriptions, prerequisites list (Node.js 18+, Python 3.8+, Hurl, Bruno), and a single setup script
+1. Create the full directory scaffold: `specs/`, `rules/`, `mocks/`, `tests/`, `docs/`, `ci/`
+2. Create a README.md with folder purpose descriptions, prerequisites list (Node.js 18+, Python 3.8+, Hurl), and a single setup script. Include a note that the spec can be imported into any API client (Bruno, Postman, Insomnia, Hoppscotch, Scalar, Yaak) for manual exploration.
 3. Create a `setup.sh` that installs all global tools (`prism-cli`, `openapi-generator-cli`, `spectral-cli`, `@scalar/cli`, `schemathesis`, `oasdiff`)
 4. Add `.gitignore` entries for `generated/`, `node_modules/`, `*.Zone.Identifier`
 
@@ -42,7 +42,7 @@ Primary files:
 
 Test gate:
 
-1. `ls specs rules mocks tests generated docs ci` — all directories exist
+1. `ls specs rules mocks tests docs ci` — all directories exist
 2. `cat README.md | head -5` — file exists and has content
 3. `bash -n setup.sh` — script is syntactically valid
 
@@ -292,8 +292,8 @@ Test gate:
 
 Alternatives:
 
-- **Newman** — CLI runner for Postman collections. Runs automated collection tests in CI with JUnit output. If the team already uses Postman, Newman provides a migration path. However, Postman collections are JSON blobs not designed for Git, which is why Bruno (plain text `.bru` files) is preferred.
-- **Hoppscotch** — fully open-source web-based API client (MIT). Lighter than Bruno, no desktop install required.
+- **Newman** — CLI runner for Postman collections. Runs automated collection tests in CI with JUnit output. Good if the team already uses Postman, but Postman collections are JSON blobs not designed for Git.
+- For manual API exploration, the scaffold recommends using Scalar's built-in "Try it out" (zero install) or any desktop client of choice (Bruno, Postman, Insomnia, Hoppscotch, Yaak).
 
 Exit criteria:
 
@@ -302,42 +302,11 @@ Exit criteria:
 
 ---
 
-### Increment 09: Bruno collection import and environment files
+### Increment 09: Breaking change detection
 
 **Status:** pending
 
 > PRD ref: US-009
-
-Scope:
-
-1. Import `specs/order-api.yaml` into Bruno (manual step via Bruno desktop app)
-2. Save the generated `.bru` collection files to `generated/bruno-collection/`
-3. Create environment files: `Mock.bru` (localhost:4010) and `Dev.bru` (dev URL)
-4. Document the import process in the README
-
-Primary files:
-
-1. `generated/bruno-collection/` (generated via Bruno import)
-2. `generated/bruno-collection/environments/Mock.bru`
-3. `generated/bruno-collection/environments/Dev.bru`
-
-Test gate:
-
-1. `ls generated/bruno-collection/` — contains `.bru` files organized by endpoint
-2. `cat generated/bruno-collection/environments/Mock.bru` — contains `baseUrl: http://localhost:4010`
-
-Exit criteria:
-
-1. Bruno collection contains all endpoints from the spec
-2. Environment files allow switching between mock and dev servers
-
----
-
-### Increment 10: Breaking change detection
-
-**Status:** pending
-
-> PRD ref: US-010
 
 Scope:
 
@@ -367,11 +336,11 @@ Exit criteria:
 
 ---
 
-### Increment 11: Scalar API documentation
+### Increment 10: Scalar API documentation
 
 **Status:** pending
 
-> PRD ref: US-011
+> PRD ref: US-010
 
 Scope:
 
@@ -404,11 +373,11 @@ Exit criteria:
 
 ---
 
-### Increment 12: CI pipeline (GitHub Actions)
+### Increment 11: CI pipeline (GitHub Actions)
 
 **Status:** pending
 
-> PRD ref: US-012
+> PRD ref: US-011
 
 Scope:
 
@@ -441,15 +410,15 @@ Exit criteria:
 
 ---
 
-### Increment 13: Pre-recording checklist and dry run
+### Increment 12: Pre-recording checklist and dry run
 
 **Status:** pending
 
-> PRD ref: US-013 (preparation)
+> PRD ref: US-012 (preparation)
 
 Scope:
 
-1. Execute the full pre-recording checklist: validate spec, lint good/bad specs, start Prism (static + dynamic), generate TS client, generate server stubs, run Schemathesis, run Hurl, run oasdiff, bundle Scalar docs
+1. Execute the full pre-recording checklist: validate spec, lint good/bad specs, start Prism (static + dynamic), generate TS client, generate server stubs, run Schemathesis, run Hurl, run oasdiff, bundle Scalar docs, verify "Try it out" works
 2. Fix any issues found during the dry run
 3. Pre-populate terminal history with all demo commands
 4. Set up terminal (dark theme, 16pt+ font) and browser (incognito, bookmarks)
@@ -470,11 +439,11 @@ Exit criteria:
 
 ---
 
-### Increment 14: Record video clips (core workflow)
+### Increment 13: Record video clips (core workflow)
 
 **Status:** pending
 
-> PRD ref: US-013
+> PRD ref: US-012
 
 Scope:
 
@@ -486,8 +455,8 @@ Scope:
 6. Record Clip 6: Backend Stubs (3 min, generate → fill in → test)
 7. Record Clip 7: Contract Testing (5 min, Schemathesis pass → bug → catch → fix)
 8. Record Clip 8: Breaking Change Detection (3 min, oasdiff)
-9. Record Clip 9: Documentation (2 min, Scalar UI + "Try it out")
-10. Record Clip 10: Bruno & Hurl (2 min, collection + functional tests)
+9. Record Clip 9: Documentation + API Exploration (3 min, Scalar UI + "Try it out" + mention desktop clients)
+10. Record Clip 10: Hurl Functional Tests (2 min, hurl --test)
 11. Record Clip 11: CI Pipeline (2 min, pipeline.yaml walkthrough)
 
 Primary files:
@@ -502,16 +471,16 @@ Test gate:
 
 Exit criteria:
 
-1. 11 clips covering the full open-source workflow are recorded
+1. 11 clips covering the full open-source workflow are recorded (Clips 9 and 10 now cover Scalar exploration and Hurl tests separately)
 2. No IBM terminal demos — that is handled by slides
 
 ---
 
-### Increment 15: Record IBM slides and closing
+### Increment 14: Record IBM slides and closing
 
 **Status:** pending
 
-> PRD ref: US-014, US-013
+> PRD ref: US-013, US-012
 
 Scope:
 
@@ -536,11 +505,11 @@ Exit criteria:
 
 ---
 
-### Increment 16: Video editing and final delivery
+### Increment 15: Video editing and final delivery
 
 **Status:** pending
 
-> PRD ref: US-013
+> PRD ref: US-012
 
 Scope:
 
@@ -573,8 +542,8 @@ Exit criteria:
 1. One increment per commit.
 2. Each increment must be independently verifiable via its test gate.
 3. No IBM environment dependencies in any increment — IBM is slides only.
-4. Generated code (`generated/`) is not committed to the repo; it is produced on-the-fly via commands documented in the README.
-5. The OpenAPI spec (`specs/order-api.yaml`) is the single source of truth — all downstream artifacts derive from it.
+4. The OpenAPI spec (`specs/order-api.yaml`) is the single source of truth — all downstream artifacts derive from it.
+5. API exploration tooling is bring-your-own — the scaffold is opinionated about automation (Spectral, Prism, Schemathesis, Hurl, Scalar, CI) and unopinionated about personal clients (Bruno, Postman, Insomnia, etc.).
 6. All tools used are open source and free tier. No paid licenses required.
 7. Video clips are recorded as separate files and edited together — never as one continuous take.
 
@@ -588,6 +557,6 @@ Exit criteria:
 | M2: Quality Gates | 03-04 | pending | Linting + mock server working | Spectral passes on good spec, fails on bad spec; Prism serves mock responses | Spec quality is enforceable; frontend can start building against mocks | `feat: add Spectral linting rules` then `feat: validate Prism mock responses` |
 | M3: Code Generation | 05-06 | pending | TypeScript client + Express server stubs | Generated client has typed models/APIs; stub server starts and responds | Both frontend and backend have generated starting points from the spec | `feat: generate TypeScript client` then `feat: generate Express server stubs` |
 | M4: Testing | 07-08 | pending | Contract tests + functional tests working | Schemathesis passes 100+ tests; Hurl tests pass with JUnit output | Automated quality assurance is in place with zero hand-written contract tests | `feat: add Schemathesis contract testing` then `feat: add Hurl functional tests` |
-| M5: Ecosystem | 09-11 | pending | Bruno collection, breaking change detection, Scalar docs | Bruno files exist; oasdiff detects breaking changes; Scalar HTML renders | Full tooling ecosystem is operational around the spec | `feat: add Bruno collection` then `feat: add breaking change detection` then `feat: add Scalar API docs` |
-| M6: CI & Verification | 12-13 | pending | CI pipeline + full dry run | Valid pipeline YAML with all 5 jobs; pre-recording checklist passes | Everything works end-to-end, ready to record | `feat: add GitHub Actions CI pipeline` then `chore: pre-recording dry run` |
-| M7: Video Production | 14-16 | pending | Recorded and edited video + companion materials | Final video is 35-40 min, 1080p, with chapter markers | IT department can watch the video and access all materials | Commits not applicable (video is external) |
+| M5: Ecosystem | 09-10 | pending | Breaking change detection, Scalar docs with "Try it out" | oasdiff detects breaking changes; Scalar HTML renders with working playground | Full tooling ecosystem is operational around the spec | `feat: add breaking change detection` then `feat: add Scalar API docs` |
+| M6: CI & Verification | 11-12 | pending | CI pipeline + full dry run | Valid pipeline YAML with all 5 jobs; pre-recording checklist passes | Everything works end-to-end, ready to record | `feat: add GitHub Actions CI pipeline` then `chore: pre-recording dry run` |
+| M7: Video Production | 13-15 | pending | Recorded and edited video + companion materials | Final video is 35-40 min, 1080p, with chapter markers | IT department can watch the video and access all materials | Commits not applicable (video is external) |

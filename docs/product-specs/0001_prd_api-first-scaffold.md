@@ -45,8 +45,9 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 **Acceptance Criteria:**
 
 - [ ] Repo has a clear README explaining the folder structure and purpose of each directory
-- [ ] Running `ls` at the root reveals an intuitive layout: `specs/`, `rules/`, `tests/`, `generated/`, `docs/`, `ci/`
+- [ ] Running `ls` at the root reveals an intuitive layout: `specs/`, `rules/`, `tests/`, `docs/`, `ci/`
 - [ ] README lists all prerequisites and a single setup command to install dependencies
+- [ ] README mentions that the spec can be imported into any API client (Bruno, Postman, Insomnia, Hoppscotch, Scalar, Yaak) for manual exploration — the scaffold is unopinionated about personal tooling
 
 ---
 
@@ -162,22 +163,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ---
 
-### US-009: Import spec into Bruno for manual exploration
-
-**Status:** pending
-
-**Description:** As a QA engineer, I want to import the OpenAPI spec into Bruno so that I have a ready-made, Git-friendly API collection for exploratory testing.
-
-**Acceptance Criteria:**
-
-- [ ] Bruno successfully imports `specs/order-api.yaml` and generates a collection with all endpoints
-- [ ] Collection is organized by tags with correct HTTP methods, URLs, parameters, and example bodies
-- [ ] Bruno collection files (`.bru`) are stored in the repo under `generated/bruno-collection/`
-- [ ] Environment files exist for Mock and Dev with appropriate `baseUrl` values
-
----
-
-### US-010: Detect breaking changes between spec versions
+### US-009: Detect breaking changes between spec versions
 
 **Status:** pending
 
@@ -191,7 +177,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ---
 
-### US-011: Generate API documentation with Scalar
+### US-010: Generate API documentation with Scalar
 
 **Status:** pending
 
@@ -206,7 +192,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ---
 
-### US-012: CI pipeline validates the contract automatically
+### US-011: CI pipeline validates the contract automatically
 
 **Status:** pending
 
@@ -222,7 +208,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ---
 
-### US-013: Record a video walkthrough of the full workflow
+### US-012: Record a video walkthrough of the full workflow
 
 **Status:** pending
 
@@ -230,7 +216,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 **Acceptance Criteria:**
 
-- [ ] Video covers: problem statement, contract writing, linting, mocking (static + dynamic), codegen, server stubs, contract testing (with intentional bug), breaking change detection, Scalar docs, Bruno/Hurl, CI pipeline, IBM stack (slides only), role impact summary
+- [ ] Video covers: problem statement, contract writing, linting, mocking (static + dynamic), codegen, server stubs, contract testing (with intentional bug), breaking change detection, Scalar docs (with "Try it out"), Hurl functional tests, CI pipeline, IBM stack (slides only), role impact summary
 - [ ] Each section is recorded as a separate clip for easy re-recording
 - [ ] Terminal font is 16pt+ and readable at 1080p
 - [ ] Total final video is 35-40 minutes after editing
@@ -238,7 +224,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ---
 
-### US-014: Present IBM stack integration via slides
+### US-013: Present IBM stack integration via slides
 
 **Status:** pending
 
@@ -265,7 +251,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 - **Node.js 18+** is required for Prism, Spectral, openapi-generator-cli, and Scalar CLI.
 - **Python 3.8+** is required for Schemathesis and oasdiff.
 - **Hurl** is a standalone binary with no runtime dependencies.
-- **Bruno** is a desktop app; the generated `.bru` collection files are plain text and Git-friendly.
+- **API exploration** is left to individual preference. The OpenAPI spec can be imported into any client (Bruno, Postman, Insomnia, Hoppscotch, Scalar desktop, Yaak). Scalar's built-in "Try it out" in the generated docs provides a zero-install exploration path.
 - **Docker** is optional (for Swagger UI if needed as a fallback) but not required for the core workflow.
 - All tools are open source and free. No paid tiers are needed for any functionality in scope.
 - The CI pipeline targets GitHub Actions but the concepts are portable to GitLab CI or Jenkins.

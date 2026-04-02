@@ -52,10 +52,11 @@ A numbered list of what you're about to show. Use this as a roadmap slide you ca
 6. Contract Testing (Schemathesis)
 7. Breaking Change Detection (oasdiff)
 8. API Documentation (Scalar)
-9. Functional Tests & Exploration (Hurl + Bruno)
-10. CI Pipeline (GitHub Actions)
-11. IBM Stack Integration (slides)
-12. The Payoff (Role Impact Matrix)
+9. API Documentation & Exploration (Scalar + "Try it out")
+10. Functional Tests (Hurl)
+11. CI Pipeline (GitHub Actions)
+12. IBM Stack Integration (slides)
+13. The Payoff (Role Impact Matrix)
 
 ### Slides 5-6: IBM Stack Integration
 
@@ -104,7 +105,7 @@ Week 3:   Integration — contract tests already passing
 |---|---|---|
 | **Frontend Dev** | Blocked until backend is ready, guesses field names | Works from day one with mocks and typed clients |
 | **Backend Dev** | Builds API shape by gut feeling, breaks consumers | Implements against a validated contract |
-| **QA Engineer** | Maintains API collections by hand, tests late | Auto-generated contract tests in CI, Bruno collections from spec, Hurl assertions in pipeline |
+| **QA Engineer** | Maintains API collections by hand, tests late | Auto-generated contract tests in CI, Hurl assertions in pipeline, import spec into any client |
 | **DevOps** | Configures gateway manually, manages env sprawl | Gateway imports spec, environments declared centrally |
 | **Security** | Reviews after deployment, expensive fixes | Scans the spec before code exists |
 | **Tech Lead** | Polices conventions in code review, inconsistency creeps in | Spectral enforces standards automatically |
@@ -137,7 +138,7 @@ Week 3:   Integration — contract tests already passing
 **Browser setup:**
 - Disable browser extensions that add visual clutter
 - Use an incognito window for a clean UI
-- Bookmark the local URLs: `http://localhost:4010` (Prism), `http://localhost:8080` (stub server), `http://localhost:8081` (Scalar docs)
+- Bookmark the local URLs: `http://localhost:4010` (Prism mock), `http://localhost:8080` (stub server), `http://localhost:8081` (Scalar docs with "Try it out")
 
 **Slide tool:** Marp (markdown-to-slides, free) or Keynote/PowerPoint. Keep slides minimal — dark background, large text.
 
@@ -269,30 +270,33 @@ Record each section as a **separate video file**. This lets you re-record a sing
 
 ---
 
-### Clip 9: Documentation (2 min)
+### Clip 9: Documentation & API Exploration (3 min)
 
 **Format:** Browser
 
 **What to show:**
 1. Open the Scalar API reference in browser. Show the modern UI — dark/light toggle, endpoint navigation, code samples in multiple languages.
 2. Click "Try it out" on one endpoint. Make a live request against the mock server. Show the response.
-3. (Optional) Put a screenshot of a stale Confluence doc next to the Scalar page. "Which one do you trust?"
+3. Show a second endpoint — modify a parameter, send again. "This is a full API client, built into the docs."
+4. (Optional) Put a screenshot of a stale Confluence doc next to the Scalar page. "Which one do you trust?"
+5. Mention: "If you prefer a desktop client — Bruno, Postman, Insomnia, Hoppscotch, Yaak — import this same spec file. It works with all of them. That's the point of a standard."
 
-**Key line:** "These docs are never stale. They come from the same file that drives everything else. One command regenerates them."
+**Key line:** "These docs are never stale, and you can explore the API directly from them. Zero extra tooling."
 
 ---
 
-### Clip 10: Bruno & Hurl (2 min)
+### Clip 10: Hurl Functional Tests (2 min)
 
-**Format:** Bruno desktop app + terminal
+**Format:** Terminal
 
 **What to show:**
-1. Open Bruno. Show the imported collection with all endpoints organized by tags. Show the request body pre-filled from the spec.
-2. Run one request against the mock. Show the response.
-3. Switch to terminal. Run `hurl --test tests/orders.hurl`. Show all 5 tests passing.
-4. "Bruno is for exploratory testing. Hurl is for automated assertions. Both come from the same spec."
+1. Show `tests/orders.hurl` briefly in the editor — plain text HTTP tests with assertions.
+2. Run `hurl --test tests/orders.hurl`. Show all 5 tests passing.
+3. Show JUnit XML output: `hurl --test --report-junit generated/hurl-results.xml tests/orders.hurl`.
 
-**Teaching point:** "Bruno stores collections as plain `.bru` text files in Git — no JSON blobs, no account sync, no vendor lock-in."
+**Key line:** "Hand-written assertions for business scenarios. Plain text, lives in Git, runs in CI with a single binary."
+
+**Teaching point:** "Schemathesis catches what you didn't think of — it fuzzes every edge case. Hurl validates what you specifically expect. They complement each other."
 
 ---
 
@@ -347,7 +351,7 @@ Record each section as a **separate video file**. This lets you re-record a sing
 - **Progress bar:** Add a progress bar or chapter markers so viewers can jump to sections they care about.
 - **Export:** 1080p minimum, 30fps (fine for screen recordings).
 - **Background music:** Subtle background music during slide sections only — not during terminal work, where the viewer needs to focus on commands and output.
-- **Chapter markers for YouTube/SharePoint:** 0:00 The Problem, 2:00 The Contract, 7:00 Linting, 10:00 Mock Server, etc.
+- **Chapter markers for YouTube/SharePoint:** 0:00 The Problem, 2:00 The Contract, 7:00 Linting, 10:00 Mock Server, 14:00 Code Generation, 17:00 Backend Stubs, 20:00 Contract Testing, 25:00 Breaking Changes, 28:00 Documentation & Exploration, 31:00 Hurl Tests, 33:00 CI Pipeline, 35:00 IBM Stack, 38:00 The Payoff
 
 ---
 
@@ -362,7 +366,7 @@ Share these alongside the video so viewers can explore on their own:
 | `rules/.spectral.yaml` | In the repo | Teams can adopt the ruleset immediately |
 | `ci/pipeline.yaml` | In the repo | DevOps can evaluate and adapt for their CI |
 | Interactive training app | To be built post-implementation | Hands-on walkthrough of the API-first workflow (scoped after all increments are delivered) |
-| Tool links | In the README or a shared doc | Prism, Spectral, openapi-generator, Scalar, Schemathesis, Hurl, Bruno, oasdiff |
+| Tool links | In the README or a shared doc | Prism, Spectral, openapi-generator, Scalar, Schemathesis, Hurl, oasdiff + desktop client options (Bruno, Postman, Insomnia, Hoppscotch, Yaak) |
 
 ---
 
