@@ -361,7 +361,7 @@ Share these alongside the video so viewers can explore on their own:
 | `specs/order-api.yaml` | In the repo | The spec itself — explore it, import it, generate from it |
 | `rules/.spectral.yaml` | In the repo | Teams can adopt the ruleset immediately |
 | `ci/pipeline.yaml` | In the repo | DevOps can evaluate and adapt for their CI |
-| `openapi-faker-walkthrough.jsx` | In the repo or hosted web page | Interactive walkthrough showing the x-faker progression |
+| Interactive training app | To be built post-implementation | Hands-on walkthrough of the API-first workflow (scoped after all increments are delivered) |
 | Tool links | In the README or a shared doc | Prism, Spectral, openapi-generator, Scalar, Schemathesis, Hurl, Bruno, oasdiff |
 
 ---

@@ -255,8 +255,8 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 ## 5. Design Considerations
 
 - The repo should feel like a real project template, not a tutorial dump. Clean folder structure, minimal config files, no unnecessary boilerplate.
-- The interactive React walkthrough (`openapi-faker-walkthrough.jsx`) can be embedded in a companion web page or shown alongside the video.
 - Scalar docs should use the `kepler` theme for a professional look during the demo.
+- An interactive training app will be built post-implementation as a companion learning tool (see Open Questions #6).
 
 ---
 
@@ -306,3 +306,4 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 3. **Do we need a shared internal Scalar instance?** Or is static HTML deployed to GitHub Pages / internal hosting sufficient?
 4. **What is the team's appetite for Schemathesis in CI?** It adds significant test coverage but also adds pipeline runtime. Should it run on every push or only on spec changes?
 5. **AsyncAPI scope:** The implementation plan includes an AsyncAPI spec for MQ events. Should this be included in the scaffold as a template, or is it purely a slide topic?
+6. **Interactive training material:** Once the full implementation is complete, build a small interactive web app (React or similar) that walks users through the API-first workflow hands-on — e.g., the x-faker progression from bare spec to realistic mocks. To be scoped after all increments are delivered.
