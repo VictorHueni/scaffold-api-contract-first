@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Code-First vs Contract-First — Gantt</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #f8f9fb;
+    color: #1e2028;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 32px;
+  }
+
+  h1 {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #6b7280;
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1e2028;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: #6b7280;
+    margin-bottom: 36px;
+  }
+
+  /* Gantt container */
+  .gantt-section {
+    width: 100%;
+    max-width: 1100px;
+    margin-bottom: 36px;
+  }
+
+  .gantt-title {
+    font-size: 15px;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .gantt-title .badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .code-first .gantt-title {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1.5px solid #fecaca;
+    border-bottom: none;
+  }
+  .code-first .badge { background: #fee2e2; color: #dc2626; }
+
+  .contract-first .gantt-title {
+    background: #eff6ff;
+    color: #1e40af;
+    border: 1.5px solid #bfdbfe;
+    border-bottom: none;
+  }
+  .contract-first .badge { background: #dbeafe; color: #2563eb; }
+
+  .gantt {
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+
+  .code-first .gantt { border-top-color: #fecaca; }
+  .contract-first .gantt { border-top-color: #bfdbfe; }
+
+  /* Header row — week columns */
+  .gantt-header {
+    display: grid;
+    border-bottom: 1.5px solid #e5e7eb;
+    background: #fafbfc;
+  }
+
+  .gantt-header .role-col {
+    padding: 8px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-right: 1px solid #f3f4f6;
+  }
+
+  .gantt-header .week-col {
+    padding: 8px 0;
+    font-size: 10px;
+    font-weight: 700;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-align: center;
+    border-right: 1px solid #f3f4f6;
+  }
+
+  .gantt-header .week-col:last-child { border-right: none; }
+
+  /* Rows */
+  .gantt-row {
+    display: grid;
+    border-bottom: 1px solid #f3f4f6;
+    align-items: center;
+    min-height: 40px;
+  }
+
+  .gantt-row:last-child { border-bottom: none; }
+
+  .gantt-row .role-cell {
+    padding: 6px 12px;
+    border-right: 1px solid #f3f4f6;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 100%;
+  }
+
+  .role-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .role-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: #374151;
+  }
+
+  .gantt-row .bar-area {
+    position: relative;
+    height: 100%;
+    border-right: 1px solid #f3f4f6;
+  }
+
+  .gantt-row .bar-area:last-child { border-right: none; }
+
+  /* Bars */
+  .bar {
+    position: absolute;
+    top: 8px;
+    bottom: 8px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Bar colors */
+  .bar-active   { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+  .bar-blocked  { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; background-image: repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(220,38,38,0.06) 4px, rgba(220,38,38,0.06) 8px); }
+  .bar-done     { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+  .bar-drift    { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+  .bar-green    { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+
+  /* Role colors for dots */
+  .dot-tl  { background: #7c3aed; }
+  .dot-fe  { background: #2563eb; }
+  .dot-be  { background: #059669; }
+  .dot-qa  { background: #d97706; }
+  .dot-po  { background: #db2777; }
+  .dot-ops { background: #4338ca; }
+
+  /* 7-column grid for code-first (role + 7 weeks) */
+  .grid-7 { grid-template-columns: 100px repeat(7, 1fr); }
+
+  /* 4-column grid for contract-first (role + day1 + w1 + w2 + w3) */
+  .grid-4 { grid-template-columns: 100px 0.7fr 1fr 1fr 1fr; }
+
+  /* Today marker for contract-first */
+  .today-marker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #2563eb;
+    z-index: 2;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #9ca3af;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .footer strong {
+    color: #1e2028;
+    font-weight: 700;
+  }
+
+  .savings {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #d1fae5;
+    color: #065f46;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-top: 12px;
+    border: 1px solid #6ee7b7;
+  }
+</style>
+</head>
+<body>
+
+<h1>Why Contract-First?</h1>
+<h2>Code-First vs Contract-First</h2>
+<p class="subtitle">Same team, same API, same scope. Different starting point.</p>
+
+<!-- CODE-FIRST GANTT -->
+<div class="gantt-section code-first">
+  <div class="gantt-title">
+    <span>Code-First Approach</span>
+    <span class="badge">~7 weeks</span>
+  </div>
+  <div class="gantt">
+    <!-- Header -->
+    <div class="gantt-header grid-7">
+      <div class="role-col">Role</div>
+      <div class="week-col">Wk 1</div>
+      <div class="week-col">Wk 2</div>
+      <div class="week-col">Wk 3</div>
+      <div class="week-col">Wk 4</div>
+      <div class="week-col">Wk 5</div>
+      <div class="week-col">Wk 6</div>
+      <div class="week-col">Wk 7</div>
+    </div>
+
+    <!-- Backend -->
+    <div class="gantt-row grid-7">
+      <div class="role-cell"><div class="role-dot dot-be"></div><span class="role-name">Backend</span></div>
+      <div class="bar-area"><div class="bar bar-active" style="left:4px;right:4px;">Build API</div></div>
+      <div class="bar-area"><div class="bar bar-active" style="left:4px;right:4px;">Deploy to dev</div></div>
+      <div class="bar-area"><div class="bar bar-drift" style="left:4px;right:4px;">Fix mismatches</div></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"><div class="bar bar-drift" style="left:4px;right:4px;">Fix QA bugs</div></div>
+      <div class="bar-area"><div class="bar bar-drift" style="left:4px;right:4px;">More fixes</div></div>
+      <div class="bar-area"></div>
+    </div>
+
+    <!-- Frontend -->
+    <div class="gantt-row grid-7">
+      <div class="role-cell"><div class="role-dot dot-fe"></div><span class="role-name">Frontend</span></div>
+      <div class="bar-area"><div class="bar bar-blocked" style="left:4px;right:4px;">Blocked</div></div>
+      <div class="bar-area"><div class="bar bar-blocked" style="left:4px;right:4px;">Blocked</div></div>
+      <div class="bar-area"><div class="bar bar-active" style="left:4px;right:4px;">Start integrating</div></div>
+      <div class="bar-area"><div class="bar bar-drift" style="left:4px;right:4px;">Fix against changes</div></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"><div class="bar bar-drift" style="left:4px;right:4px;">Retest</div></div>
+    </div>
+
+    <!-- QA -->
+    <div class="gantt-row grid-7">
+      <div class="role-cell"><div class="role-dot dot-qa"></div><span class="role-name">QA</span></div>
+      <div class="bar-area"><div class="bar bar-blocked" style="left:4px;right:4px;">Blocked</div></div>
+      <div class="bar-area"><div class="bar bar-blocked" style="left:4px;right:4px;">Blocked</div></div>
+      <div class="bar-area"><div class="bar bar-active" style="left:4px;right:4px;">Write Postman</div></div>
+      <div class="bar-area"><div class="bar bar-active" style="left:4px;right:4px;">Test</div></div>
+      <div class="bar-area"><div class="bar bar-drift" style="left:4px;right:4px;">Retest</div></div>
+      <div class="bar-area"><div class="bar bar-drift" style="left:4px;right:4px;">Collection stale</div></div>
+      <div class="bar-area"></div>
+    </div>
+
+    <!-- Product Owner -->
+    <div class="gantt-row grid-7">
+      <div class="role-cell"><div class="role-dot dot-po"></div><span class="role-name">Product</span></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"><div class="bar bar-active" style="left:4px;right:4px;">Write docs</div></div>
+      <div class="bar-area"><div class="bar bar-drift" style="left:4px;right:4px;">Docs stale</div></div>
+      <div class="bar-area"><div class="bar bar-drift" style="left:4px;right:4px;">Docs stale</div></div>
+      <div class="bar-area"><div class="bar bar-drift" style="left:4px;right:4px;">Docs stale</div></div>
+    </div>
+
+    <!-- DevOps -->
+    <div class="gantt-row grid-7">
+      <div class="role-cell"><div class="role-dot dot-ops"></div><span class="role-name">DevOps</span></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"><div class="bar bar-active" style="left:4px;right:4px;">Gateway config</div></div>
+      <div class="bar-area"><div class="bar bar-active" style="left:4px;right:4px;">Deploy</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTRACT-FIRST GANTT -->
+<div class="gantt-section contract-first">
+  <div class="gantt-title">
+    <span>Contract-First Approach</span>
+    <span class="badge">~3 weeks</span>
+  </div>
+  <div class="gantt">
+    <!-- Header -->
+    <div class="gantt-header grid-4">
+      <div class="role-col">Role</div>
+      <div class="week-col">Day 1</div>
+      <div class="week-col">Week 1</div>
+      <div class="week-col">Week 2</div>
+      <div class="week-col">Week 3</div>
+    </div>
+
+    <!-- Tech Lead -->
+    <div class="gantt-row grid-4">
+      <div class="role-cell"><div class="role-dot dot-tl"></div><span class="role-name">Tech Lead</span></div>
+      <div class="bar-area"><div class="bar bar-done" style="left:4px;right:4px;">Write spec + PR review</div></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"><div class="bar bar-done" style="left:4px;right:4px;">Integration done</div></div>
+    </div>
+
+    <!-- Backend -->
+    <div class="gantt-row grid-4">
+      <div class="role-cell"><div class="role-dot dot-be"></div><span class="role-name">Backend</span></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"><div class="bar bar-green" style="left:4px;right:4px;">Fill in generated stubs</div></div>
+      <div class="bar-area"><div class="bar bar-green" style="left:4px;right:4px;">Edge cases + perf</div></div>
+      <div class="bar-area"><div class="bar bar-done" style="left:4px;right:4px;">Contract tests pass</div></div>
+    </div>
+
+    <!-- Frontend -->
+    <div class="gantt-row grid-4">
+      <div class="role-cell"><div class="role-dot dot-fe"></div><span class="role-name">Frontend</span></div>
+      <div class="bar-area"></div>
+      <div class="bar-area"><div class="bar bar-green" style="left:4px;right:4px;">Build against mocks + TS client</div></div>
+      <div class="bar-area"><div class="bar bar-green" style="left:4px;right:4px;">Switch to real backend</div></div>
+      <div class="bar-area"><div class="bar bar-done" style="left:4px;right:4px;">Same types, zero drift</div></div>
+    </div>
+
+    <!-- QA -->
+    <div class="gantt-row grid-4">
+      <div class="role-cell"><div class="role-dot dot-qa"></div><span class="role-name">QA</span></div>
+      <div class="bar-area"><div class="bar bar-green" style="left:4px;right:4px;">Schemathesis in CI</div></div>
+      <div class="bar-area"><div class="bar bar-green" style="left:4px;right:4px;">Write Hurl tests</div></div>
+      <div class="bar-area"><div class="bar bar-done" style="left:4px;right:4px;">All tests pass</div></div>
+      <div class="bar-area"></div>
+    </div>
+
+    <!-- Product Owner -->
+    <div class="gantt-row grid-4">
+      <div class="role-cell"><div class="role-dot dot-po"></div><span class="role-name">Product</span></div>
+      <div class="bar-area"><div class="bar bar-green" style="left:4px;right:4px;">Review Scalar docs</div></div>
+      <div class="bar-area"><div class="bar bar-done" style="left:4px;right:4px;">Docs always current</div></div>
+      <div class="bar-area"><div class="bar bar-done" style="left:4px;right:4px;">Docs always current</div></div>
+      <div class="bar-area"><div class="bar bar-done" style="left:4px;right:4px;">Docs always current</div></div>
+    </div>
+
+    <!-- DevOps -->
+    <div class="gantt-row grid-4">
+      <div class="role-cell"><div class="role-dot dot-ops"></div><span class="role-name">DevOps</span></div>
+      <div class="bar-area"><div class="bar bar-green" style="left:4px;right:4px;">CI pipeline active</div></div>
+      <div class="bar-area"><div class="bar bar-done" style="left:4px;right:4px;">Pipeline green</div></div>
+      <div class="bar-area"><div class="bar bar-done" style="left:4px;right:4px;">Pipeline green</div></div>
+      <div class="bar-area"><div class="bar bar-done" style="left:4px;right:4px;">oasdiff blocks breaks</div></div>
+    </div>
+  </div>
+</div>
+
+<p class="footer">
+  <strong>Same team. Same API. Same scope.</strong><br/>
+  The only difference is where you start: from code, or from a contract.
+</p>
+<div class="savings">4 weeks saved — parallel work from day one</div>
+
+</body>
+</html>
