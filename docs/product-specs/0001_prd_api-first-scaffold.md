@@ -31,6 +31,8 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 - **Custom API gateway setup.** Kong, Tyk, or other gateway configuration is out of scope for v1. *Why: gateway choice varies by team; this is a separate initiative.*
 - **SDK publishing pipeline.** Auto-publishing generated clients to npm/Maven/PyPI registries is out of scope. *Why: requires internal registry infrastructure that doesn't exist yet.*
 - **Multi-repo orchestration.** The scaffold assumes a single repo containing the spec and all generated artifacts. Mono-repo vs multi-repo strategy is a separate discussion. *Why: adds organizational complexity that distracts from the core workflow.*
+- **Interactive training app.** Will be scoped post-implementation once the workflow is finalized. *Why: the teaching content depends on the final implementation.*
+- **Multi-API developer portal.** For v1, Scalar generates static HTML per API. Evaluating Backstage or a centralized portal is a medium-term initiative after the pilot. *Why: premature before we have multiple APIs using the workflow.*
 
 ---
 
@@ -255,13 +257,27 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 - [ ] Slides reference the actual spec file in the repo so viewers know it is the same contract
 - [ ] No live IBM environment is required during the presentation
 
+### US-014: AsyncAPI spec for event-driven contracts
+
+**Status:** pending
+
+**Description:** As a tech lead, I want an AsyncAPI spec template for order events (MQ/Kafka) so that the team sees the same contract-first philosophy applied to event-driven APIs alongside REST.
+
+**Acceptance Criteria:**
+
+- [ ] `specs/order-events.asyncapi.yaml` exists as an AsyncAPI 2.6 spec
+- [ ] Spec defines at least 2 channels: `order/created` and `order/statusChanged`
+- [ ] Each channel has a message payload with typed properties (orderId, status, timestamps)
+- [ ] Spec includes server definition (e.g., IBM MQ or Kafka broker)
+- [ ] Spec validates with `npx @asyncapi/cli validate specs/order-events.asyncapi.yaml`
+- [ ] The AsyncAPI spec lives alongside the REST spec in the same `specs/` directory, demonstrating unified contract-first for both HTTP and events
+
 ---
 
 ## 5. Design Considerations
 
 - The repo should feel like a real project template, not a tutorial dump. Clean folder structure, minimal config files, no unnecessary boilerplate.
 - Scalar docs should use the `kepler` theme for a professional look during the demo.
-- An interactive training app will be built post-implementation as a companion learning tool (see Open Questions #6).
 
 ---
 
@@ -306,9 +322,14 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ## 8. Open Questions
 
-1. **Which real API should be the first pilot?** Picking a low-risk, medium-complexity API for the first real adoption would validate the workflow without excessive risk.
-2. **Should the Spectral ruleset be published as a shared npm package?** This would make it easy for all repos to depend on a single versioned ruleset.
-3. **Do we need a shared internal Scalar instance?** Or is static HTML deployed to GitHub Pages / internal hosting sufficient?
-4. **What is the team's appetite for Schemathesis in CI?** It adds significant test coverage but also adds pipeline runtime. Should it run on every push or only on spec changes?
-5. **AsyncAPI scope:** The implementation plan includes an AsyncAPI spec for MQ events. Should this be included in the scaffold as a template, or is it purely a slide topic?
-6. **Interactive training material:** Once the full implementation is complete, build a small interactive web app (React or similar) that walks users through the API-first workflow hands-on — e.g., the x-faker progression from bare spec to realistic mocks. To be scoped after all increments are delivered.
+1. **Which real API should be the first pilot?** Hypothetical candidate: a Policy or Claims API (insurance domain). Low-risk, medium-complexity, ideally a new API rather than retrofitting an existing one. Final decision after the demo presentation.
+
+## 9. Resolved Decisions
+
+Decisions originally tracked as open questions, now resolved:
+
+1. **Spectral ruleset as npm package:** Not for v1 — the ruleset lives in the scaffold repo. After the pilot validates the rules, publish as `@yourcompany/spectral-ruleset` to GitHub Packages so all repos can `npm install` and extend it. This is a follow-up milestone, not a non-goal.
+2. **Scalar hosting:** Static HTML for v1, auto-deployed by CI. For 1-5 APIs, GitHub Pages per repo is sufficient. Evaluate Backstage or a centralized portal once 10+ APIs adopt the workflow. (Moved to non-goals as medium-term initiative.)
+3. **Schemathesis in CI:** Runs only on spec changes (`specs/**` trigger). Adds ~20-30s of pipeline runtime, not minutes. Already configured this way in the pipeline.
+4. **AsyncAPI scope:** Included in the scaffold as a template spec (`specs/order-events.asyncapi.yaml`). Added as US-014.
+5. **Interactive training app:** Deferred to post-implementation. Moved to non-goals.
