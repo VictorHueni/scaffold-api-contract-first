@@ -270,18 +270,22 @@ Record each section as a **separate video file**. This lets you re-record a sing
 
 ---
 
-### Clip 9: Documentation & API Exploration (3 min)
+### Clip 9: Documentation & API Exploration (4 min)
 
-**Format:** Browser
+**Format:** Browser + desktop client(s)
 
 **What to show:**
 1. Open the Scalar API reference in browser. Show the modern UI — dark/light toggle, endpoint navigation, code samples in multiple languages.
 2. Click "Try it out" on one endpoint. Make a live request against the mock server. Show the response.
 3. Show a second endpoint — modify a parameter, send again. "This is a full API client, built into the docs."
 4. (Optional) Put a screenshot of a stale Confluence doc next to the Scalar page. "Which one do you trust?"
-5. Mention: "If you prefer a desktop client — Bruno, Postman, Insomnia, Hoppscotch, Yaak — import this same spec file. It works with all of them. That's the point of a standard."
+5. **Live import demo:** Open one or two desktop clients and import `specs/order-api.yaml` on camera:
+   - **Bruno:** File > Import Collection > OpenAPI V3 Import > select `order-api.yaml`. Show the generated collection with all endpoints, pre-filled request bodies.
+   - **Postman:** Import > File > select `order-api.yaml`. Show the collection organized by tags. Send one request against the mock.
+   - Pick whichever one or two the audience is most likely to already use. The point is to show it takes 10 seconds, not to advocate for a specific tool.
+6. "The spec is the standard. Your client is your choice. Import, explore, done."
 
-**Key line:** "These docs are never stale, and you can explore the API directly from them. Zero extra tooling."
+**Key line:** "These docs are never stale, and you can explore the API directly from them. Or import the spec into Bruno, Postman, Insomnia — whatever you already use. Ten seconds, full collection."
 
 ---
 

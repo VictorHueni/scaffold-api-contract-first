@@ -455,7 +455,7 @@ Scope:
 6. Record Clip 6: Backend Stubs (3 min, generate → fill in → test)
 7. Record Clip 7: Contract Testing (5 min, Schemathesis pass → bug → catch → fix)
 8. Record Clip 8: Breaking Change Detection (3 min, oasdiff)
-9. Record Clip 9: Documentation + API Exploration (3 min, Scalar UI + "Try it out" + mention desktop clients)
+9. Record Clip 9: Documentation + API Exploration (4 min, Scalar UI + "Try it out" + live import into 1-2 desktop clients)
 10. Record Clip 10: Hurl Functional Tests (2 min, hurl --test)
 11. Record Clip 11: CI Pipeline (2 min, pipeline.yaml walkthrough)
 
