@@ -31,7 +31,7 @@ Scope:
 
 1. Create the full directory scaffold: `specs/`, `rules/`, `mocks/`, `tests/`, `docs/`, `ci/`
 2. Create a README.md with folder purpose descriptions, prerequisites list (Node.js 18+, Python 3.8+, Hurl), and a single setup script. Include a note that the spec can be imported into any API client (Bruno, Postman, Insomnia, Hoppscotch, Scalar, Yaak) for manual exploration.
-3. Create a `setup.sh` that installs all global tools (`prism-cli`, `openapi-generator-cli`, `spectral-cli`, `@scalar/cli`, `schemathesis`, `oasdiff`)
+3. Create a `setup.sh` that installs all global tools (`prism-cli`, `spectral-cli`, `@scalar/cli`, `schemathesis`, `oasdiff`) and project-level dependencies (`openapi-typescript`, `openapi-fetch`, `openapi-generator-cli` for server stubs)
 4. Add `.gitignore` entries for `generated/`, `node_modules/`, `*.Zone.Identifier`
 
 Primary files:
@@ -156,7 +156,7 @@ Exit criteria:
 
 ---
 
-### Increment 05: TypeScript client code generation
+### Increment 05: TypeScript types and client generation
 
 **Status:** pending
 
@@ -164,34 +164,33 @@ Exit criteria:
 
 Scope:
 
-1. Run `openapi-generator-cli generate` with `typescript-fetch` generator against the spec
-2. Verify generated `models/` contains typed interfaces for Order, Customer, OrderItem, ErrorResponse
-3. Verify generated `apis/` contains methods for each operationId
-4. Add `generated/` to `.gitignore` (already done) — generated code is an artifact, not source
+1. Run `npx openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts` to generate TypeScript types from the spec
+2. Install `openapi-fetch` and create a minimal usage example (`examples/client-usage.ts`) showing a typed GET request with autocompletion
+3. Verify generated types include interfaces for Order, Customer, OrderItem, ErrorResponse
+4. Verify all field names, types, and optionality match the spec exactly
 
 Primary files:
 
-1. `generated/client-typescript/` (generated, not committed)
+1. `generated/api-types.d.ts` (generated, not committed)
+2. `examples/client-usage.ts` (committed — shows how to use the types)
 
 Test gate:
 
-1. `openapi-generator-cli generate -i specs/order-api.yaml -g typescript-fetch -o generated/client-typescript --additional-properties=supportsES6=true,typescriptThreePlus=true` — exits 0
-2. `ls generated/client-typescript/models/` — contains Order, Customer, OrderItem files
-3. `ls generated/client-typescript/apis/` — contains API class file(s)
+1. `npx openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts` — exits 0
+2. `grep -c "Order\|Customer\|OrderItem\|ErrorResponse" generated/api-types.d.ts` — all 4 schemas present
+3. `npx tsc --noEmit examples/client-usage.ts` — usage example compiles without errors
 
-Alternatives (demo for impact):
+Alternatives:
 
-- **openapi-typescript** — lightweight type-only generation (`npx openapi-typescript specs/order-api.yaml -o generated/types.d.ts`), no runtime code, pairs with `openapi-fetch`. Preferred by frontend teams who want types without a full SDK.
-- **Java client** — `openapi-generator-cli generate -i specs/order-api.yaml -g java -o generated/client-java --additional-properties=library=resttemplate`
-- **Python client** — `openapi-generator-cli generate -i specs/order-api.yaml -g python -o generated/client-python`
-- Generating all three languages from the same spec demonstrates cross-team consistency.
-- **Orval** — generates React Query / SWR hooks from the spec for React-heavy frontends.
+- **@hey-api/openapi-ts** — generates full SDK client code + types with plugin support (TanStack Query, Zod). Use when you want generated method calls, not just types. Fastest-growing codegen tool (~2M downloads/week).
+- **Orval** — generates React Query / SWR hooks from the spec. Best for React-heavy frontends.
+- **openapi-generator-cli (typescript-fetch)** — full runtime client generation. Supports 50+ languages but produces heavier output with a Java dependency.
 - **Kiota (Microsoft)** — excellent for .NET ecosystems.
 
 Exit criteria:
 
-1. Generated TypeScript client compiles and contains types matching every schema in the spec
-2. Every operationId has a corresponding typed method
+1. Generated types file contains typed interfaces matching every schema in the spec
+2. Usage example compiles and demonstrates type-safe API calls with `openapi-fetch`
 
 ---
 
@@ -382,7 +381,7 @@ Exit criteria:
 Scope:
 
 1. Create `ci/pipeline.yaml` as a GitHub Actions workflow triggering on push/PR to `specs/**`
-2. Jobs: `lint` (Spectral), `breaking-changes` (oasdiff, PR-only), `contract-test` (Schemathesis against Prism), `generate-clients` (openapi-generator), `generate-docs` (Scalar)
+2. Jobs: `lint` (Spectral), `breaking-changes` (oasdiff, PR-only), `contract-test` (Schemathesis against Prism), `generate-types` (openapi-typescript), `generate-docs` (Scalar)
 3. Remove the IBM `publish-apic` job (out of scope — slides only)
 4. Validate the YAML is syntactically correct
 
@@ -394,7 +393,7 @@ Test gate:
 
 1. `python3 -c "import yaml; yaml.safe_load(open('ci/pipeline.yaml'))"` — valid YAML
 2. `grep -c "jobs:" ci/pipeline.yaml` — contains jobs section
-3. `grep "spectral\|oasdiff\|schemathesis\|scalar" ci/pipeline.yaml | wc -l` — all 4 tools referenced
+3. `grep "spectral\|oasdiff\|schemathesis\|scalar\|openapi-typescript" ci/pipeline.yaml | wc -l` — all 5 tools referenced
 
 Alternatives:
 
@@ -418,7 +417,7 @@ Exit criteria:
 
 Scope:
 
-1. Execute the full pre-recording checklist: validate spec, lint good/bad specs, start Prism (static + dynamic), generate TS client, generate server stubs, run Schemathesis, run Hurl, run oasdiff, bundle Scalar docs, verify "Try it out" works
+1. Execute the full pre-recording checklist: validate spec, lint good/bad specs, start Prism (static + dynamic), generate TS types with openapi-typescript, verify openapi-fetch usage example compiles, generate server stubs, run Schemathesis, run Hurl, run oasdiff, bundle Scalar docs, verify "Try it out" works
 2. Fix any issues found during the dry run
 3. Pre-populate terminal history with all demo commands
 4. Set up terminal (dark theme, 16pt+ font) and browser (incognito, bookmarks)
@@ -451,7 +450,7 @@ Scope:
 2. Record Clip 2: The Contract (5 min, editor + spec walkthrough)
 3. Record Clip 3: Linting (3 min, Spectral bad spec → fix → pass)
 4. Record Clip 4: Mock Server (4 min, static → dynamic → validation error)
-5. Record Clip 5: Code Generation (3 min, TypeScript client)
+5. Record Clip 5: Code Generation (3 min, openapi-typescript + openapi-fetch)
 6. Record Clip 6: Backend Stubs (3 min, generate → fill in → test)
 7. Record Clip 7: Contract Testing (5 min, Schemathesis pass → bug → catch → fix)
 8. Record Clip 8: Breaking Change Detection (3 min, oasdiff)
@@ -555,7 +554,7 @@ Exit criteria:
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | M1: Foundation | 01-02 | pending | Scaffold repo with valid OpenAPI spec | `npx @scalar/cli validate specs/order-api.yaml` passes, all directories exist | A developer can clone the repo, understand the structure, and read a valid spec | `feat: scaffold project structure` then `feat: add Order Management OpenAPI spec` |
 | M2: Quality Gates | 03-04 | pending | Linting + mock server working | Spectral passes on good spec, fails on bad spec; Prism serves mock responses | Spec quality is enforceable; frontend can start building against mocks | `feat: add Spectral linting rules` then `feat: validate Prism mock responses` |
-| M3: Code Generation | 05-06 | pending | TypeScript client + Express server stubs | Generated client has typed models/APIs; stub server starts and responds | Both frontend and backend have generated starting points from the spec | `feat: generate TypeScript client` then `feat: generate Express server stubs` |
+| M3: Code Generation | 05-06 | pending | TypeScript types + Express server stubs | Generated types match spec; openapi-fetch usage example compiles; stub server starts and responds | Both frontend and backend have generated starting points from the spec | `feat: generate TypeScript types with openapi-typescript` then `feat: generate Express server stubs` |
 | M4: Testing | 07-08 | pending | Contract tests + functional tests working | Schemathesis passes 100+ tests; Hurl tests pass with JUnit output | Automated quality assurance is in place with zero hand-written contract tests | `feat: add Schemathesis contract testing` then `feat: add Hurl functional tests` |
 | M5: Ecosystem | 09-10 | pending | Breaking change detection, Scalar docs with "Try it out" | oasdiff detects breaking changes; Scalar HTML renders with working playground | Full tooling ecosystem is operational around the spec | `feat: add breaking change detection` then `feat: add Scalar API docs` |
 | M6: CI & Verification | 11-12 | pending | CI pipeline + full dry run | Valid pipeline YAML with all 5 jobs; pre-recording checklist passes | Everything works end-to-end, ready to record | `feat: add GitHub Actions CI pipeline` then `chore: pre-recording dry run` |

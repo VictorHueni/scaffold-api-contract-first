@@ -110,10 +110,11 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 **Acceptance Criteria:**
 
-- [ ] Running `openapi-generator-cli generate -i specs/order-api.yaml -g typescript-fetch -o generated/client-typescript` produces a working client
-- [ ] Generated `models/` directory contains typed interfaces for Order, Customer, OrderItem, ErrorResponse
-- [ ] Generated `apis/` directory contains methods for each operationId
+- [ ] Running `npx openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts` produces a types file
+- [ ] Generated types include typed interfaces for Order, Customer, OrderItem, ErrorResponse
 - [ ] All field names, types, and optionality match the spec exactly
+- [ ] `openapi-fetch` can be used with the generated types for type-safe API calls with IDE autocompletion
+- [ ] A minimal usage example exists showing a typed GET request with autocompletion
 
 ---
 
@@ -202,7 +203,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 - [ ] `ci/pipeline.yaml` exists as a valid GitHub Actions workflow
 - [ ] Pipeline triggers on push/PR to `specs/**`
-- [ ] Jobs include: `lint` (Spectral), `breaking-changes` (oasdiff on PRs), `contract-test` (Schemathesis against Prism), `generate-clients` (openapi-generator), `generate-docs` (Scalar)
+- [ ] Jobs include: `lint` (Spectral), `breaking-changes` (oasdiff on PRs), `contract-test` (Schemathesis against Prism), `generate-types` (openapi-typescript), `generate-docs` (Scalar)
 - [ ] Lint failure blocks merge
 - [ ] Breaking change detection runs only on PRs and fails if breaking changes are found
 
@@ -248,7 +249,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ## 6. Technical Considerations
 
-- **Node.js 18+** is required for Prism, Spectral, openapi-generator-cli, and Scalar CLI.
+- **Node.js 18+** is required for Prism, Spectral, openapi-typescript, openapi-fetch, openapi-generator-cli (server stubs only), and Scalar CLI.
 - **Python 3.8+** is required for Schemathesis and oasdiff.
 - **Hurl** is a standalone binary with no runtime dependencies.
 - **API exploration** is left to individual preference. The OpenAPI spec can be imported into any client (Bruno, Postman, Insomnia, Hoppscotch, Scalar desktop, Yaak). Scalar's built-in "Try it out" in the generated docs provides a zero-install exploration path.

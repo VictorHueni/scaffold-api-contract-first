@@ -218,12 +218,12 @@ Record each section as a **separate video file**. This lets you re-record a sing
 **Format:** Terminal + editor
 
 **What to show:**
-1. Run `openapi-generator-cli generate` for TypeScript. Show the command completing in seconds.
-2. Open `generated/client-typescript/models/`. Show `Order.ts` — every field typed, every enum defined, every optional marker present.
-3. Open `generated/client-typescript/apis/`. Show the generated API class with typed methods for each endpoint.
-4. (Optional for extra impact) Run the generator for Java or Python. Show that the same spec produces clients in multiple languages with identical shapes.
+1. Run `npx openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts`. Show it completing in under a second.
+2. Open `generated/api-types.d.ts`. Show the typed interfaces — Order, Customer, OrderItem, ErrorResponse. Every field typed, every enum defined, every optional marker present. "One command, complete type safety."
+3. Open `examples/client-usage.ts`. Show a typed API call using `openapi-fetch` — IDE autocompletion on endpoint paths, typed request params, typed response body.
+4. "No generated runtime code to maintain. Just types. The spec changes, you regenerate, and the compiler tells you what broke."
 
-**Key line:** "Zero hand-written fetch calls. Compile-time safety. If the spec changes, regenerate and the compiler tells you what broke."
+**Key line:** "One command generates the types. openapi-fetch gives you a 6kb wrapper with full autocompletion. No bloated SDK, no Java dependency, no generated code to commit."
 
 ---
 
