@@ -194,7 +194,7 @@ Exit criteria:
 
 ---
 
-### Increment 06: Backend server stubs with minimal implementation
+### Increment 06: Spring Boot server stubs with minimal implementation
 
 **Status:** pending
 
@@ -202,31 +202,32 @@ Exit criteria:
 
 Scope:
 
-1. Run `openapi-generator-cli generate` with `nodejs-express-server` generator
-2. Fill in `GET /orders/{orderId}` with a minimal hardcoded response returning a valid Order object
+1. Run `openapi-generator-cli generate` with `spring` generator and `interfaceOnly=true,useSpringBoot3=true`
+2. Create a minimal implementation class that implements the generated `OrdersApi` interface for `GET /orders/{orderId}` with a hardcoded Order response
 3. Verify the stub server starts and responds to requests
 
 Primary files:
 
-1. `generated/server-stubs/` (generated, not committed)
+1. `generated/server-spring/` (generated, not committed)
+2. `generated/server-spring/src/main/java/.../OrdersApiImpl.java` (hand-written implementation)
 
 Test gate:
 
-1. `openapi-generator-cli generate -i specs/order-api.yaml -g nodejs-express-server -o generated/server-stubs` — exits 0
-2. `cd generated/server-stubs && npm install && npm start &` then `curl -sf http://localhost:8080/orders/test-123 | jq .id` — returns a valid order ID
+1. `openapi-generator-cli generate -i specs/order-api.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true` — exits 0
+2. `cd generated/server-spring && mvn spring-boot:run &` then `curl -sf http://localhost:8080/orders/test-123 | jq .id` — returns a valid order ID
 
 Alternatives:
 
-- **Spring Boot stubs** — `openapi-generator-cli generate -i specs/order-api.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true`. Generates interfaces; backend devs implement them. Use for Java-based teams.
+- **Quarkus (JAX-RS)** — `openapi-generator-cli generate -i specs/order-api.yaml -g jaxrs-spec -o generated/server-quarkus`. Same tool, generates JAX-RS interfaces for Quarkus. Same spec, same workflow.
+- **Node.js Express** — `openapi-generator-cli generate -g nodejs-express-server`. Full scaffold with validation middleware. Use for Node-based teams.
 - **Connexion (Python/Flask)** — routes and validates directly from the spec. Good for Python shops.
 - **NSwag / Kiota (.NET)** — strong typing and middleware generation for .NET teams.
-- **express-openapi-validator** — middleware that validates every request/response against the spec at runtime, complementary to generated stubs.
 
 Exit criteria:
 
-1. Server stubs are generated with controller stubs for every operationId
-2. At least one endpoint returns a valid, spec-conforming response
-3. Server starts without errors
+1. Spring Boot interfaces are generated for every operationId
+2. At least one endpoint has an implementation returning a valid, spec-conforming response
+3. Server starts with `mvn spring-boot:run` without errors
 
 ---
 
@@ -417,7 +418,7 @@ Exit criteria:
 
 Scope:
 
-1. Execute the full pre-recording checklist: validate spec, lint good/bad specs, start Prism (static + dynamic), generate TS types with openapi-typescript, verify openapi-fetch usage example compiles, generate server stubs, run Schemathesis, run Hurl, run oasdiff, bundle Scalar docs, verify "Try it out" works
+1. Execute the full pre-recording checklist: validate spec, lint good/bad specs, start Prism (static + dynamic), generate TS types with openapi-typescript, verify openapi-fetch usage example compiles, generate Spring Boot stubs, run `mvn spring-boot:run`, run Schemathesis, run Hurl, run oasdiff, bundle Scalar docs, verify "Try it out" works
 2. Fix any issues found during the dry run
 3. Pre-populate terminal history with all demo commands
 4. Set up terminal (dark theme, 16pt+ font) and browser (incognito, bookmarks)
@@ -451,7 +452,7 @@ Scope:
 3. Record Clip 3: Linting (3 min, Spectral bad spec → fix → pass)
 4. Record Clip 4: Mock Server (4 min, static → dynamic → validation error)
 5. Record Clip 5: Code Generation (3 min, openapi-typescript + openapi-fetch)
-6. Record Clip 6: Backend Stubs (3 min, generate → fill in → test)
+6. Record Clip 6: Backend Stubs (3 min, Spring Boot interfaces → implement → test)
 7. Record Clip 7: Contract Testing (5 min, Schemathesis pass → bug → catch → fix)
 8. Record Clip 8: Breaking Change Detection (3 min, oasdiff)
 9. Record Clip 9: Documentation + API Exploration (4 min, Scalar UI + "Try it out" + live import into 1-2 desktop clients)
@@ -554,7 +555,7 @@ Exit criteria:
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | M1: Foundation | 01-02 | pending | Scaffold repo with valid OpenAPI spec | `npx @scalar/cli validate specs/order-api.yaml` passes, all directories exist | A developer can clone the repo, understand the structure, and read a valid spec | `feat: scaffold project structure` then `feat: add Order Management OpenAPI spec` |
 | M2: Quality Gates | 03-04 | pending | Linting + mock server working | Spectral passes on good spec, fails on bad spec; Prism serves mock responses | Spec quality is enforceable; frontend can start building against mocks | `feat: add Spectral linting rules` then `feat: validate Prism mock responses` |
-| M3: Code Generation | 05-06 | pending | TypeScript types + Express server stubs | Generated types match spec; openapi-fetch usage example compiles; stub server starts and responds | Both frontend and backend have generated starting points from the spec | `feat: generate TypeScript types with openapi-typescript` then `feat: generate Express server stubs` |
+| M3: Code Generation | 05-06 | pending | TypeScript types + Spring Boot server stubs | Generated types match spec; openapi-fetch usage example compiles; Spring Boot stub server starts and responds | Both frontend and backend have generated starting points from the spec | `feat: generate TypeScript types with openapi-typescript` then `feat: generate Spring Boot server stubs` |
 | M4: Testing | 07-08 | pending | Contract tests + functional tests working | Schemathesis passes 100+ tests; Hurl tests pass with JUnit output | Automated quality assurance is in place with zero hand-written contract tests | `feat: add Schemathesis contract testing` then `feat: add Hurl functional tests` |
 | M5: Ecosystem | 09-10 | pending | Breaking change detection, Scalar docs with "Try it out" | oasdiff detects breaking changes; Scalar HTML renders with working playground | Full tooling ecosystem is operational around the spec | `feat: add breaking change detection` then `feat: add Scalar API docs` |
 | M6: CI & Verification | 11-12 | pending | CI pipeline + full dry run | Valid pipeline YAML with all 5 jobs; pre-recording checklist passes | Everything works end-to-end, ready to record | `feat: add GitHub Actions CI pipeline` then `chore: pre-recording dry run` |

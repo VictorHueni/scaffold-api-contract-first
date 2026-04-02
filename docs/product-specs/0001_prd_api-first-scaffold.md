@@ -126,11 +126,11 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 **Acceptance Criteria:**
 
-- [ ] Running `openapi-generator-cli generate -i specs/order-api.yaml -g nodejs-express-server -o generated/server-stubs` produces a scaffold
-- [ ] Generated controllers have method signatures matching each operationId
+- [ ] Running `openapi-generator-cli generate -i specs/order-api.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true` produces a scaffold
+- [ ] Generated interfaces have method signatures matching each operationId
 - [ ] Generated models match the spec schemas
-- [ ] At least one endpoint (`GET /orders/{orderId}`) has a minimal hardcoded implementation that returns a valid response
-- [ ] The stub server starts with `npm start` and responds to requests
+- [ ] At least one endpoint (`GET /orders/{orderId}`) has a minimal implementation class that implements the generated interface and returns a valid response
+- [ ] The stub server starts with `mvn spring-boot:run` and responds to requests
 
 ---
 

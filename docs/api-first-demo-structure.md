@@ -229,15 +229,16 @@ Record each section as a **separate video file**. This lets you re-record a sing
 
 ### Clip 6: Backend Stubs (3 min)
 
-**Format:** Terminal + editor
+**Format:** Terminal + editor (IntelliJ or VS Code)
 
 **What to show:**
-1. Run `openapi-generator-cli generate` for Node.js Express.
-2. Open the generated controller. Show the TODO comments — pre-shaped functions waiting for business logic.
-3. Fill in `GET /orders/{orderId}` with a minimal hardcoded response (type live or paste).
-4. Start the server: `npm start`. `curl` the endpoint. Show the response.
+1. Run `openapi-generator-cli generate -g spring --additional-properties=interfaceOnly=true,useSpringBoot3=true`. Show the command completing.
+2. Open the generated `OrdersApi` interface. Show the method signatures — each one matches an operationId from the spec. "The spec wrote your interface."
+3. Create `OrdersApiImpl.java` implementing the interface. Fill in `getOrder()` with a minimal hardcoded Order response.
+4. Start the server: `mvn spring-boot:run`. `curl` the endpoint. Show the response.
+5. "The interface is the contract. You implement it. If the spec changes, the interface changes, and the compiler tells you what broke."
 
-**Key line:** "The backend developer's job: add the logic inside. The shape, the validation, the routing — already done."
+**Key line:** "The backend developer's job: implement the interface. The shape, the validation, the routing — generated from the spec."
 
 ---
 
