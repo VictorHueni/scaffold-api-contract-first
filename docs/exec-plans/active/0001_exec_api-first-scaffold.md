@@ -92,30 +92,63 @@ Exit criteria:
 
 Scope:
 
-1. Create `rules/.spectral.yaml` extending `spectral:oas` with custom rules: operationId required (error), camelCase property names (warn), descriptions on operations (warn), examples on schema properties (warn), error responses required (warn)
-2. Run Spectral against `specs/order-api.yaml` and fix any violations
-3. Create `specs/order-api-bad.yaml` with intentional violations: `order_status` (snake_case), missing `operationId`, missing example, missing error response
+1. Install `@stoplight/spectral-owasp-ruleset` as a dependency
+2. Create `rules/.spectral.yaml` with three layers:
+
+   **Layer 1 — OpenAPI standard** (extends `spectral:oas`, 25+ built-in rules)
+
+   **Layer 2 — OWASP security** (extends `@stoplight/spectral-owasp-ruleset`) with key rules promoted to error:
+   - `owasp:api-security:security-hosts-https-oas3` (error) — servers must use HTTPS
+   - `owasp:api-security:protection-global-unsafe` (error) — POST/PUT/DELETE must have auth
+   - `owasp:api-security:no-api-keys-in-url` (error) — API keys not in query params
+   - `owasp:api-security:array-limit` (error) — arrays must define `maxItems`
+   - `owasp:api-security:string-limit` (warn) — strings should define `maxLength`
+   - `owasp:api-security:no-additionalProperties` (warn) — objects should set `additionalProperties: false`
+   - `owasp:api-security:rate-limit-responses-429` (warn) — operations should define 429 responses
+
+   **Layer 3 — Organizational custom rules:**
+   - `operationId` required on all operations (error)
+   - `operationId-pattern` — must follow `verbNoun` pattern e.g. `listOrders`, `createOrder` (warn)
+   - camelCase property names (warn)
+   - Descriptions on operations (warn)
+   - `no-empty-descriptions` — empty descriptions are worse than none (error)
+   - Examples on schema properties (warn)
+   - Error responses required on all operations (warn)
+   - `paths-kebab-case` — path segments must be kebab-case (error)
+   - `no-trailing-slash` — paths must not end with `/` (error)
+   - `operation-must-have-tag` — every operation must be tagged (error)
+   - `get-must-return-body` — GET 200 responses must define content (error)
+   - `request-body-must-ref-component` — request bodies should use `$ref` not inline schemas (warn)
+
+3. Run Spectral against `specs/order-api.yaml` and fix any violations
+4. Create `specs/order-api-bad.yaml` with intentional violations covering all three layers:
+   - **Convention violations:** `order_status` (snake_case), missing `operationId`, trailing slash in path, verb in path (`/getOrders`), missing tag
+   - **Security violations:** server using `http://` not `https://`, missing auth on a POST, API key in query param, array without `maxItems`
+   - **Quality violations:** empty description, inline request body schema, missing error response
 
 Primary files:
 
 1. `rules/.spectral.yaml`
 2. `specs/order-api-bad.yaml`
+3. `package.json` (for `@stoplight/spectral-owasp-ruleset` dependency)
 
 Test gate:
 
 1. `spectral lint specs/order-api.yaml --ruleset rules/.spectral.yaml` — exits 0, zero errors
-2. `spectral lint specs/order-api-bad.yaml --ruleset rules/.spectral.yaml 2>&1 | grep -c "warning\|error"` — returns 3 or more violations
+2. `spectral lint specs/order-api-bad.yaml --ruleset rules/.spectral.yaml 2>&1 | grep -c "warning\|error"` — returns 8 or more violations across all 3 layers
 
 Alternatives:
 
-- **Spectral OWASP ruleset** (`@stoplight/spectral-owasp-ruleset`) — security-focused rules mapped to OWASP API Top 10. Can be layered on top of the base ruleset.
-- **Redocly CLI lint** — alternative linter with built-in rules and custom plugin support. More opinionated out of the box.
-- **VS Code Spectral extension** — gives developers real-time linting feedback as they edit the spec in their IDE.
+- **@ibm-cloud/openapi-ruleset** — IBM's enterprise ruleset with 80+ rules (pagination patterns, error format, etag, snake_case). The most comprehensive community ruleset. Can replace the custom rules layer.
+- **@apisyouwonthate/style-guide** — opinionated ruleset covering pagination, naming, error format (RFC 7807), versioning.
+- **Redocly CLI lint** — alternative linter with built-in rules and custom plugin support.
+- **VS Code Spectral extension** — gives developers real-time linting feedback as they edit the spec.
 
 Exit criteria:
 
-1. Good spec passes linting cleanly
-2. Bad spec triggers at least 3 distinct violations with clear messages
+1. Good spec passes all three layers (standard + OWASP + custom) cleanly
+2. Bad spec triggers violations from each layer — conventions, security, and quality
+3. Security violations are clearly flagged with OWASP rule names
 
 ---
 

@@ -183,18 +183,21 @@ Record each section as a **separate video file**. This lets you re-record a sing
 
 ---
 
-### Clip 3: Linting (3 min)
+### Clip 3: Linting (4 min)
 
-**Format:** Terminal
+**Format:** Terminal + editor
 
 **What to show:**
-1. Run `spectral lint` against `specs/order-api-bad.yaml`. Show violations: snake_case field, missing operationId, missing error response.
-2. "These rules are customizable. Your organization defines its own standards."
-3. Fix one violation live in the editor (or show the diff).
-4. Run Spectral again. Show it passing.
-5. "This runs in CI. A PR that violates the rules cannot merge."
+1. Briefly show `rules/.spectral.yaml` — point out the three layers: "We extend the OpenAPI standard rules, add OWASP security rules, and add our own organizational rules."
+2. Run `spectral lint` against `specs/order-api-bad.yaml`. Show violations from all three layers:
+   - **Convention:** snake_case field, missing operationId, trailing slash, missing tag
+   - **Security:** HTTP server (not HTTPS), missing auth on POST, API key in query param, array without `maxItems`
+   - **Quality:** empty description, inline schema, missing error response
+3. "Three layers of protection. Convention, security, quality — all from the same file."
+4. Fix one or two violations live in the editor. Run Spectral again. Show the count dropping.
+5. "This runs in CI. A PR that violates any layer cannot merge."
 
-**Teaching point:** "The linter catches what code review misses. A new team member cannot accidentally break conventions."
+**Key line:** "The OWASP rules catch security issues before code exists. The convention rules enforce consistency across 50 APIs. A new team member cannot accidentally break either."
 
 ---
 

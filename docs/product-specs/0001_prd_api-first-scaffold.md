@@ -77,11 +77,12 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 **Acceptance Criteria:**
 
-- [ ] `rules/.spectral.yaml` exists and extends `spectral:oas`
-- [ ] Rules enforce: operationId required, camelCase property names, descriptions on operations, examples on schema properties, error responses on all operations
+- [ ] `rules/.spectral.yaml` exists and extends both `spectral:oas` and `@stoplight/spectral-owasp-ruleset`
+- [ ] OWASP security rules enforce: HTTPS servers, auth on unsafe methods, no API keys in URL, array `maxItems`, string `maxLength`
+- [ ] Custom organizational rules enforce: operationId required, `verbNoun` operationId pattern, camelCase properties, descriptions on operations, examples on schemas, error responses, kebab-case paths, no trailing slashes, operations must have tags, GET must return body, request bodies must use `$ref`
 - [ ] Running Spectral against a well-formed spec produces zero errors
-- [ ] A "bad spec" variant (`specs/order-api-bad.yaml`) exists with intentional violations (snake_case field, missing operationId, missing error response)
-- [ ] Running Spectral against the bad spec produces at least 3 violations with clear messages
+- [ ] A "bad spec" variant (`specs/order-api-bad.yaml`) exists with intentional violations across all three layers (convention, security, quality)
+- [ ] Running Spectral against the bad spec produces at least 8 violations with clear messages spanning all layers
 
 ---
 
