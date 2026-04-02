@@ -68,6 +68,18 @@ Scope:
 5. Define endpoints: `GET /orders` (paginated), `GET /orders/{orderId}`, `POST /orders`, `PUT /orders/{orderId}`, `DELETE /orders/{orderId}`, `GET /orders/{orderId}/items`
 6. Each endpoint has `operationId`, `tags`, parameters, request body (where applicable), success + error responses
 7. Add OpenAPI `links` on `POST /orders` 201 response for stateful testing
+8. Add multiple named `examples` on responses to showcase Scalar's example picker:
+   - `GET /orders/{orderId}` 200: "Pending order", "Shipped order with tracking", "Delivered order with notes"
+   - `POST /orders` 201: "Single item order", "Multi-item order with notes"
+   - `GET /orders` 200: "First page of results", "Filtered by status"
+9. Add multiple named `examples` on request bodies for Scalar's "Try it out" pre-fill:
+   - `POST /orders` body: "Basic order", "Order with multiple items and notes"
+   - `PUT /orders/{orderId}` body: "Update status to shipped", "Add tracking number"
+10. Add error response examples with realistic bodies:
+    - 400: validation error (missing required field, with `message` and `code`)
+    - 401: unauthorized (invalid or missing API key)
+    - 404: order not found
+    - 429: rate limit exceeded (with `Retry-After` header example)
 
 Primary files:
 
@@ -76,11 +88,14 @@ Primary files:
 Test gate:
 
 1. `npx @scalar/cli validate specs/order-api.yaml` — exits 0, no errors
+2. `grep -c "examples:" specs/order-api.yaml` — multiple `examples` blocks present (at least 5)
 
 Exit criteria:
 
 1. The spec is valid OpenAPI 3.1 with all 6 endpoints, 4 schemas, security schemes, and x-faker annotations
 2. Every schema property has `type`, `format` (where applicable), `example`, and `x-faker`
+3. Key endpoints have multiple named examples for both responses and request bodies
+4. Error responses (400, 401, 404, 429) have realistic example bodies
 
 ---
 

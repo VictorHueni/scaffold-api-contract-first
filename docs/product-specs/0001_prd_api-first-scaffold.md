@@ -64,8 +64,19 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 - [ ] Spec includes `servers` block with mock, dev, staging, and production URLs
 - [ ] Spec includes security schemes (API key and OAuth2)
 - [ ] Spec includes OpenAPI `links` for stateful testing (POST response links to GET/PUT)
+- [ ] Response `examples` (plural) are defined on key endpoints to showcase Scalar's example picker:
+  - `GET /orders/{orderId}` 200: at least 3 named examples (e.g., "Pending order", "Shipped order with tracking", "Delivered order with notes")
+  - `POST /orders` 201: at least 2 named examples (e.g., "Single item order", "Multi-item order with notes")
+  - `GET /orders` 200: at least 2 named examples (e.g., "First page of results", "Filtered by status")
+- [ ] Request body `examples` (plural) are defined on mutation endpoints for Scalar's "Try it out" pre-fill:
+  - `POST /orders`: at least 2 named examples (e.g., "Basic order", "Order with multiple items and notes")
+  - `PUT /orders/{orderId}`: at least 2 named examples (e.g., "Update status to shipped", "Add tracking number")
+- [ ] Error response examples are defined with realistic bodies:
+  - 400: validation error example (e.g., missing required field)
+  - 401: unauthorized example
+  - 404: resource not found example
+  - 429: rate limit exceeded example (with `Retry-After` header)
 - [ ] `npx @scalar/cli validate specs/order-api.yaml` passes with no errors
-- [ ] `spectral lint specs/order-api.yaml --ruleset rules/.spectral.yaml` passes with no errors
 
 ---
 

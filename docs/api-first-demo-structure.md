@@ -280,10 +280,12 @@ Record each section as a **separate video file**. This lets you re-record a sing
 
 **What to show:**
 1. Open the Scalar API reference in browser. Show the modern UI — dark/light toggle, endpoint navigation, code samples in multiple languages.
-2. Click "Try it out" on one endpoint. Make a live request against the mock server. Show the response.
-3. Show a second endpoint — modify a parameter, send again. "This is a full API client, built into the docs."
-4. (Optional) Put a screenshot of a stale Confluence doc next to the Scalar page. "Which one do you trust?"
-5. **Live import demo:** Open one or two desktop clients and import `specs/order-api.yaml` on camera:
+2. Navigate to `GET /orders/{orderId}`. Show the **example picker** — click between "Pending order", "Shipped order with tracking", "Delivered order with notes". "Three scenarios, all from the spec."
+3. Click "Try it out". The request body is pre-filled from the selected example. Send it against the mock. Show the response.
+4. Navigate to `POST /orders`. Show the request body example picker — "Basic order" vs "Order with multiple items and notes". Select one, send it, show the 201 response.
+5. Show an error example — send a malformed request, show the 400 response with the error body matching the spec's error example.
+6. (Optional) Put a screenshot of a stale Confluence doc next to the Scalar page. "Which one do you trust?"
+7. **Live import demo:** Open one or two desktop clients and import `specs/order-api.yaml` on camera:
    - **Bruno:** File > Import Collection > OpenAPI V3 Import > select `order-api.yaml`. Show the generated collection with all endpoints, pre-filled request bodies.
    - **Postman:** Import > File > select `order-api.yaml`. Show the collection organized by tags. Send one request against the mock.
    - Pick whichever one or two the audience is most likely to already use. The point is to show it takes 10 seconds, not to advocate for a specific tool.
