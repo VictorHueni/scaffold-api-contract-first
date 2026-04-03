@@ -235,34 +235,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ---
 
-### US-012: Record a video walkthrough of the full workflow
-
-**Status:** pending
-
-**Description:** As the presenter, I want to record a polished video demo walking through each phase of the API-first workflow so that the IT department can watch and understand the approach.
-
-**Acceptance Criteria:**
-
-- [ ] Video covers: problem statement, contract writing, linting, mocking (static + dynamic), codegen, server stubs, contract testing (with intentional bug), breaking change detection, Scalar docs (with "Try it out"), Hurl functional tests, CI pipeline, IBM stack (slides only), role impact summary
-- [ ] Each section is recorded as a separate clip for easy re-recording
-- [ ] Terminal font is 16pt+ and readable at 1080p
-- [ ] Total final video is 35-40 minutes after editing
-- [ ] IBM stack integration is presented via slides, not live terminal
-
----
-
-### US-013: Present IBM stack integration via slides
-
-**Status:** pending
-
-**Description:** As the presenter, I want slides covering API Connect publishing, Developer Portal, App Connect import, and AsyncAPI/MQ so that the audience understands the IBM integration path without requiring live environment access.
-
-**Acceptance Criteria:**
-
-- [ ] Slides cover: `apic products:publish` workflow, Developer Portal screenshot/mockup, App Connect OpenAPI import flow
-- [ ] Slides include an AsyncAPI "what's next" section: what it is, how it extends contract-first to event-driven APIs (MQ/Kafka), example spec structure, current tooling maturity
-- [ ] Slides reference the actual spec file in the repo so viewers know it is the same contract
-- [ ] No live IBM environment is required during the presentation
+*Video recording and slide production are covered in the [Presentation & Delivery Guide](../api-first-demo-structure.md), not in this PRD. This PRD covers the scaffold implementation only.*
 
 ---
 

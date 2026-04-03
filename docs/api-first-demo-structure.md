@@ -390,6 +390,48 @@ Share these alongside the video so viewers can explore on their own:
 
 ---
 
+## Delivery Checklist
+
+This checklist tracks video recording and presentation delivery. The scaffold implementation is tracked separately in the [exec plan](exec-plans/active/0001_exec_api-first-scaffold.md).
+
+### Pre-recording
+
+- [ ] Scaffold smoke test passes end-to-end (exec plan Increment 12 complete)
+- [ ] Terminal configured: dark theme, 16pt+ font, shell prompt shows current directory
+- [ ] Terminal history pre-populated with all demo commands (arrow-up to recall)
+- [ ] Browser configured: incognito, extensions disabled, bookmarks for localhost:4010, :8080, :8081
+- [ ] OBS Studio installed and tested
+- [ ] Slide deck complete (10 slides — see Slide Deck Outline above)
+
+### Recording
+
+- [ ] Clip 1: The Problem (2 min, slides)
+- [ ] Clip 2: The Contract (5 min, editor + spec walkthrough)
+- [ ] Clip 3: Linting (4 min, 3-layer Spectral demo)
+- [ ] Clip 4: Mock Server (4 min, static + dynamic + validation error)
+- [ ] Clip 5: Code Generation (3 min, openapi-typescript + openapi-fetch)
+- [ ] Clip 6: Backend Stubs (3 min, Spring Boot interfaces)
+- [ ] Clip 7: Contract Testing (5 min, Schemathesis with intentional bug)
+- [ ] Clip 8: Breaking Change Detection (3 min, oasdiff)
+- [ ] Clip 9: Documentation + API Exploration (4 min, Scalar + desktop client import)
+- [ ] Clip 10: Hurl Functional Tests (2 min)
+- [ ] Clip 11: CI Pipeline (2 min, pipeline.yaml walkthrough)
+- [ ] Clip 12: IBM Stack + AsyncAPI (3-5 min, slides only)
+- [ ] Clip 13: The Payoff (3 min, timeline + role impact matrix)
+
+### Post-production
+
+- [ ] All clips assembled in sequence with title cards (2s each)
+- [ ] Pauses and retakes cut
+- [ ] Progress bar or chapter markers added
+- [ ] Exported at 1080p, 30fps
+- [ ] Total runtime: 35-40 minutes
+- [ ] Uploaded to internal platform
+- [ ] Companion materials shared (repo link, spec, ruleset, pipeline, tool links)
+- [ ] Q&A session scheduled
+
+---
+
 ## Follow-Up Strategy
 
 ### Immediate (week after presentation)

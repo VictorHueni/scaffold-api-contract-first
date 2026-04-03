@@ -511,130 +511,49 @@ Exit criteria:
 
 ---
 
-### Increment 12: Pre-recording checklist and dry run
+### Increment 12: End-to-end smoke test
 
 **Status:** pending
 
-> PRD ref: US-012 (preparation)
+> PRD ref: all (verification of Increments 01-11)
 
 Scope:
 
-1. Execute the full pre-recording checklist: validate spec, lint good/bad specs, start Prism (static + dynamic), generate TS types with openapi-typescript, verify openapi-fetch usage example compiles, generate Spring Boot stubs, run `mvn spring-boot:run`, run Schemathesis, run Hurl, run oasdiff, bundle Scalar docs, verify "Try it out" works
-2. Fix any issues found during the dry run
-3. Pre-populate terminal history with all demo commands
-4. Set up terminal (dark theme, 16pt+ font) and browser (incognito, bookmarks)
+1. Run every tool in sequence from a clean state to verify the full workflow works end-to-end:
+   - `npm install`
+   - `npm run bundle`
+   - `npm run lint`
+   - `npm run lint:bad` (verify violations detected)
+   - Start Prism static: `npm run mock` → curl GET endpoint → verify response
+   - Start Prism dynamic: `npm run mock:dynamic` → curl twice → verify different responses
+   - `npm run types` → verify `generated/api-types.d.ts` exists
+   - `npx tsc --noEmit examples/client-usage.ts` → compiles
+   - `npm run stubs` → verify `generated/server-spring/` exists (requires Java)
+   - `npm run breaking` → verify exit code 1
+   - `npm run docs:build` → verify `docs/scalar-reference.html` exists
+   - `hurl --test tests/orders.hurl` → all pass (with Prism running)
+2. Fix any issues found
 
 Primary files:
 
-1. (No new files — verification of all prior increments)
+1. (No new files — verification only)
 
 Test gate:
 
-1. Every item in the pre-recording checklist passes end-to-end without manual intervention
-2. All demo commands can be recalled via terminal history (arrow-up)
+1. `npm install && npm run bundle && npm run lint` — exits 0
+2. `npm run lint:bad 2>&1 | grep -c "error\|warning"` — returns 8+
+3. `npm run types && test -f generated/api-types.d.ts` — types generated
+4. `npm run docs:build && test -f docs/scalar-reference.html` — docs generated
+5. `npm run breaking; test $? -eq 1` — breaking changes detected with exit code 1
+6. `hurl --test tests/orders.hurl` — all pass (with Prism running on 4010)
 
 Exit criteria:
 
-1. The full workflow works end-to-end on the recording machine
-2. Terminal and browser are configured for recording
+1. Every `npm run` script completes successfully
+2. The full workflow works end-to-end from a clean `npm install`
+3. No manual steps required — everything is reproducible
 
----
-
-### Increment 13: Record video clips (core workflow)
-
-**Status:** pending
-
-> PRD ref: US-012
-
-Scope:
-
-1. Record Clip 1: The Problem (2 min, slides)
-2. Record Clip 2: The Contract (5 min, editor + spec walkthrough)
-3. Record Clip 3: Linting (3 min, Spectral bad spec → fix → pass)
-4. Record Clip 4: Mock Server (4 min, static → dynamic → validation error)
-5. Record Clip 5: Code Generation (3 min, openapi-typescript + openapi-fetch)
-6. Record Clip 6: Backend Stubs (3 min, Spring Boot interfaces → implement → test)
-7. Record Clip 7: Contract Testing (5 min, Schemathesis pass → bug → catch → fix)
-8. Record Clip 8: Breaking Change Detection (3 min, oasdiff)
-9. Record Clip 9: Documentation + API Exploration (4 min, Scalar UI + "Try it out" + live import into 1-2 desktop clients)
-10. Record Clip 10: Hurl Functional Tests (2 min, hurl --test)
-11. Record Clip 11: CI Pipeline (2 min, pipeline.yaml walkthrough)
-
-Primary files:
-
-1. Video clip files (stored outside repo)
-
-Test gate:
-
-1. Each clip is a self-contained recording file that starts and ends cleanly
-2. Terminal is readable at 1080p in all clips
-3. All commands execute successfully on camera
-
-Exit criteria:
-
-1. 11 clips covering the full open-source workflow are recorded (Clips 9 and 10 now cover Scalar exploration and Hurl tests separately)
-2. No IBM terminal demos — that is handled by slides
-
----
-
-### Increment 14: Record IBM slides and closing
-
-**Status:** pending
-
-> PRD ref: US-013, US-012
-
-Scope:
-
-1. Create or finalize slides covering: API Connect publishing workflow, Developer Portal, App Connect OpenAPI import, AsyncAPI spec for MQ events
-2. Record Clip 12: IBM Stack (3-5 min, slides + narration)
-3. Record Clip 13: The Payoff (3 min, Role Impact Matrix + timeline comparison)
-4. Slides reference the spec file in the repo
-
-Primary files:
-
-1. Slide deck (external to repo)
-
-Test gate:
-
-1. Slides reference `specs/order-api.yaml` by name
-2. Clips 12 and 13 are recorded and self-contained
-
-Exit criteria:
-
-1. IBM integration is presented via slides with no live environment dependency
-2. Closing clip shows the Role Impact Matrix and timeline comparison
-
----
-
-### Increment 15: Video editing and final delivery
-
-**Status:** pending
-
-> PRD ref: US-012
-
-Scope:
-
-1. Assemble all clips in sequence with section title cards (2s each, text on dark background)
-2. Cut pauses and retakes
-3. Add progress bar or chapter markers
-4. Export at 1080p, 30fps
-5. Upload to internal platform
-6. Share companion materials: repo URL, spec, ruleset, CI pipeline, tool links
-
-Primary files:
-
-1. Final video file (external to repo)
-
-Test gate:
-
-1. Final video plays start-to-finish without errors
-2. Total runtime is 35-40 minutes
-3. Chapter markers allow jumping to each section
-
-Exit criteria:
-
-1. Video is uploaded and accessible to the IT department
-2. Companion materials (repo, spec, ruleset, pipeline YAML, tool links) are shared alongside the video
+*Video recording and presentation delivery are covered in the [Presentation & Delivery Guide](../../api-first-demo-structure.md), not in this exec plan.*
 
 ---
 
@@ -642,11 +561,11 @@ Exit criteria:
 
 1. One increment per commit.
 2. Each increment must be independently verifiable via its test gate.
-3. No IBM environment dependencies in any increment — IBM is slides only.
+3. All test gates are executable shell commands with deterministic pass/fail.
 4. The OpenAPI spec source lives in `specs/order-api.yaml` + `specs/components/` (multi-file, committed). The bundled file `specs/order-api.bundled.yaml` is generated and gitignored — all downstream tools consume the bundled file.
 5. API exploration tooling is bring-your-own — the scaffold is opinionated about automation (Spectral, Prism, Schemathesis, Hurl, Scalar, CI) and unopinionated about personal clients (Bruno, Postman, Insomnia, etc.).
 6. All tools used are open source and free tier. No paid licenses required.
-7. Video clips are recorded as separate files and edited together — never as one continuous take.
+7. This plan covers scaffold implementation only (code + config). Video recording and presentation delivery are tracked separately in the [Presentation & Delivery Guide](../../api-first-demo-structure.md).
 
 ---
 
@@ -659,5 +578,4 @@ Exit criteria:
 | M3: Code Generation | 05-06 | pending | TypeScript types + Spring Boot server stubs | Generated types match spec; openapi-fetch usage example compiles; Spring Boot stub server starts and responds | Both frontend and backend have generated starting points from the spec | `feat: generate TypeScript types with openapi-typescript` then `feat: generate Spring Boot server stubs` |
 | M4: Testing | 07-08 | pending | Contract tests + functional tests working | Schemathesis passes 100+ tests; Hurl tests pass with JUnit output | Automated quality assurance is in place with zero hand-written contract tests | `feat: add Schemathesis contract testing` then `feat: add Hurl functional tests` |
 | M5: Ecosystem | 09-10 | pending | Breaking change detection, Scalar docs with "Try it out" | oasdiff detects breaking changes; Scalar HTML renders with working playground | Full tooling ecosystem is operational around the spec | `feat: add breaking change detection` then `feat: add Scalar API docs` |
-| M6: CI & Verification | 11-12 | pending | CI pipeline + full dry run | Valid pipeline YAML with all jobs; pre-recording checklist passes | Everything works end-to-end, ready to record | `feat: add GitHub Actions CI pipeline` then `chore: pre-recording dry run` |
-| M7: Video Production | 13-15 | pending | Recorded and edited video + companion materials | Final video is 35-40 min, 1080p, with chapter markers | IT department can watch the video and access all materials | Commits not applicable (video is external) |
+| M6: CI & Smoke Test | 11-12 | pending | CI pipeline + end-to-end smoke test | Valid pipeline YAML with all jobs; every `npm run` script passes from clean install | Everything works end-to-end, scaffold is production-ready | `feat: add GitHub Actions CI pipeline` then `chore: end-to-end smoke test` |
