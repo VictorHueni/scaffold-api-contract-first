@@ -16,6 +16,8 @@ These patterns describe what happens to the message payload (request/response bo
 
 **EIP Book Name:** Message Translator
 **Book Category:** Message Transformation
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/MessageTranslator.html
+**Camel:** https://camel.apache.org/components/latest/eips/message-translator.html
 
 **What it does:** Converts a message from one data structure to another so that systems using different data models can communicate. This is the foundational transformation pattern — every field mapping is an instance of it.
 
@@ -38,6 +40,8 @@ These patterns describe what happens to the message payload (request/response bo
 
 **EIP Book Name:** Content Enricher
 **Book Category:** Message Transformation
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/DataEnricher.html
+**Camel:** https://camel.apache.org/components/latest/eips/content-enricher.html
 
 **What it does:** Augments the incoming message with additional data obtained from an external source (another API, database, cache) that the original sender did not provide but the receiver requires.
 
@@ -60,6 +64,8 @@ These patterns describe what happens to the message payload (request/response bo
 
 **EIP Book Name:** Content Filter
 **Book Category:** Message Transformation
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/ContentFilter.html
+**Camel:** https://camel.apache.org/components/latest/eips/content-filter-eip.html
 
 **What it does:** Removes unwanted or unnecessary fields from a message, passing through only the data the downstream system needs. The inverse of Content Enricher.
 
@@ -80,6 +86,8 @@ These patterns describe what happens to the message payload (request/response bo
 
 **EIP Book Name:** Claim Check
 **Book Category:** Message Transformation
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/StoreInLibrary.html
+**Camel:** https://camel.apache.org/components/latest/eips/claimCheck-eip.html
 
 **What it does:** Replaces a large payload (or portion) with a reference key, stores the full data externally, and allows retrieval later using the key. Reduces message size for intermediate processing steps.
 
@@ -103,6 +111,8 @@ These patterns describe what happens to the message payload (request/response bo
 
 **EIP Book Name:** Normalizer
 **Book Category:** Message Transformation
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/Normalizer.html
+**Camel:** https://camel.apache.org/components/latest/eips/normalizer.html
 
 **What it does:** Routes messages from different sources (each with its own format) through format-specific translators to produce a single canonical message format. Combines a router with multiple Message Translators.
 
@@ -123,6 +133,7 @@ These patterns describe what happens to the message payload (request/response bo
 
 **EIP Book Name:** Canonical Data Model
 **Book Category:** Message Transformation
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/CanonicalDataModel.html
 
 **What it does:** Defines a shared, application-independent data model that sits between all consumers and providers. Each system maps to/from the canonical model rather than mapping directly to every other system. Reduces N-to-N mappings to N-to-1 + 1-to-N.
 
@@ -144,6 +155,7 @@ These patterns describe what happens to the message payload (request/response bo
 
 **EIP Book Name:** Envelope Wrapper
 **Book Category:** Message Transformation
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/EnvelopeWrapper.html
 
 **What it does:** Wraps a message inside a transport-specific envelope (adding headers, metadata, routing information) or unwraps an incoming envelope to extract the business payload.
 
@@ -193,6 +205,8 @@ These patterns describe how the integration layer decides where to send a messag
 
 **EIP Book Name:** Content-Based Router
 **Book Category:** Message Routing
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/ContentBasedRouter.html
+**Camel:** https://camel.apache.org/components/latest/eips/choice-eip.html
 
 **What it does:** Inspects message content (field values, headers) and routes to the appropriate downstream provider based on rules. The single most common routing pattern in ESB implementations.
 
@@ -215,6 +229,8 @@ These patterns describe how the integration layer decides where to send a messag
 
 **EIP Book Name:** Message Filter
 **Book Category:** Message Routing
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/Filter.html
+**Camel:** https://camel.apache.org/components/latest/eips/filter-eip.html
 
 **What it does:** Examines a message and either passes it through or drops it entirely based on criteria. Unlike Content-Based Router (different destinations), Message Filter has only two outcomes: pass or discard.
 
@@ -235,6 +251,8 @@ These patterns describe how the integration layer decides where to send a messag
 
 **EIP Book Name:** Recipient List
 **Book Category:** Message Routing
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/RecipientList.html
+**Camel:** https://camel.apache.org/components/latest/eips/recipientList-eip.html
 
 **What it does:** Sends a copy of the message to multiple recipients (providers), where the list is determined dynamically based on message content or configuration.
 
@@ -256,6 +274,8 @@ These patterns describe how the integration layer decides where to send a messag
 
 **EIP Book Name:** Splitter
 **Book Category:** Message Routing
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/Sequencer.html
+**Camel:** https://camel.apache.org/components/latest/eips/split-eip.html
 
 **What it does:** Takes a single message containing a collection (array) and breaks it into individual messages, one per element. Each is processed independently.
 
@@ -279,6 +299,8 @@ These patterns describe how the integration layer decides where to send a messag
 
 **EIP Book Name:** Aggregator
 **Book Category:** Message Routing
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/Aggregator.html
+**Camel:** https://camel.apache.org/components/latest/eips/aggregate-eip.html
 
 **What it does:** Collects and combines multiple related messages into a single message. The inverse of Splitter. Handles correlation (which messages belong together), completeness (when all have arrived), and aggregation logic (how to combine).
 
@@ -301,6 +323,8 @@ These patterns describe how the integration layer decides where to send a messag
 
 **EIP Book Name:** Dynamic Router
 **Book Category:** Message Routing
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/DynamicRouter.html
+**Camel:** https://camel.apache.org/components/latest/eips/dynamicRouter-eip.html
 
 **What it does:** Routes messages based on rules that can change at runtime without redeploying. Rules are externalized (database, config service, feature flags) rather than hardcoded.
 
@@ -323,6 +347,8 @@ These patterns describe how the integration layer decides where to send a messag
 
 **EIP Book Name:** Routing Slip
 **Book Category:** Message Routing
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/RoutingTable.html
+**Camel:** https://camel.apache.org/components/latest/eips/routingSlip-eip.html
 
 **What it does:** Attaches a list of processing steps to the message itself. Each step processes the message and forwards it to the next. The sequence can vary per message.
 
@@ -351,6 +377,8 @@ These patterns describe complex multi-step processing combining routing and tran
 
 **EIP Book Name:** Scatter-Gather
 **Book Category:** Message Routing
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/BroadcastAggregate.html
+**Camel:** https://camel.apache.org/components/latest/eips/scatter-gather.html
 
 **What it does:** Sends the same request to multiple providers simultaneously (scatter), waits for all responses, and aggregates results into a single response (gather). Combines Recipient List + Aggregator.
 
@@ -373,6 +401,7 @@ These patterns describe complex multi-step processing combining routing and tran
 
 **EIP Book Name:** Composed Message Processor
 **Book Category:** Message Routing
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/DistributionAggregate.html
 
 **What it does:** Splits a composite message by type, routes each part to its appropriate handler, processes independently, and re-aggregates. Combines Splitter + Router + Aggregator.
 
@@ -396,6 +425,7 @@ These patterns describe complex multi-step processing combining routing and tran
 
 **EIP Book Name:** Process Manager
 **Book Category:** Message Routing
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/ProcessManager.html
 
 **What it does:** Maintains state and controls multi-step processing, making dynamic decisions based on results of previous steps. More powerful than Routing Slip because the next step depends on the previous step's outcome.
 
@@ -420,6 +450,8 @@ These patterns describe complex multi-step processing combining routing and tran
 
 **EIP Book Name:** Pipes and Filters
 **Book Category:** Messaging Systems (architectural style)
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/PipesAndFilters.html
+**Camel:** https://camel.apache.org/components/latest/eips/pipeline-eip.html
 
 **What it does:** Decomposes complex processing into a sequence of independent, reusable steps (filters) connected by channels (pipes). Each filter performs one concern and passes the result to the next.
 
@@ -442,6 +474,8 @@ These patterns describe complex multi-step processing combining routing and tran
 
 **EIP Book Name:** Wire Tap
 **Book Category:** System Management
+**EIP Catalog:** https://www.enterpriseintegrationpatterns.com/patterns/messaging/WireTap.html
+**Camel:** https://camel.apache.org/components/latest/eips/wireTap-eip.html
 
 **What it does:** Sends a copy of the message to a secondary destination for monitoring, auditing, or analytics without affecting the primary flow.
 

@@ -5,6 +5,7 @@
 **Related:**
 - [`0001_prd_api-first-scaffold.md`](./0001_prd_api-first-scaffold.md) — this PRD extends the contract-first approach from single API documentation to the integration layer between APIs.
 - [`../reference/eip-patterns-for-api-mediation.md`](../reference/eip-patterns-for-api-mediation.md) — reference catalog of Enterprise Integration Patterns (Hohpe & Woolf) with coverage analysis against this mapping spec.
+- [`../reference/openapi-overlay-specification.md`](../reference/openapi-overlay-specification.md) — reference for the OpenAPI Overlay Specification used to annotate API specs with mapping metadata.
 
 ---
 
