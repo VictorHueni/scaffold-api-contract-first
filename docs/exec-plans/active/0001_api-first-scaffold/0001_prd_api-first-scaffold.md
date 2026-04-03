@@ -41,21 +41,21 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ### US-001: Clone and understand the scaffold
 
-**Status:** pending
+**Status:** done
 
 **Description:** As a developer joining a new API project, I want to clone the scaffold repo and immediately understand its structure so that I can start working without reading external documentation.
 
 **Acceptance Criteria:**
 
-- [ ] Repo has a clear README explaining the folder structure and purpose of each directory
-- [ ] The scaffold lives in `scaffold-api/` — running `ls scaffold-api/` reveals an intuitive layout: `specs/` (with `components/` subdirectories), `rules/`, `tests/`, `docs/`, `ci/`
-- [ ] `scaffold-api/package.json` exists with all Node.js tools as `devDependencies` (no global installs)
-- [ ] `npm install` is the single setup command — installs Spectral, Prism, Scalar CLI, openapi-typescript, openapi-fetch, openapi-generator-cli
-- [ ] `npm run` (no args) lists all available commands, organized by category
-- [ ] README documents all `npm run` scripts with a brief description of each
-- [ ] README documents prerequisites: Node.js 18+ (required), Java 11+ (optional, for Spring stubs only), Hurl and oasdiff (optional, for local testing — also run in CI)
-- [ ] README includes a "Using this scaffold for your own API" section explaining the find-and-replace process
-- [ ] README mentions that the spec can be imported into any API client (Bruno, Postman, Insomnia, Hoppscotch, Scalar, Yaak) for manual exploration — the scaffold is unopinionated about personal tooling
+- [x] Repo has a clear README explaining the folder structure and purpose of each directory
+- [x] The scaffold lives in `scaffold-api/` — running `ls scaffold-api/` reveals an intuitive layout: `specs/` (with `components/` subdirectories), `rules/`, `tests/`, `docs/`, `ci/`
+- [x] `scaffold-api/package.json` exists with all Node.js tools as `devDependencies` (no global installs)
+- [x] `npm install` is the single setup command — installs Spectral, Prism, Scalar CLI, openapi-typescript, openapi-fetch, openapi-generator-cli
+- [x] `npm run` (no args) lists all available commands, organized by category
+- [x] README documents all `npm run` scripts with a brief description of each
+- [x] README documents prerequisites: Node.js 18+ (required), Java 11+ (optional, for Spring stubs only), Hurl and oasdiff (optional, for local testing — also run in CI)
+- [x] README includes a "Using this scaffold for your own API" section explaining the find-and-replace process
+- [x] README mentions that the spec can be imported into any API client (Bruno, Postman, Insomnia, Hoppscotch, Scalar, Yaak) for manual exploration — the scaffold is unopinionated about personal tooling
 
 ---
 

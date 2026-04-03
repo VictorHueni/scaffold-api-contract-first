@@ -1,0 +1,40 @@
+{
+  "name": "scaffold-api-contract-first",
+  "version": "1.0.0",
+  "description": "API-first scaffold with contract-driven tooling",
+  "private": true,
+  "scripts": {
+    "------- SPEC -------": "",
+    "bundle": "scalar-cli bundle specs/order-api.yaml -o specs/order-api.bundled.yaml",
+    "validate": "scalar-cli validate specs/order-api.yaml",
+
+    "------- QUALITY -------": "",
+    "lint": "spectral lint 'specs/**/*.yaml' --ruleset rules/.spectral.yaml --ignore-unknown-format",
+    "lint:bad": "spectral lint specs/order-api-bad.yaml --ruleset rules/.spectral.yaml",
+
+    "------- DEV -------": "",
+    "mock": "prism mock specs/order-api.bundled.yaml --port 4010",
+    "mock:dynamic": "prism mock -d specs/order-api.bundled.yaml --port 4010",
+    "types": "openapi-typescript specs/order-api.bundled.yaml -o generated/api-types.d.ts",
+    "docs": "scalar-cli serve specs/order-api.bundled.yaml --port 8081 --watch",
+    "docs:build": "scalar-cli bundle specs/order-api.bundled.yaml -o docs/scalar-reference.html",
+
+    "------- TEST -------": "",
+    "test:hurl": "hurl --test tests/**/*.hurl",
+
+    "------- BACKEND -------": "",
+    "stubs": "openapi-generator-cli generate -i specs/order-api.bundled.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true",
+
+    "------- PRECHECK -------": "",
+    "precheck": "npm run bundle && npm run lint"
+  },
+  "devDependencies": {
+    "@stoplight/prism-cli": "^5",
+    "@stoplight/spectral-cli": "^6",
+    "@stoplight/spectral-owasp-ruleset": "^2",
+    "@scalar/cli": "^1",
+    "openapi-typescript": "^7",
+    "openapi-fetch": "^0.17",
+    "@openapitools/openapi-generator-cli": "^2"
+  }
+}

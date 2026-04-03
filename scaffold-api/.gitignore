@@ -1,0 +1,5 @@
+node_modules/
+generated/
+specs/*.bundled.yaml
+docs/scalar-reference.html
+*.Zone.Identifier
