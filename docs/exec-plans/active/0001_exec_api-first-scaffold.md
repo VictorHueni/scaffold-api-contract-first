@@ -2,7 +2,7 @@
 
 ## Summary
 
-Build a reusable API-first scaffold repository and record a video walkthrough demonstrating the full contract-first workflow to the IT department. The demo uses a fictional Order Management API as the running example. IBM stack integration is covered via slides only.
+Build a reusable API-first scaffold repository (`scaffold-api/`) with a fictional Order Management API as the running example. This plan covers scaffold implementation only (code + config). Video recording and presentation delivery are tracked in the [Presentation & Delivery Guide](../../api-first-demo-structure.md).
 
 **Source PRD:** [`docs/product-specs/0001_prd_api-first-scaffold.md`](../../../docs/product-specs/0001_prd_api-first-scaffold.md)
 
@@ -240,8 +240,8 @@ Primary files:
 
 Test gate:
 
-1. `prism mock specs/order-api.bundled.yaml --port 4010 &` then `curl -sf http://localhost:4010/orders/test-123 | jq .id` — returns the static example ID
-2. `prism mock -d specs/order-api.bundled.yaml --port 4011 &` then run `curl` twice and diff outputs — responses differ
+1. `prism mock specs/order-api.bundled.yaml --port 4010 & sleep 3 && curl -sf http://localhost:4010/orders/test-123 | jq .id` — returns the static example ID
+2. `prism mock -d specs/order-api.bundled.yaml --port 4011 & sleep 3 && curl -sf http://localhost:4011/orders/test-123 > /tmp/resp1.json && curl -sf http://localhost:4011/orders/test-123 > /tmp/resp2.json && ! diff -q /tmp/resp1.json /tmp/resp2.json` — two calls return different responses
 3. `curl -s -o /dev/null -w '%{http_code}' -X POST http://localhost:4010/orders -H 'Content-Type: application/json' -d '{"customer":{"name":"Test"}}'` — returns 400
 
 Alternatives:
@@ -312,10 +312,12 @@ Primary files:
 1. `generated/server-spring/` (generated, not committed)
 2. `generated/server-spring/src/main/java/.../OrdersApiImpl.java` (hand-written implementation)
 
+Prerequisites: Java 11+ must be installed. Skip this increment if Java is not available — it is optional for frontend-only teams.
+
 Test gate:
 
 1. `openapi-generator-cli generate -i specs/order-api.bundled.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true` — exits 0
-2. `cd generated/server-spring && mvn spring-boot:run &` then `curl -sf http://localhost:8080/orders/test-123 | jq .id` — returns a valid order ID
+2. `cd generated/server-spring && mvn spring-boot:run & sleep 10 && curl -sf http://localhost:8080/orders/test-123 | jq .id` — returns a valid order ID
 
 Alternatives:
 
@@ -350,11 +352,12 @@ Primary files:
 
 1. (No new files — uses existing spec and servers)
 
+Prerequisites: Schemathesis must be available via Docker (`docker run schemathesis/schemathesis`) or pip. Prism must be running on port 4010.
+
 Test gate:
 
-1. `schemathesis run specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --stateful=links --hypothesis-max-examples=100` — all pass
-2. Schemathesis output shows 100+ test cases
-3. Against the buggy stub server — Schemathesis reports schema violation for `total`
+1. `docker run --rm --network host schemathesis/schemathesis run specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --stateful=links --hypothesis-max-examples=100 2>&1 | tail -5` — all pass, exit code 0
+2. `docker run --rm --network host schemathesis/schemathesis run specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --hypothesis-max-examples=100 2>&1 | grep -oP '\d+ passed' | head -1` — number is 100+
 
 Alternatives:
 
@@ -375,6 +378,8 @@ Exit criteria:
 **Status:** pending
 
 > PRD ref: US-008
+
+Prerequisites: Hurl binary must be installed (`brew install hurl` or download from GitHub releases). Prism must be running on port 4010.
 
 Scope:
 
@@ -408,6 +413,8 @@ Exit criteria:
 **Status:** pending
 
 > PRD ref: US-009
+
+Prerequisites: oasdiff binary must be installed (`brew install oasdiff` or download from GitHub releases).
 
 Scope:
 
@@ -493,7 +500,7 @@ Primary files:
 
 Test gate:
 
-1. `python3 -c "import yaml; yaml.safe_load(open('ci/pipeline.yaml'))"` — valid YAML
+1. `node -e "require('js-yaml').load(require('fs').readFileSync('ci/pipeline.yaml','utf8'))"` — valid YAML (js-yaml is a dependency of Spectral, already installed)
 2. `grep -c "jobs:" ci/pipeline.yaml` — contains jobs section
 3. `grep "spectral\|oasdiff\|schemathesis\|scalar\|openapi-typescript" ci/pipeline.yaml | wc -l` — all 5 tools referenced
 
