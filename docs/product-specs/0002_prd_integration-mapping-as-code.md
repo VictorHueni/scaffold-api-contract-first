@@ -455,11 +455,30 @@ mapping-validation:
 
 ---
 
-### US-002: Write a mapping specification
+### US-002: Formalize the mapping DSL as a JSON Schema
 
 **Status:** pending
 
-**Description:** As an integration developer, I want to write a YAML mapping spec that documents field-level mappings, transformations, and transcodifications so that the mapping logic is version-controlled and reviewable.
+**Description:** As an integration developer, I want a JSON Schema that defines the mapping YAML structure so that my IDE provides autocompletion, typo detection, required field validation, and hover documentation as I author mapping specs.
+
+**Acceptance Criteria:**
+
+- [ ] `schemas/mapping-spec-schema.json` exists as a valid JSON Schema (2020-12)
+- [ ] Schema defines all top-level fields: `apiVersion`, `kind`, `metadata`, `routing`, `mappings`, `transcodifications`
+- [ ] Required fields are marked (`apiVersion`, `kind`, `metadata.name`, `metadata.consumer`, `mappings[].source`, `mappings[].canonical`, `mappings[].target`)
+- [ ] `transform.language` is constrained to `enum: ["jsonata", "jolt", "jq"]`
+- [ ] `transcodifications[].codes[].relationship` is constrained to `enum: ["equivalent", "narrower", "broader", "not-related"]`
+- [ ] `transcodifications[].unmapped.strategy` is constrained to `enum: ["reject", "use-default", "pass-through"]`
+- [ ] VS Code YAML extension recognizes `.mapping.yaml` files via `.vscode/settings.json` schema association
+- [ ] Autocompletion, validation, and hover docs work in VS Code with the YAML extension
+
+---
+
+### US-003: Write a mapping specification
+
+**Status:** pending
+
+**Description:** As an integration developer, I want to write a YAML mapping spec (validated against the JSON Schema from US-002) that documents field-level mappings, transformations, and transcodifications so that the mapping logic is version-controlled and reviewable.
 
 **Acceptance Criteria:**
 
@@ -471,7 +490,7 @@ mapping-validation:
 
 ---
 
-### US-003: Link mapping specs to OpenAPI specs
+### US-004: Link mapping specs to OpenAPI specs
 
 **Status:** pending
 
@@ -485,7 +504,7 @@ mapping-validation:
 
 ---
 
-### US-004: Validate mapping completeness in CI
+### US-005: Validate mapping completeness in CI
 
 **Status:** pending
 
@@ -500,7 +519,7 @@ mapping-validation:
 
 ---
 
-### US-005: Generate human-readable mapping documentation
+### US-006: Generate human-readable mapping documentation
 
 **Status:** pending
 
@@ -514,7 +533,7 @@ mapping-validation:
 
 ---
 
-### US-006: Validate platform implementation against mapping spec
+### US-007: Validate platform implementation against mapping spec
 
 **Status:** pending
 
@@ -781,7 +800,7 @@ This is the equivalent of what AtlasMap provides visually but driven by the YAML
 - **OpenAPI Overlay** is a newly standardized spec (v1.0.0). Tooling support is limited but growing. Redocly CLI supports overlays.
 - **Spectral** can lint any YAML/JSON file, not just OpenAPI — custom rulesets for mapping files use the same infrastructure already in place for API linting.
 - **Bridge adapters** depend on platform-specific file formats. Most integration platforms store configuration as XML or YAML in Git-compatible structures, making parsing feasible.
-- **The mapping YAML DSL should be formalized as a JSON Schema** (`mapping-spec-schema.json`) to enable IDE autocompletion and validation of mapping files themselves.
+- **The mapping YAML DSL is formalized as a JSON Schema** (`schemas/mapping-spec-schema.json`) — see US-002 and Resolved Decision #1.
 
 ---
 
@@ -804,13 +823,16 @@ This is the equivalent of what AtlasMap provides visually but driven by the YAML
 
 ## 11. Open Questions
 
-1. **Should the mapping YAML DSL be formalized as a JSON Schema?** This would enable validation of mapping files themselves (schema for the schema). Strongly recommended.
-2. **Which integration flow should be the first pilot?** Pick a low-complexity, well-understood mapping to validate the approach.
-3. **Should the canonical model be defined independently or derived from existing platform schemas?** Starting from existing models may be faster but risks inheriting tech debt.
-4. **FINOS Legend evaluation:** Is Legend's Pure language a viable alternative to the custom YAML DSL? It provides more formal semantics but requires Java infrastructure.
-5. **DataHub integration:** Should mapping metadata be published to a data lineage platform for cross-team discoverability?
-6. **Which bridge adapter to build first?** Depends on the team's primary integration platform. The adapter validates implementation against the mapping spec.
-7. **Should transcodification tables support external references?** E.g., referencing a shared code table maintained by a master data management (MDM) system instead of inlining all values.
+1. **Which integration flow should be the first pilot?** Pick a low-complexity, well-understood mapping to validate the approach. Hypothetical candidate: a Policy or Claims flow (insurance domain).
+2. **Which bridge adapter to build first?** Depends on the team's primary integration platform. The adapter validates implementation against the mapping spec.
+
+## 12. Resolved Decisions
+
+1. **JSON Schema for the mapping DSL:** Yes — `mapping-spec-schema.json` will be created as part of v1. It is the foundation for IDE autocompletion, typo detection, required field validation, hover documentation, Spectral linting, and CI validation. Without it, the authoring experience described in section 8.2 does not work.
+2. **Canonical model independence:** Define the canonical model independently from any existing platform schemas. Starting from platform models inherits tech debt and couples the canonical model to one implementation. The entire point is platform-agnostic portability.
+3. **FINOS Legend:** Not for v1. Legend's Pure language provides formal semantics but requires Java infrastructure and a different authoring model (code, not YAML). Evaluate as a future alternative if the YAML DSL proves insufficient for complex financial/regulatory mappings.
+4. **DataHub integration:** Not for v1. Useful at scale (10+ integration flows) for cross-team discoverability. Follow-up milestone after the mapping spec is validated by a pilot team.
+5. **External transcodification references:** Inline code tables for v1. External references to MDM systems (e.g., `$ref: "mdm://code-tables/order-status"`) are a v2 feature. Enterprise code tables are too large and too frequently updated to inline long-term, but inline works for proving the spec format.
 
 ---
 
