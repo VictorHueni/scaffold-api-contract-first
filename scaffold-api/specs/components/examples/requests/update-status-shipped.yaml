@@ -1,5 +1,18 @@
 summary: Update status to shipped
 description: Mark an order as shipped with a tracking number.
 value:
-  status: "shipped"
+  customer:
+    name: "John Smith"
+    email: "john.smith@example.com"
+    shippingAddress:
+      street: "123 Main Street, Apt 4B"
+      city: "New York"
+      state: "NY"
+      postalCode: "10001"
+      country: "US"
+  items:
+    - productId: "1a2b3c4d-5e6f-7890-abcd-ef1234567890"
+      productName: "Ergonomic Office Chair"
+      quantity: 1
+      unitPrice: 299.99
   trackingNumber: "1Z999AA10123456784"

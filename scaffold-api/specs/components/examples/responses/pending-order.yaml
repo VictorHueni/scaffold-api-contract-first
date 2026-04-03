@@ -1,7 +1,7 @@
 summary: Pending order
 description: A newly created order in pending status awaiting confirmation.
 value:
-  id: "ord-a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+  id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
   customer:
     name: "Jane Doe"
     email: "jane.doe@example.com"
@@ -13,7 +13,7 @@ value:
       postalCode: "62704"
       country: "US"
   items:
-    - productId: "prod-8f14e45f-ceea-467f-a020-9e2f5a5c5e01"
+    - productId: "8f14e45f-ceea-467f-a020-9e2f5a5c5e01"
       productName: "Wireless Bluetooth Headphones"
       quantity: 2
       unitPrice: 49.99

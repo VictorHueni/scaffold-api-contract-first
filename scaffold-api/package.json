@@ -9,8 +9,8 @@
     "validate": "scalar document validate specs/order-api.yaml",
 
     "------- QUALITY -------": "",
-    "lint": "spectral lint 'specs/**/*.yaml' --ruleset rules/.spectral.yaml --ignore-unknown-format",
-    "lint:bad": "spectral lint specs/order-api-bad.yaml --ruleset rules/.spectral.yaml",
+    "lint": "spectral lint specs/order-api.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format",
+    "lint:bad": "spectral lint specs/order-api-bad.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format",
 
     "------- DEV -------": "",
     "mock": "prism mock specs/order-api.bundled.yaml --port 4010",

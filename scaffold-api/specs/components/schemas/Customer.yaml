@@ -3,6 +3,16 @@ description: Customer information associated with an order.
 required:
   - name
   - email
+example:
+  name: "Jane Doe"
+  email: "jane.doe@example.com"
+  phone: "+15551234567"
+  shippingAddress:
+    street: "742 Evergreen Terrace"
+    city: "Springfield"
+    state: "IL"
+    postalCode: "62704"
+    country: "US"
 properties:
   name:
     type: string
@@ -28,6 +38,12 @@ properties:
   shippingAddress:
     type: object
     description: Customer shipping address.
+    example:
+      street: "742 Evergreen Terrace"
+      city: "Springfield"
+      state: "IL"
+      postalCode: "62704"
+      country: "US"
     required:
       - street
       - city

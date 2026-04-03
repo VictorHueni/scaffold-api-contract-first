@@ -1,7 +1,7 @@
 summary: Single item order
 description: A newly created order with a single line item.
 value:
-  id: "ord-d4e5f6a7-b8c9-0123-defa-234567890123"
+  id: "d4e5f6a7-b8c9-0123-defa-234567890123"
   customer:
     name: "Bob Williams"
     email: "bob.williams@example.com"
@@ -12,7 +12,7 @@ value:
       postalCode: "73301"
       country: "US"
   items:
-    - productId: "prod-4d5e6f7a-8b9c-0123-defa-234567890123"
+    - productId: "4d5e6f7a-8b9c-0123-defa-234567890123"
       productName: "USB-C Charging Cable"
       quantity: 1
       unitPrice: 12.99

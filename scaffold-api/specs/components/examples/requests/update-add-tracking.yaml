@@ -1,5 +1,19 @@
 summary: Add tracking number
 description: Add or update the tracking number for an existing order.
 value:
+  customer:
+    name: "Alice Johnson"
+    email: "alice.johnson@example.com"
+    shippingAddress:
+      street: "456 Oak Avenue"
+      city: "Portland"
+      state: "OR"
+      postalCode: "97201"
+      country: "US"
+  items:
+    - productId: "2b3c4d5e-6f7a-8901-bcde-f12345678901"
+      productName: "Stainless Steel Water Bottle"
+      quantity: 3
+      unitPrice: 24.99
   trackingNumber: "9400111899223100012345"
   notes: "Shipped via USPS Priority Mail."

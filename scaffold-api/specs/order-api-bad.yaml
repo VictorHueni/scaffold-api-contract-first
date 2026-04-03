@@ -1,0 +1,131 @@
+# order-api-bad.yaml — Intentionally broken spec for Spectral demonstration
+#
+# This spec contains violations across all three linting layers:
+# - Layer 1 (OpenAPI standard): missing operationId, trailing slash
+# - Layer 2 (OWASP security): http:// server, missing auth, API key in URL, no maxItems
+# - Layer 3 (Custom org rules): snake_case, empty description, inline schema, missing tag
+#
+# Run: npx spectral lint specs/order-api-bad.yaml --ruleset rules/.spectral.yaml
+
+openapi: 3.1.0
+info:
+  title: Bad Order API (Intentional Violations)
+  version: 0.0.1
+  description: A deliberately broken spec for linting demos.
+
+# VIOLATION (Layer 2 — OWASP): Server uses http:// instead of https://
+servers:
+  - url: http://bad-api.example.com/v1
+    description: Insecure server
+
+# NOTE: No global security — forces per-operation auth or violations
+# VIOLATION (Layer 2 — OWASP): write-restricted — POST without auth
+
+# VIOLATION (Layer 2 — OWASP): API key in query parameter
+components:
+  securitySchemes:
+    queryApiKey:
+      type: apiKey
+      name: api_key
+      in: query
+      description: API key passed as query parameter (insecure).
+  schemas:
+    BadOrder:
+      type: object
+      description: A bad order schema with violations.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Order identifier.
+          example: "bad-001"
+        # VIOLATION (Layer 3 — Custom): snake_case property name
+        order_status:
+          type: string
+          description: Status field using snake_case.
+          enum:
+            - pending
+            - shipped
+          example: "pending"
+        # VIOLATION (Layer 2 — OWASP): array without maxItems
+        items:
+          type: array
+          description: Order line items with no size limit.
+          items:
+            type: object
+            description: A line item.
+            properties:
+              name:
+                type: string
+                description: Product name.
+                maxLength: 200
+                example: "Widget"
+    ErrorResponse:
+      type: object
+      description: Standard error response.
+      properties:
+        message:
+          type: string
+          description: Error message.
+          maxLength: 500
+          example: "Something went wrong"
+
+paths:
+  # VIOLATION (Layer 3 — Custom): verb in path, not kebab-case
+  /getOrders/:
+    # VIOLATION (Layer 3 — Custom): trailing slash
+    get:
+      # VIOLATION (Layer 1 — OAS): missing operationId
+      # VIOLATION (Layer 3 — Custom): missing tag
+      summary: Get all orders
+      # VIOLATION (Layer 3 — Custom): empty description
+      description: ""
+      responses:
+        "200":
+          description: List of orders.
+          content:
+            application/json:
+              schema:
+                type: array
+                description: Array of orders.
+                items:
+                  $ref: "#/components/schemas/BadOrder"
+
+  /orders:
+    post:
+      operationId: createOrder
+      summary: Create a new order
+      description: Creates an order without security.
+      tags:
+        - Orders
+      # VIOLATION (Layer 2 — OWASP): no security on POST (write-restricted)
+      # No global security and no operation-level security
+      requestBody:
+        required: true
+        content:
+          application/json:
+            # VIOLATION (Layer 3 — Custom): inline schema instead of $ref
+            schema:
+              type: object
+              description: Inline order creation body.
+              properties:
+                customerName:
+                  type: string
+                  description: Name of the customer.
+                  maxLength: 200
+                  example: "Test User"
+                quantity:
+                  type: integer
+                  format: int32
+                  description: Number of items.
+                  minimum: 1
+                  maximum: 100
+                  example: 1
+      responses:
+        # VIOLATION (Layer 3 — Custom): no error response defined
+        "201":
+          description: Order created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadOrder"

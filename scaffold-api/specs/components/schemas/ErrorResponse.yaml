@@ -51,6 +51,9 @@ properties:
     type: array
     description: List of individual validation errors, if applicable.
     maxItems: 50
+    example:
+      - field: "customer.email"
+        message: "must be a valid email address"
     items:
       type: object
       description: A single field-level validation error.

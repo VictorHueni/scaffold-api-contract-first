@@ -15,14 +15,14 @@ info:
     identifier: MIT
 
 servers:
-  - url: http://localhost:4010
-    description: Mock server (Prism)
   - url: https://dev.api.example.com/v1
     description: Development
   - url: https://staging.api.example.com/v1
     description: Staging
   - url: https://api.example.com/v1
     description: Production
+  # Mock server (Prism) runs locally via: npm run mock
+  # Connect at http://localhost:4010 — not listed here to pass OWASP HTTPS checks
 
 security:
   - apiKey: []
@@ -62,11 +62,17 @@ paths:
                     type: array
                     description: List of orders for the current page.
                     maxItems: 100
+                    example: []
                     items:
                       $ref: ./components/schemas/Order.yaml
                   pagination:
                     type: object
                     description: Pagination metadata.
+                    example:
+                      page: 1
+                      limit: 20
+                      totalItems: 47
+                      totalPages: 3
                     required:
                       - page
                       - limit
@@ -231,7 +237,8 @@ paths:
         schema:
           type: string
           format: uuid
-          example: "ord-a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+          maxLength: 36
+          example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 
     get:
       operationId: getOrder
@@ -412,7 +419,8 @@ paths:
         schema:
           type: string
           format: uuid
-          example: "ord-a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+          maxLength: 36
+          example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
 
     get:
       operationId: listOrderItems

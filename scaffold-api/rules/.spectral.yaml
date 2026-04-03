@@ -1,0 +1,182 @@
+# Spectral Ruleset — Three-Layer API Governance
+#
+# Layer 1: OpenAPI standard (spectral:oas — 25+ built-in rules)
+# Layer 2: OWASP API Security (spectral-owasp-ruleset — selected rules)
+# Layer 3: Organizational custom rules (naming, quality, consistency)
+
+extends:
+  - spectral:oas
+  - "@stoplight/spectral-owasp-ruleset"
+
+rules:
+  # ════════════════════════════════════════════════
+  # Layer 1 — OpenAPI Standard (severity overrides)
+  # ════════════════════════════════════════════════
+  # spectral:oas provides 25+ built-in rules. We promote key rules to error.
+
+  # operationId is required (built-in, promoted from warn to error)
+  operation-operationId: error
+
+  # Trailing slashes are forbidden (built-in, promoted from warn to error)
+  path-keys-no-trailing-slash: error
+
+  # Operations must have tags (built-in, kept at warn)
+  operation-tags: warn
+
+  # ════════════════════════════════════════════════
+  # Layer 2 — OWASP Security Rules
+  # ════════════════════════════════════════════════
+  # We extend the full OWASP ruleset and configure each rule explicitly.
+  # Rules we enforce are set to error or warn.
+  # Rules outside our current organizational scope are turned off.
+
+  # --- Enforced OWASP rules ---
+
+  # Servers must use HTTPS
+  owasp:api8:2023-no-server-http: error
+
+  # POST/PUT/DELETE must have authentication
+  owasp:api2:2023-write-restricted: error
+
+  # API keys must not appear in query parameters
+  owasp:api2:2023-no-api-keys-in-url: error
+
+  # Arrays must define maxItems to prevent abuse
+  owasp:api4:2023-array-limit: error
+
+  # Strings should define maxLength
+  owasp:api4:2023-string-limit: warn
+
+  # Objects should set additionalProperties: false
+  owasp:api3:2023-no-additionalProperties: warn
+
+  # Operations should define 429 responses
+  owasp:api4:2023-rate-limit-responses-429: warn
+
+  # --- OWASP rules disabled for now (adopt incrementally) ---
+  # These rules are valuable but require broader spec/infra changes.
+  # Re-enable as organizational maturity grows.
+
+  owasp:api1:2023-no-numeric-ids: off
+  owasp:api2:2023-no-http-basic: off
+  owasp:api2:2023-no-credentials-in-url: off
+  owasp:api2:2023-auth-insecure-schemes: off
+  owasp:api2:2023-jwt-best-practices: off
+  owasp:api2:2023-short-lived-access-tokens: off
+  owasp:api2:2023-read-restricted: off
+  owasp:api3:2023-constrained-additionalProperties: off
+  owasp:api3:2023-no-unevaluatedProperties: off
+  owasp:api3:2023-constrained-unevaluatedProperties: off
+  owasp:api4:2023-rate-limit: off
+  owasp:api4:2023-rate-limit-retry-after: off
+  owasp:api4:2023-string-restricted: off
+  owasp:api4:2023-integer-limit: off
+  owasp:api4:2023-integer-limit-legacy: off
+  owasp:api4:2023-integer-format: off
+  owasp:api5:2023-admin-security-unique: off
+  owasp:api7:2023-concerning-url-parameter: off
+  owasp:api8:2023-define-cors-origin: off
+  owasp:api8:2023-no-scheme-http: off
+  owasp:api8:2023-define-error-validation: off
+  owasp:api8:2023-define-error-responses-401: off
+  owasp:api8:2023-define-error-responses-500: off
+  owasp:api9:2023-inventory-access: off
+  owasp:api9:2023-inventory-environment: off
+
+  # ════════════════════════════════════════════════
+  # Layer 3 — Organizational Custom Rules
+  # ════════════════════════════════════════════════
+
+  # operationId must follow verbNoun pattern (e.g. listOrders, createOrder)
+  operationId-pattern:
+    description: "operationId should follow verbNoun camelCase pattern (e.g. listOrders, getOrder)."
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].operationId"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^(list|get|create|update|delete|search|validate|cancel|submit|approve|reject|process)[A-Z][a-zA-Z]*$"
+
+  # Property names must be camelCase
+  camel-case-properties:
+    description: Property names must use camelCase.
+    severity: warn
+    given: "$.paths..properties[*]~"
+    then:
+      function: casing
+      functionOptions:
+        type: camel
+
+  # Empty descriptions are worse than none
+  no-empty-descriptions:
+    description: "Descriptions must not be empty strings — omit them rather than leaving them blank."
+    severity: error
+    given: "$..description"
+    then:
+      function: truthy
+
+  # Schema properties should have examples
+  schema-properties-examples:
+    description: Schema properties should include an example value.
+    severity: warn
+    given: "$.paths..properties[*]"
+    then:
+      field: example
+      function: truthy
+
+  # Error responses should be defined on all operations
+  error-responses-required:
+    description: "Operations should define at least one error response (4xx or 5xx)."
+    severity: warn
+    given: "$.paths[*][get,post,put,patch,delete].responses"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          anyOf:
+            - required: ["400"]
+            - required: ["401"]
+            - required: ["403"]
+            - required: ["404"]
+            - required: ["409"]
+            - required: ["422"]
+            - required: ["429"]
+            - required: ["500"]
+
+  # Path segments must be kebab-case
+  paths-kebab-case:
+    description: Path segments must use kebab-case (lowercase with hyphens).
+    severity: error
+    given: "$.paths[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^(\\/[a-z][a-z0-9-]*(\\/{[a-zA-Z][a-zA-Z0-9]*})?)+$"
+
+  # Every operation must be tagged for documentation grouping
+  operation-must-have-tag:
+    description: Every operation must be tagged for documentation grouping.
+    severity: error
+    given: "$.paths[*][get,post,put,patch,delete]"
+    then:
+      field: tags
+      function: truthy
+
+  # GET 200 responses must define response body content
+  get-must-return-body:
+    description: GET operations with 200 responses must define response content.
+    severity: error
+    given: "$.paths[*].get.responses.200"
+    then:
+      field: content
+      function: truthy
+
+  # Request bodies should reference component schemas, not inline
+  request-body-must-ref-component:
+    description: Request body schemas should use $ref to component schemas, not inline definitions.
+    severity: warn
+    given: "$.paths[*][post,put,patch].requestBody.content[*]"
+    then:
+      field: "schema.$ref"
+      function: truthy

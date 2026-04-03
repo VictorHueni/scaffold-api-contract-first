@@ -2,7 +2,7 @@ summary: Filtered by status
 description: Orders filtered by shipped status showing matching results.
 value:
   data:
-    - id: "ord-b2c3d4e5-f6a7-8901-bcde-f12345678901"
+    - id: "b2c3d4e5-f6a7-8901-bcde-f12345678901"
       customer:
         name: "John Smith"
         email: "john.smith@example.com"
@@ -13,7 +13,7 @@ value:
           postalCode: "10001"
           country: "US"
       items:
-        - productId: "prod-1a2b3c4d-5e6f-7890-abcd-ef1234567890"
+        - productId: "1a2b3c4d-5e6f-7890-abcd-ef1234567890"
           productName: "Ergonomic Office Chair"
           quantity: 1
           unitPrice: 299.99

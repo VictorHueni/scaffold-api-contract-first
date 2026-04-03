@@ -13,7 +13,8 @@ properties:
     format: uuid
     description: Unique identifier for the order.
     readOnly: true
-    example: "ord-a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+    maxLength: 36
+    example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
     x-faker: string.uuid
   customer:
     $ref: ./Customer.yaml
@@ -22,11 +23,18 @@ properties:
     description: Line items included in the order.
     minItems: 1
     maxItems: 100
+    example:
+      - productId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+        productName: "Wireless Bluetooth Headphones"
+        quantity: 2
+        unitPrice: 49.99
+        subtotal: 99.98
     items:
       $ref: ./OrderItem.yaml
   status:
     type: string
     description: Current status of the order.
+    readOnly: true
     enum:
       - pending
       - confirmed
@@ -79,6 +87,7 @@ properties:
     format: date-time
     description: Timestamp when the order was created.
     readOnly: true
+    maxLength: 30
     example: "2026-03-15T10:30:00Z"
     x-faker: date.recent
   updatedAt:
@@ -86,6 +95,7 @@ properties:
     format: date-time
     description: Timestamp when the order was last updated.
     readOnly: true
+    maxLength: 30
     example: "2026-03-16T14:22:00Z"
     x-faker: date.recent
 additionalProperties: false

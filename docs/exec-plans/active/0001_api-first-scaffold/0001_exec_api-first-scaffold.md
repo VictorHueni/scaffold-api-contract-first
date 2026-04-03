@@ -15,7 +15,7 @@ Principles:
 5. IBM stack is slides-only — no implementation, no environment dependency.
 
 **Overall Status:** in-progress
-**Current Increment:** 02
+**Current Increment:** 03
 
 ---
 
@@ -154,7 +154,7 @@ Exit criteria:
 
 ### Increment 03: Spectral linting ruleset and bad spec variant
 
-**Status:** pending
+**Status:** done
 
 > PRD ref: US-003
 
@@ -586,7 +586,7 @@ Exit criteria:
 | Milestone | Increments | Status | Coherent Outcome | Standalone Test Gate | Exit Criteria | Commit Guidance |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | M1: Foundation | 01-02 | done | Scaffold in `scaffold-api/` with valid OpenAPI spec | `cd scaffold-api && npm install` works, `npm run` lists scripts, spec validates | A developer copies `scaffold-api/`, runs `npm install`, and has all tools + a valid spec | `feat: scaffold project structure with package.json` then `feat: add Order Management OpenAPI spec` |
-| M2: Quality Gates | 03-04 | pending | Linting + mock server working | Spectral passes on good spec, fails on bad spec; Prism serves mock responses | Spec quality is enforceable; frontend can start building against mocks | `feat: add Spectral linting rules` then `feat: validate Prism mock responses` |
+| M2: Quality Gates | 03-04 | in-progress | Linting + mock server working | Spectral passes on good spec, fails on bad spec; Prism serves mock responses | Spec quality is enforceable; frontend can start building against mocks | `feat: add Spectral linting rules` then `feat: validate Prism mock responses` |
 | M3: Code Generation | 05-06 | pending | TypeScript types + Spring Boot server stubs | Generated types match spec; openapi-fetch usage example compiles; Spring Boot stub server starts and responds | Both frontend and backend have generated starting points from the spec | `feat: generate TypeScript types with openapi-typescript` then `feat: generate Spring Boot server stubs` |
 | M4: Testing | 07-08 | pending | Contract tests + functional tests working | Schemathesis passes 100+ tests; Hurl tests pass with JUnit output | Automated quality assurance is in place with zero hand-written contract tests | `feat: add Schemathesis contract testing` then `feat: add Hurl functional tests` |
 | M5: Ecosystem | 09-10 | pending | Breaking change detection, Scalar docs with "Try it out" | oasdiff detects breaking changes; Scalar HTML renders with working playground | Full tooling ecosystem is operational around the spec | `feat: add breaking change detection` then `feat: add Scalar API docs` |

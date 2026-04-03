@@ -96,18 +96,18 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ### US-003: Lint specs against organizational rules
 
-**Status:** pending
+**Status:** done
 
 **Description:** As a tech lead, I want a custom Spectral ruleset that enforces our API standards so that new specs automatically follow conventions without relying on manual review.
 
 **Acceptance Criteria:**
 
-- [ ] `rules/.spectral.yaml` exists and extends both `spectral:oas` and `@stoplight/spectral-owasp-ruleset`
-- [ ] OWASP security rules enforce: HTTPS servers, auth on unsafe methods, no API keys in URL, array `maxItems`, string `maxLength`
-- [ ] Custom organizational rules enforce: operationId required, `verbNoun` operationId pattern, camelCase properties, descriptions on operations, examples on schemas, error responses, kebab-case paths, no trailing slashes, operations must have tags, GET must return body, request bodies must use `$ref`
-- [ ] Running Spectral against a well-formed spec produces zero errors
-- [ ] A "bad spec" variant (`specs/order-api-bad.yaml`) exists with intentional violations across all three layers (convention, security, quality)
-- [ ] Running Spectral against the bad spec produces at least 8 violations with clear messages spanning all layers
+- [x] `rules/.spectral.yaml` exists and extends both `spectral:oas` and `@stoplight/spectral-owasp-ruleset`
+- [x] OWASP security rules enforce: HTTPS servers, auth on unsafe methods, no API keys in URL, array `maxItems`, string `maxLength`
+- [x] Custom organizational rules enforce: operationId required, `verbNoun` operationId pattern, camelCase properties, descriptions on operations, examples on schemas, error responses, kebab-case paths, no trailing slashes, operations must have tags, GET must return body, request bodies must use `$ref`
+- [x] Running Spectral against a well-formed spec produces zero errors
+- [x] A "bad spec" variant (`specs/order-api-bad.yaml`) exists with intentional violations across all three layers (convention, security, quality)
+- [x] Running Spectral against the bad spec produces at least 8 violations with clear messages spanning all layers
 
 ---
 

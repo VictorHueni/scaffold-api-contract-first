@@ -10,7 +10,8 @@ properties:
     type: string
     format: uuid
     description: Unique identifier for the product.
-    example: "prod-8f14e45f-ceea-467f-a020-9e2f5a5c5e01"
+    maxLength: 36
+    example: "8f14e45f-ceea-467f-a020-9e2f5a5c5e01"
     x-faker: string.uuid
   productName:
     type: string

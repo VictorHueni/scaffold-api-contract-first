@@ -1,7 +1,7 @@
 summary: Delivered order with notes
 description: A completed order that has been delivered to the customer.
 value:
-  id: "ord-c3d4e5f6-a7b8-9012-cdef-123456789012"
+  id: "c3d4e5f6-a7b8-9012-cdef-123456789012"
   customer:
     name: "Alice Johnson"
     email: "alice.johnson@example.com"
@@ -13,12 +13,12 @@ value:
       postalCode: "97201"
       country: "US"
   items:
-    - productId: "prod-2b3c4d5e-6f7a-8901-bcde-f12345678901"
+    - productId: "2b3c4d5e-6f7a-8901-bcde-f12345678901"
       productName: "Stainless Steel Water Bottle"
       quantity: 3
       unitPrice: 24.99
       subtotal: 74.97
-    - productId: "prod-3c4d5e6f-7a8b-9012-cdef-123456789012"
+    - productId: "3c4d5e6f-7a8b-9012-cdef-123456789012"
       productName: "Insulated Lunch Bag"
       quantity: 1
       unitPrice: 34.99

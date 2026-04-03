@@ -18,3 +18,14 @@
 - Learnings (addendum): Scalar CLI v1 binary is `scalar` not `scalar-cli`. Commands use `scalar document validate/bundle/serve` not `scalar-cli validate/bundle`. Fixed package.json scripts.
 - Commit: see below
 - Timestamp: 2026-04-03T06:15:00Z
+
+## Iteration 3
+- Increment: 03 — Spectral linting ruleset and bad spec variant
+- Status: done
+- Files changed: rules/.spectral.yaml (new, 3-layer ruleset), specs/order-api-bad.yaml (new, intentional violations), specs/order-api.yaml (removed http://localhost from servers for OWASP compliance), package.json (updated lint scripts), exec plan + PRD updates
+- Test gate: Sandbox blocks npx/node — must be run manually:
+  1. `cd scaffold-api && npx spectral lint specs/order-api.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format` (expect exit 0, zero errors)
+  2. `cd scaffold-api && npx spectral lint specs/order-api-bad.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format 2>&1 | grep -c "warning\|error"` (expect 8+)
+- Learnings: OWASP ruleset v2 uses `owasp:apiN:2023-*` naming (not `owasp:api-security:*` from v1). Many OWASP rules are overly strict for initial adoption (CORS headers, rate-limit headers on every response, JWT RFC8725 reference, integer bounds). Pragmatic approach: enable 7 key rules, disable 18 others with `off`. Mock server URL (`http://localhost:4010`) triggers OWASP HTTPS rule — removed from servers block (documented in comments, users run `npm run mock`). Lint script changed from glob `specs/**/*.yaml` to specific `specs/order-api.yaml` to exclude bad spec.
+- Commit: pending (sandbox blocks git add/commit — run manually)
+- Timestamp: 2026-04-02T12:00:00Z
