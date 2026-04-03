@@ -529,14 +529,249 @@ mapping-validation:
 
 ---
 
-## 8. Design Considerations
+## 8. User Experience
 
-- The mapping YAML DSL borrows concepts from FHIR StructureMap (field mapping structure), FHIR ConceptMap (transcodification with relationships), and OpenAPI Arazzo (routing/workflow).
-- JSONata is the recommended transformation expression language — lightweight, readable, and available in Node.js, Java, Go, Python, and .NET. It is platform-agnostic.
-- The mapping spec is a design-time artifact. It does not execute transformations at runtime — the integration platform remains the execution layer.
-- The spec is deliberately platform-agnostic. Platform-specific concerns are isolated in bridge adapters, not in the spec itself.
-- The bridge adapter architecture allows incremental adoption: start with one platform, add others as needed. Migration between platforms becomes easier because the mapping spec is portable.
-- The spec's scope is guided by the [EIP patterns reference](../reference/eip-patterns-for-api-mediation.md). V1 covers the 4 most critical patterns: Message Translator, Canonical Data Model, Transcodification, and Content-Based Router. V2 priorities: Content Enricher (external callouts), Splitter/Aggregator (batch processing), and Message Filter (drop/pass criteria). Composition patterns (Scatter-Gather, Process Manager) are deferred to OpenAPI Arazzo or future versions.
+Five personas interact with the mapping spec. Each has a different primary interface.
+
+### 8.1 Personas and Primary Interfaces
+
+| Persona | Primary task | Primary interface | Frequency |
+|---|---|---|---|
+| **Integration developer** | Author and maintain mapping specs | IDE (VS Code / IntelliJ) with YAML + JSON Schema autocompletion | Daily |
+| **Architect** | Review mappings, validate completeness, approve changes | PR diff view + generated documentation | Per PR |
+| **QA engineer** | Understand what to test, verify coverage | Generated mapping tables + coverage report | Per sprint |
+| **Product owner / BA** | Understand data flow, validate field names and business rules | Generated visual documentation (web) | Ad hoc |
+| **New team member** | Onboard and understand existing integrations | Generated documentation + interactive explorer | First weeks |
+
+### 8.2 Authoring Experience (Integration Developer)
+
+**IDE-first, YAML-native.** The mapping spec is authored as YAML files in a code editor.
+
+**What makes it productive:**
+
+1. **JSON Schema for the mapping DSL** (`mapping-spec-schema.json`) — enables:
+   - Autocompletion of mapping YAML structure (`apiVersion`, `kind`, `metadata`, `mappings`, `transcodifications`, `routing`)
+   - Inline validation (red squiggles for missing required fields, wrong types)
+   - Hover documentation (what each field means)
+   - Works in VS Code (YAML extension + schema association) and IntelliJ (built-in YAML schema support)
+
+2. **Spec-aware autocompletion** (future) — a VS Code extension that:
+   - Reads the consumer and provider OpenAPI specs referenced in `metadata`
+   - Suggests field paths in `source` and `target` from the actual schemas
+   - Warns if a referenced field path doesn't exist in the spec
+   - Suggests enum values for transcodification tables from the spec's `enum` definitions
+
+3. **JSONata expression preview** — a VS Code extension or CLI command that:
+   - Parses JSONata expressions inline and shows validation errors
+   - Allows testing an expression against a sample payload
+   - Example: type `$split(source, ' ')[0]`, hover, see "Result: 'Jane'" for sample input "Jane Doe"
+
+4. **Snippets** — VS Code snippets for common patterns:
+   - `mapping-new` → scaffold a new mapping file with metadata + empty sections
+   - `field-1to1` → simple 1:1 field mapping
+   - `field-split` → split transformation with JSONata
+   - `transcodification-new` → new transcodification table with codes template
+   - `routing-cbr` → content-based routing rules
+
+**File example (what the developer sees in the IDE):**
+
+```yaml
+# mappings/create-order.mapping.yaml
+apiVersion: mapping/v1          # ← autocompleted from schema
+kind: IntegrationMapping        # ← autocompleted from schema
+metadata:
+  name: create-order
+  consumer:
+    spec: specs/consumer-api.yaml    # ← validated: file exists
+    operation: createOrder           # ← validated: operationId exists in spec
+  canonical:
+    schema: specs/canonical/Order.yaml
+  providers:
+    - name: acme-orders
+      spec: specs/provider-acme-api.yaml
+      operation: createAcmeOrder
+
+mappings:
+  - source: "Order.fullName"         # ← autocomplete from consumer spec schema
+    canonical: "Customer.firstName"  # ← autocomplete from canonical schema
+    target: "given_name"             # ← autocomplete from provider spec schema
+    transform:
+      expression: "$split(source, ' ')[0]"  # ← validated: valid JSONata
+      language: jsonata
+    description: "Extract first name from full name"
+```
+
+### 8.3 Review Experience (Architect)
+
+**PR-native.** Mapping changes are reviewed in the same PR workflow as code changes.
+
+**What the architect sees in a PR:**
+
+1. **YAML diff** — the raw change to the mapping file. Because it's YAML (not Java code or XML message maps), the diff is readable:
+   ```diff
+   mappings:
+   + - source: "Order.loyaltyTier"
+   +   canonical: "Customer.loyaltyLevel"
+   +   target: "customer_tier"
+   +   transform: null
+   +   description: "New loyalty tier field - direct pass-through"
+   ```
+
+2. **CI checks on the PR** (automated):
+   - Spectral lint: "mapping file is structurally valid"
+   - Coverage check: "all consumer fields have a mapping entry"
+   - Transcodification check: "all enum values have a row"
+   - Spec reference check: "all file paths and field paths resolve"
+
+3. **Generated documentation comment** (CI posts as a PR comment):
+   - A rendered mapping table showing what changed
+   - A coverage diff: "Coverage went from 95% to 97% (+2 fields mapped)"
+   - Transcodification table showing new or changed code mappings
+
+### 8.4 Visualization Experience (Product Owner / BA / New Team Member)
+
+**Generated web documentation.** A static HTML site generated from the mapping YAML, auto-deployed by CI.
+
+**Views:**
+
+**View 1: Field Mapping Table**
+
+The core view. Three-column table showing the complete data flow:
+
+```
+┌──────────────────────┬──────────────────────┬──────────────────────┬──────────────────────┐
+│ Consumer Field       │ Canonical Field      │ Provider Field       │ Transformation       │
+├──────────────────────┼──────────────────────┼──────────────────────┼──────────────────────┤
+│ Order.fullName       │ Customer.firstName   │ given_name           │ split(' ')[0]        │
+│ Order.fullName       │ Customer.lastName    │ family_name          │ split(' ')[1:]        │
+│ Order.total          │ Order.totalAmount    │ amount_cents         │ × 100 (to cents)     │
+│ Order.status         │ Order.orderStatus    │ order_status_code    │ Transcodification ⤵  │
+│ Order.createdAt      │ Order.creationDate   │ created_date         │ Date only (YYYY-MM-DD)│
+│ Order.notes          │ Order.comments       │ internal_notes       │ Default if empty      │
+│ —                    │ Customer.creditLimit │ —                    │ Enriched from CRM API│
+└──────────────────────┴──────────────────────┴──────────────────────┴──────────────────────┘
+```
+
+- Color-coded rows: green = direct pass-through, amber = transformation, blue = enrichment, red = filtered/dropped
+- Click a row to expand: see the full JSONata expression, description, data types on both sides, nullability
+- Search/filter by field name
+
+**View 2: Transcodification Tables**
+
+Side-by-side code tables with relationship indicators:
+
+```
+Order Status Mapping
+┌───────────┬─────────────┬──────────┬──────────────┐
+│ Consumer  │ Canonical   │ Provider │ Relationship │
+├───────────┼─────────────┼──────────┼──────────────┤
+│ A         │ ACTIVE      │ 1        │ ≡ equivalent │
+│ I         │ INACTIVE    │ 0        │ ≡ equivalent │
+│ S         │ SUSPENDED   │ -1       │ ≡ equivalent │
+│ C         │ CANCELLED   │ -2       │ ≡ equivalent │
+│ (other)   │ UNKNOWN     │ 99       │ ⚠ default    │
+└───────────┴─────────────┴──────────┴──────────────┘
+```
+
+- Highlight unmapped values with warnings
+- Show the unmapped strategy (reject vs default vs pass-through)
+- Link to the canonical code system definition
+
+**View 3: Routing Decision Tree**
+
+Visual decision tree for content-based routing:
+
+```
+                    Incoming Request
+                         │
+                ┌────────┴────────┐
+                │ X-Region = EU?  │
+                └────────┬────────┘
+               yes ╱           ╲ no
+              ╱                   ╲
+    ┌─────────────┐      ┌────────┴────────┐
+    │  eu-orders  │      │ orderType =     │
+    │  (EU GDPR)  │      │ DIGITAL?        │
+    └─────────────┘      └────────┬────────┘
+                        yes ╱           ╲ no
+                       ╱                   ╲
+              ┌──────────────┐    ┌──────────────┐
+              │digital-orders│    │ acme-orders  │
+              │              │    │  (default)   │
+              └──────────────┘    └──────────────┘
+```
+
+- Each node links to its provider spec
+- Each edge shows the condition expression
+- Highlight the default route
+
+**View 4: Data Flow Diagram**
+
+A visual showing the end-to-end flow from consumer to provider(s):
+
+```
+┌──────────────┐     ┌───────────────┐     ┌───────────────┐     ┌──────────────┐
+│ Consumer API │────▶│   Canonical   │────▶│   Routing     │────▶│ Provider API │
+│              │     │   Model       │     │   Decision    │     │ (acme)       │
+│ 6 fields     │     │ 8 fields      │     │               │────▶│              │
+│              │     │ (+2 enriched) │     │               │     │ Provider API │
+│              │     │               │     │               │     │ (eu)         │
+└──────────────┘     └───────────────┘     └───────────────┘     └──────────────┘
+     fullName ─────▶ firstName ──────────────────────────────────▶ given_name
+                     lastName  ──────────────────────────────────▶ family_name
+     total ────────▶ totalAmount ────────────────────────────────▶ amount_cents (×100)
+     status ───────▶ orderStatus ────────────────────────────────▶ order_status_code (transco)
+```
+
+- Hover a field to highlight its full path from consumer to provider
+- Click to see transformation details
+- Enriched fields (from external callouts) shown with a different color/icon
+
+**View 5: Coverage Report**
+
+Dashboard showing mapping completeness:
+
+```
+Coverage Summary: create-order
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Consumer fields:  6/6 mapped  (100%) ✓
+Canonical fields: 8/8 defined (100%) ✓
+Provider fields:  7/7 mapped  (100%) ✓
+Transcodifications: 2 tables, 9 codes, 0 unmapped ✓
+Routing rules: 3 (2 conditions + 1 default) ✓
+
+Missing:
+  (none — all fields covered)
+```
+
+- Red/amber/green indicators
+- Lists unmapped fields explicitly
+- Shows transcodification gaps (enum values without a row)
+
+### 8.5 Interactive Explorer (Future — v2)
+
+A web application where users can:
+
+1. **Click a consumer field** → see its full journey: consumer → canonical → provider(s), with transformation at each step
+2. **Click a provider field** → trace it back to the consumer field(s) it comes from (reverse lineage)
+3. **Search** across all mapping specs: "where does `customerId` appear?"
+4. **Compare versions** — diff two versions of a mapping spec visually (before/after a PR)
+5. **Simulate** — paste a sample consumer JSON payload, see the canonical model and provider payload that would result (by executing the JSONata expressions client-side)
+
+This is the equivalent of what AtlasMap provides visually but driven by the YAML mapping spec as the source of truth.
+
+### 8.6 Interaction Summary by Phase
+
+| Phase | Who | Interface | What they do |
+|---|---|---|---|
+| **Author** | Integration dev | IDE + YAML + JSON Schema | Write mapping spec with autocompletion |
+| **Validate** | CI | Spectral + custom scripts | Lint, check coverage, verify references |
+| **Review** | Architect | PR diff + CI comment | Review YAML diff + generated tables |
+| **Understand** | PO / BA / new member | Generated web docs | Browse mapping tables, routing trees, flow diagrams |
+| **Explore** | Anyone | Interactive explorer (v2) | Click-through field lineage, simulate payloads |
+| **Verify** | Integration dev | Bridge adapter | Compare implementation vs spec |
+
+## 9. Design Considerations (Architecture)
 
 ---
 
