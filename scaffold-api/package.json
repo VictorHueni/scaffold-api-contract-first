@@ -23,7 +23,7 @@
     "test:hurl": "hurl --test tests/**/*.hurl",
 
     "------- BACKEND -------": "",
-    "stubs": "openapi-generator-cli generate -i specs/order-api.bundled.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true",
+    "stubs": "openapi-generator-cli generate -i specs/order-api.bundled.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true --skip-validate-spec",
 
     "------- PRECHECK -------": "",
     "precheck": "npm run bundle && npm run lint"

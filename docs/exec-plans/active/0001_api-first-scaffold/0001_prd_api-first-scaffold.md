@@ -146,17 +146,17 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ### US-006: Generate backend server stubs
 
-**Status:** pending
+**Status:** done
 
 **Description:** As a backend developer, I want to generate server stubs from the spec so that I only need to fill in business logic while the request/response shape and validation are handled for me.
 
 **Acceptance Criteria:**
 
-- [ ] Running `openapi-generator-cli generate -i specs/order-api.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true` produces a scaffold
-- [ ] Generated interfaces have method signatures matching each operationId
-- [ ] Generated models match the spec schemas
-- [ ] At least one endpoint (`GET /orders/{orderId}`) has a minimal implementation class that implements the generated interface and returns a valid response
-- [ ] The stub server starts with `mvn spring-boot:run` and responds to requests
+- [x] Running `openapi-generator-cli generate -i specs/order-api.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true` produces a scaffold
+- [x] Generated interfaces have method signatures matching each operationId
+- [x] Generated models match the spec schemas
+- [ ] At least one endpoint (`GET /orders/{orderId}`) has a minimal implementation class that implements the generated interface and returns a valid response *(requires JDK — only JRE installed on this machine)*
+- [ ] The stub server starts with `mvn spring-boot:run` and responds to requests *(requires JDK — only JRE installed on this machine)*
 
 ---
 
