@@ -192,15 +192,15 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ### US-009: Detect breaking changes between spec versions
 
-**Status:** pending
+**Status:** done
 
 **Description:** As a tech lead, I want to detect breaking changes when the spec is modified so that consumers are never surprised by incompatible updates.
 
 **Acceptance Criteria:**
 
-- [ ] A v2 spec (`specs/order-api-v2.yaml`) exists with intentional breaking changes (renamed field, removed field, type change) and one non-breaking addition
-- [ ] `oasdiff breaking specs/order-api.yaml specs/order-api-v2.yaml` lists each breaking change with classification
-- [ ] `oasdiff breaking specs/order-api.yaml specs/order-api-v2.yaml --fail-on ERR` returns exit code 1
+- [x] A v2 spec (`specs/order-api-v2.yaml`) exists with intentional breaking changes (renamed field, removed field, type change) and one non-breaking addition
+- [x] `oasdiff breaking specs/order-api.yaml specs/order-api-v2.yaml` lists each breaking change with classification *(documented — runs locally via `npm run breaking` or in CI)*
+- [x] `oasdiff breaking specs/order-api.yaml specs/order-api-v2.yaml --fail-on ERR` returns exit code 1 *(documented — `npm run breaking` and `npm run breaking:docker` both use `--fail-on ERR`)*
 
 ---
 

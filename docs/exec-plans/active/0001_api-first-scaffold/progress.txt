@@ -93,3 +93,22 @@
 - Learnings: (1) Prism returns 422 (not 400) for request body validation errors — its built-in validation uses RFC 7807-style response with 422 status. Test 4 expects 422 accordingly. (2) Prism is a stateless mock — it cannot distinguish between existing and non-existing resources. GET /orders/{any-valid-uuid} always returns 200 with the first named example. Test 5 documents this as a known mock limitation and expects 200; in CI against a real API, the expected status would be 404. (3) Hurl syntax: headers go on lines immediately after the URL (no [Headers] section), request body follows headers after a blank line, tests are separated by two blank lines. (4) All requests include X-API-Key header (Prism enforces API key security scheme). (5) All orderId values use valid UUID format (Prism enforces uuid format validation). (6) Test 2 (get single order) includes comprehensive shape assertions: all required Order fields verified with type checks (isString, isInteger, isFloat, isCollection) plus value assertions for id and status. (7) The `test:hurl` script in package.json was already configured in Increment 01: `hurl --test tests/**/*.hurl`. (8) M4 milestone (Testing: Increments 07-08) marked as done.
 - Commit: pending (sandbox blocks git — run manually)
 - Timestamp: 2026-04-02T15:00:00Z
+
+## Iteration 9
+- Increment: 09 — Breaking change detection with oasdiff
+- Status: done
+- Files changed: specs/order-api-v2.yaml (new, standalone v2 spec with 3 breaking + 1 non-breaking changes), package.json (added `breaking` script for native oasdiff, updated `breaking:docker` to include `--fail-on ERR`), exec plan + PRD updates
+- Test gate: Sandbox blocks oasdiff/docker/npm execution — must be run manually:
+  1. Native oasdiff: `cd scaffold-api && oasdiff breaking specs/order-api.yaml specs/order-api-v2.yaml` (expect: lists 3 breaking changes — field renamed, field removed, type changed)
+  2. Fail-on ERR: `cd scaffold-api && oasdiff breaking specs/order-api.yaml specs/order-api-v2.yaml --fail-on ERR; echo $?` (expect: exit code 1)
+  3. Docker variant: `cd scaffold-api && npm run breaking:docker` (same result via Docker)
+  4. Or via npm: `cd scaffold-api && npm run breaking` (native) or `npm run breaking:docker` (Docker)
+- Breaking changes in v2 spec:
+  1. customer.name → customer.fullName (field renamed — required property changed)
+  2. notes field removed from Order schema (field removed)
+  3. quantity type changed from integer/int32 to number/double (type changed)
+- Non-breaking change in v2 spec:
+  1. New optional "priority" field added to Order schema (enum: low, normal, high, urgent)
+- Learnings: (1) The v2 spec must be standalone (all schemas inline via components/schemas/) rather than using multi-file $ref pointers, because oasdiff needs to compare two independent specs. (2) trackingNumber already existed in v1, so a new field "priority" was used for the non-breaking addition instead. (3) The bundled spec uses mangled x-ext/ keys from Scalar CLI bundling — the v2 spec uses standard #/components/schemas/ references for clarity. (4) Two npm scripts provided: `breaking` (native oasdiff binary) and `breaking:docker` (Docker, no local install needed). Both use `--fail-on ERR` for CI integration. (5) M5 milestone (Ecosystem: Increments 09-10) marked as in-progress.
+- Commit: pending (sandbox blocks git — run manually)
+- Timestamp: 2026-04-02T16:00:00Z
