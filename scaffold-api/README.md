@@ -15,6 +15,7 @@ npm run mock        # Start mock server — frontend starts building immediately
 |---|---|---|
 | **Node.js 18+** | Required | Everyone |
 | **Java 11+** | Optional | Backend devs (Spring Boot stub generation only) |
+| **Docker** | Optional | QA (Schemathesis contract tests — also runs in CI via GitHub Action) |
 | **Hurl** | Optional | QA (`brew install hurl` — also runs in CI) |
 | **oasdiff** | Optional | Tech leads (`brew install oasdiff` — also runs in CI) |
 
@@ -69,7 +70,11 @@ generated/                   # TypeScript types, Spring stubs (gitignored)
 
 | Command | Description |
 |---|---|
+| `npm run test:contract` | Run Schemathesis contract tests against mock server (requires Docker + Prism on :4010) |
+| `npm run test:contract:negative` | Run Schemathesis negative tests — sends invalid data, verifies rejection (requires Docker + Prism on :4010) |
 | `npm run test:hurl` | Run Hurl functional tests against mock server |
+
+> **Note:** Schemathesis requires Docker locally (`docker run schemathesis/schemathesis`). In CI, it runs via the `schemathesis/action@v2` GitHub Action — no Docker needed. Start the mock server first: `npm run mock &`
 
 ### Backend
 

@@ -20,6 +20,8 @@
     "docs:build": "scalar document bundle specs/order-api.bundled.yaml -o docs/scalar-reference.html",
 
     "------- TEST -------": "",
+    "test:contract": "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --stateful=links --hypothesis-max-examples=100 --set-header 'X-API-Key: test-key'",
+    "test:contract:negative": "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --mode=negative --hypothesis-max-examples=50 --set-header 'X-API-Key: test-key'",
     "test:hurl": "hurl --test tests/**/*.hurl",
 
     "------- BACKEND -------": "",
