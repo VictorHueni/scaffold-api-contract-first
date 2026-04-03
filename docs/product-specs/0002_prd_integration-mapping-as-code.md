@@ -355,27 +355,84 @@ actions:
       x-routing-note: "Routed by X-Region header and orderType field"
 ```
 
-### 5.4 Folder Structure
+### 5.4 API Spec References (apis.lock.yaml)
+
+The integration repo does not own consumer or provider API specs. It **references** them by URL or repo path. Specs are downloaded/synced into `apis/` (gitignored), and `apis.lock.yaml` (committed) records the sources:
+
+```yaml
+# apis.lock.yaml — committed, version-controlled
+specs:
+  - name: consumer-order-api
+    source: https://github.com/your-org/order-api/raw/main/specs/order-api.bundled.yaml
+    version: 1.2.0
+    sha256: a1b2c3d4e5f6...
+    downloaded: apis/consumer-order-api.yaml
+
+  - name: provider-acme-api
+    source: https://github.com/your-org/acme-backend/raw/main/specs/acme-api.yaml
+    version: 3.0.1
+    sha256: e5f6g7h8i9j0...
+    downloaded: apis/provider-acme-api.yaml
+
+  - name: provider-eu-api
+    source: https://partner.example.com/api/v2/openapi.yaml
+    version: 2.1.0
+    sha256: k1l2m3n4o5p6...
+    downloaded: apis/provider-eu-api.yaml
+```
+
+A sync script (`scripts/sync-apis.sh`) downloads specs from their sources, verifies checksums, and places them in `apis/`. CI runs this before validation. When a consumer or provider team releases a new spec version, the integration team bumps the version in `apis.lock.yaml` and the pipeline validates that all mappings still hold.
+
+### 5.5 Folder Structure
 
 ```
-specs/
-  consumer-api.yaml                    # Consumer OpenAPI spec
-  provider-acme-api.yaml               # Provider OpenAPI spec
-  provider-eu-api.yaml                 # EU provider OpenAPI spec
-  canonical/
-    Order.yaml                         # Canonical Order model (JSON Schema)
-    Customer.yaml                      # Canonical Customer model
-    StatusCodes.yaml                   # Transcodification reference
-mappings/
-  create-order.mapping.yaml            # Mapping spec per integration flow
-  get-order.mapping.yaml
-  update-order.mapping.yaml
-overlays/
-  consumer-mapping-overlay.yaml        # Links consumer spec to mappings
-  provider-acme-mapping-overlay.yaml   # Links provider spec to mappings
-rules/
-  .spectral-mappings.yaml              # Spectral rules for mapping YAML
+integration-order-flow/                # Integration repo (owned by integration team)
+  apis/                                # Referenced API specs (downloaded, gitignored)
+    consumer-order-api.yaml            #   ← downloaded from consumer team's repo
+    provider-acme-api.yaml             #   ← downloaded from provider team's repo
+    provider-eu-api.yaml               #   ← downloaded from external partner URL
+  apis.lock.yaml                       # Source URLs + versions (committed, lockfile)
+  canonical/                           # Canonical model (owned by this repo)
+    Order.yaml                         #   JSON Schema
+    Customer.yaml                      #   JSON Schema
+    StatusCodes.yaml                   #   Transcodification reference
+  mappings/                            # Mapping specs (owned by this repo)
+    create-order.mapping.yaml          #   one per integration flow
+    get-order.mapping.yaml
+    update-order.mapping.yaml
+  overlays/                            # OpenAPI Overlays (owned by this repo)
+    consumer-mapping-overlay.yaml      #   links consumer spec fields to mappings
+    provider-acme-mapping-overlay.yaml #   links provider spec fields to mappings
+  schemas/                             # Meta-schemas
+    mapping-spec-schema.json           #   JSON Schema for the mapping DSL (US-002)
+  rules/                               # Spectral rulesets
+    .spectral-mappings.yaml            #   structural + completeness rules
+    functions/                         #   custom Spectral functions (JS)
+      all-consumer-fields-mapped.js
+      all-enum-values-transcodified.js
+      canonical-field-exists.js
+  scripts/
+    sync-apis.sh                       # Download/sync API specs from lock file
+    generate-docs.js                   # Generate mapping documentation (HTML/Markdown)
+  ci/
+    pipeline.yaml                      # CI pipeline
+  .vscode/
+    settings.json                      # YAML schema association for IDE
+  .gitignore                           # apis/, generated/
+  README.md
 ```
+
+**Ownership model:**
+
+| Directory | Owned by | Committed? |
+|---|---|---|
+| `apis/` | Consumer and provider teams (referenced) | No (gitignored, downloaded from lock) |
+| `apis.lock.yaml` | Integration team | Yes (lockfile) |
+| `canonical/` | Integration team / data architecture | Yes |
+| `mappings/` | Integration team | Yes |
+| `overlays/` | Integration team | Yes |
+| `schemas/` | Integration team | Yes |
+| `rules/` | Integration team / platform team | Yes |
 
 ---
 
@@ -383,15 +440,110 @@ rules/
 
 ### 6.1 Spectral Custom Rules for Mapping Specs
 
-Spectral can lint any YAML/JSON, not just OpenAPI. Custom rules for mapping files:
+Spectral can lint any YAML/JSON, not just OpenAPI. Two categories of rules:
 
-- Every field in the consumer spec schema has a corresponding mapping entry
-- Every enum value in a transcodified field has a row in the transcodification table
-- Every `$ref` to a spec file resolves to an existing file
-- Every `language` field uses a supported expression language (jsonata, jolt, jq)
-- Every routing rule has a `description`
-- No mapping has both `transform: null` and a `description` saying it transforms (consistency check)
-- Unmapped strategy is defined for every transcodification
+**Category 1: Structural rules** (pure Spectral — JSONPath + built-in functions)
+
+These validate that mapping files follow the DSL structure. They work with Spectral alone, no custom JS needed:
+
+| Rule | What it checks | Severity |
+|---|---|---|
+| `mapping-has-metadata` | Every mapping file has `apiVersion`, `kind`, `metadata` | error |
+| `mapping-has-consumer-ref` | `metadata.consumer.spec` is defined and non-empty | error |
+| `mapping-has-canonical-ref` | `metadata.canonical.schema` is defined and non-empty | error |
+| `mapping-entry-complete` | Every mapping entry has `source`, `canonical`, `target` | error |
+| `transform-language-valid` | `transform.language` is one of `jsonata`, `jolt`, `jq` | error |
+| `transcodification-has-unmapped` | Every transcodification defines an `unmapped.strategy` | warn |
+| `transcodification-has-relationship` | Every code row has a `relationship` value | warn |
+| `routing-has-default` | Routing rules include a `default` route | warn |
+| `routing-rules-have-description` | Every routing rule has a `description` | warn |
+| `mapping-has-description` | Every mapping entry has a `description` | warn |
+
+**Category 2: Completeness rules** (custom Spectral functions — JavaScript plugins)
+
+These cross-reference the mapping YAML against the actual OpenAPI specs in `apis/` and canonical schemas in `canonical/`. They require custom JS functions that Spectral loads as plugins:
+
+| Rule | What it checks | Severity | Custom function |
+|---|---|---|---|
+| `all-consumer-fields-mapped` | Every field in the consumer spec schema has a mapping entry | warn | `functions/all-consumer-fields-mapped.js` |
+| `all-provider-fields-mapped` | Every required field in the provider spec is a mapping target | error | `functions/all-provider-fields-mapped.js` |
+| `all-enum-values-transcodified` | Every enum value in a transcodified field has a row in the table | error | `functions/all-enum-values-transcodified.js` |
+| `no-orphan-mappings` | Every `source` path exists in consumer spec, every `target` path exists in provider spec | error | `functions/no-orphan-mappings.js` |
+| `canonical-field-exists` | Every `canonical` path exists in the canonical model schema | error | `functions/canonical-field-exists.js` |
+| `consumer-spec-exists` | `metadata.consumer.spec` resolves to a file in `apis/` | error | `functions/spec-file-exists.js` |
+| `provider-spec-exists` | Every `metadata.providers[].spec` resolves to a file in `apis/` | error | `functions/spec-file-exists.js` |
+
+**Example Spectral config** (`rules/.spectral-mappings.yaml`):
+
+```yaml
+functionsDir: ./functions
+formats: []  # Not OpenAPI — custom YAML
+
+rules:
+  # --- Category 1: Structural (built-in functions) ---
+  mapping-has-metadata:
+    severity: error
+    given: "$"
+    then:
+      - field: apiVersion
+        function: truthy
+      - field: kind
+        function: truthy
+      - field: metadata
+        function: truthy
+
+  mapping-entry-complete:
+    severity: error
+    given: "$.mappings[*]"
+    then:
+      - field: source
+        function: truthy
+      - field: canonical
+        function: truthy
+      - field: target
+        function: truthy
+
+  transform-language-valid:
+    severity: error
+    given: "$.mappings[*].transform.language"
+    then:
+      function: enumeration
+      functionOptions:
+        values: [jsonata, jolt, jq]
+
+  transcodification-has-unmapped:
+    severity: warn
+    given: "$.transcodifications[*]"
+    then:
+      field: unmapped
+      function: truthy
+
+  routing-has-default:
+    severity: warn
+    given: "$.routing"
+    then:
+      field: default
+      function: truthy
+
+  # --- Category 2: Completeness (custom functions) ---
+  all-consumer-fields-mapped:
+    severity: warn
+    given: "$"
+    then:
+      function: all-consumer-fields-mapped
+
+  all-enum-values-transcodified:
+    severity: error
+    given: "$"
+    then:
+      function: all-enum-values-transcodified
+
+  canonical-field-exists:
+    severity: error
+    given: "$.mappings[*].canonical"
+    then:
+      function: canonical-field-exists
+```
 
 ### 6.2 Documentation Generator
 
@@ -431,11 +583,22 @@ mapping-validation:
   runs-on: ubuntu-latest
   steps:
     - uses: actions/checkout@v4
-    - run: spectral lint mappings/*.mapping.yaml --ruleset rules/.spectral-mappings.yaml
-    - run: node scripts/validate-mapping-coverage.js  # Check all consumer fields are mapped
-    - run: node scripts/validate-transcodification-completeness.js  # Check all enums covered
-    - run: node scripts/bridge-validate.js  # Compare platform implementation vs mapping spec
+    - run: bash scripts/sync-apis.sh          # Download API specs from apis.lock.yaml
+    - run: |
+        spectral lint mappings/*.mapping.yaml \
+          --ruleset rules/.spectral-mappings.yaml
+        # Runs both structural rules (Category 1) and
+        # completeness rules (Category 2 — custom functions
+        # cross-reference against downloaded specs in apis/)
+    - run: node scripts/generate-docs.js      # Generate mapping documentation
+    - run: node scripts/bridge-validate.js    # Compare platform implementation vs mapping spec (optional)
 ```
+
+The pipeline runs in order:
+1. **Sync** — download consumer/provider specs from lock file
+2. **Lint** — Spectral validates structure + cross-references field completeness
+3. **Generate** — produce mapping tables, transcodification tables, routing trees
+4. **Bridge** — (optional) compare against platform implementation
 
 ---
 
