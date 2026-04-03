@@ -2,7 +2,9 @@
 
 **Status:** exploration
 
-**Related:** [`0001_prd_api-first-scaffold.md`](./0001_prd_api-first-scaffold.md) — this PRD extends the contract-first approach from single API documentation to the integration layer between APIs.
+**Related:**
+- [`0001_prd_api-first-scaffold.md`](./0001_prd_api-first-scaffold.md) — this PRD extends the contract-first approach from single API documentation to the integration layer between APIs.
+- [`../reference/eip-patterns-for-api-mediation.md`](../reference/eip-patterns-for-api-mediation.md) — reference catalog of Enterprise Integration Patterns (Hohpe & Woolf) with coverage analysis against this mapping spec.
 
 ---
 
@@ -534,6 +536,7 @@ mapping-validation:
 - The mapping spec is a design-time artifact. It does not execute transformations at runtime — the integration platform remains the execution layer.
 - The spec is deliberately platform-agnostic. Platform-specific concerns are isolated in bridge adapters, not in the spec itself.
 - The bridge adapter architecture allows incremental adoption: start with one platform, add others as needed. Migration between platforms becomes easier because the mapping spec is portable.
+- The spec's scope is guided by the [EIP patterns reference](../reference/eip-patterns-for-api-mediation.md). V1 covers the 4 most critical patterns: Message Translator, Canonical Data Model, Transcodification, and Content-Based Router. V2 priorities: Content Enricher (external callouts), Splitter/Aggregator (batch processing), and Message Filter (drop/pass criteria). Composition patterns (Scatter-Gather, Process Manager) are deferred to OpenAPI Arazzo or future versions.
 
 ---
 
