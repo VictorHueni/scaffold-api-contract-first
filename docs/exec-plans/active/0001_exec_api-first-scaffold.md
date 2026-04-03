@@ -569,6 +569,11 @@ Exit criteria:
 1. One increment per commit.
 2. Each increment must be independently verifiable via its test gate.
 3. All test gates are executable shell commands with deterministic pass/fail.
+4. In this scaffold (dev), tests run against the Prism mock server. In real projects, the same tests run against real API servers per environment:
+   - **Dev/Local:** Prism mock (`http://localhost:4010`) — fast feedback, spec consistency
+   - **QA:** Real API (`https://qa.yourcompany.com`) — contract validation against real implementation
+   - **Acceptance:** Real API (`https://acp.yourcompany.com`) — final validation before production
+   - The base URL is the only thing that changes. Tests, assertions, and spec are identical across environments.
 4. The OpenAPI spec source lives in `specs/order-api.yaml` + `specs/components/` (multi-file, committed). The bundled file `specs/order-api.bundled.yaml` is generated and gitignored — all downstream tools consume the bundled file.
 5. API exploration tooling is bring-your-own — the scaffold is opinionated about automation (Spectral, Prism, Schemathesis, Hurl, Scalar, CI) and unopinionated about personal clients (Bruno, Postman, Insomnia, etc.).
 6. All tools used are open source and free tier. No paid licenses required.

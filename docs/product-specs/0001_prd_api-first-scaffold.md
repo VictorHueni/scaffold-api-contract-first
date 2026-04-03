@@ -270,6 +270,10 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 - **API exploration** is left to individual preference. The OpenAPI spec can be imported into any client (Bruno, Postman, Insomnia, Hoppscotch, Scalar desktop, Yaak). Scalar's built-in "Try it out" in the generated docs provides a zero-install exploration path.
 - All tools are open source and free. No paid tiers are needed for any functionality in scope.
 - The CI pipeline targets GitHub Actions but the concepts are portable to GitLab CI or Jenkins.
+- **Multi-environment testing:** In this scaffold, tests (Schemathesis, Hurl) run against the Prism mock. In real projects, the same tests run per environment — only the base URL changes:
+  - Dev/Local: Prism mock (`http://localhost:4010`) — spec consistency, fast feedback
+  - QA: Real API — contract validation against implementation
+  - Acceptance: Real API — final validation before production
 
 ---
 
