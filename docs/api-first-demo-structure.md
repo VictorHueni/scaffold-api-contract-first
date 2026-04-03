@@ -58,9 +58,9 @@ A numbered list of what you're about to show. Use this as a roadmap slide you ca
 12. IBM Stack Integration (slides)
 13. The Payoff (Role Impact Matrix)
 
-### Slides 5-6: IBM Stack Integration
+### Slides 5-7: IBM Stack + AsyncAPI
 
-Since IBM is slides-only (no live environment), prepare 2 slides:
+Since IBM and AsyncAPI are slides-only (no live demo), prepare 3 slides:
 
 **Slide 5: API Connect + Developer Portal**
 - Show the `apic products:publish` command (screenshot or text)
@@ -68,14 +68,21 @@ Since IBM is slides-only (no live environment), prepare 2 slides:
 - Bullet: "Same spec file, published to the gateway with one command"
 - Bullet: "Developer Portal auto-generates docs, subscription management, and API keys"
 
-**Slide 6: App Connect + AsyncAPI / MQ**
+**Slide 6: App Connect**
 - Screenshot or mockup of App Connect Designer importing the OpenAPI spec
 - Show the operations pane listing all endpoints
-- Mention AsyncAPI for event-driven contracts (Kafka, MQ)
-- Bullet: "Same contract-first approach extends to message queues and event streams"
-- Reference: "The spec driving this lives at `specs/order-api.yaml` in the repo"
+- Bullet: "Operations are scaffolded as integration flows from the same spec"
 
-### Slide 7: Timeline Comparison
+**Slide 7: AsyncAPI — What's Next for Events**
+- Brief explanation: "AsyncAPI is the OpenAPI equivalent for event-driven APIs — Kafka topics, MQ queues, MQTT channels"
+- Show a simple AsyncAPI spec snippet (order/created channel with a typed payload)
+- Side-by-side comparison: OpenAPI `paths` → AsyncAPI `channels`, `get/post` → `send/receive`
+- Bullet: "Same contract-first philosophy, applied to message queues and event streams"
+- Bullet: "The tooling ecosystem is maturing — documentation, linting (Spectral), and code generation are available today. Mocking and runtime validation are catching up."
+- Bullet: "HDI Global SE (insurance) already uses AsyncAPI alongside OpenAPI for their API catalog"
+- This is a "what's next" slide, not a "we're doing this now" slide
+
+### Slide 8: Timeline Comparison
 
 Two timelines side by side:
 
@@ -99,7 +106,7 @@ Week 2-3: Backend fills in business logic
 Week 3:   Integration — contract tests already passing
 ```
 
-### Slide 8: Role Impact Matrix
+### Slide 9: Role Impact Matrix
 
 | Role | Without API-First | With API-First |
 |---|---|---|
@@ -112,7 +119,7 @@ Week 3:   Integration — contract tests already passing
 | **Product Owner** | Reads code to understand the API | Reviews a visual spec, no code needed |
 | **New Team Member** | Reads scattered docs and Slack threads | Reads the spec and generated docs, productive in hours |
 
-### Slide 9: What's Next
+### Slide 10: What's Next
 
 - Proposed follow-up actions (see [Follow-Up Strategy](#follow-up-strategy) below)
 - Link to the scaffold repo
@@ -327,13 +334,14 @@ Record each section as a **separate video file**. This lets you re-record a sing
 
 **Format:** Slides only. No live terminal. No IBM environment required.
 
-**Slides used:** Slide 5 (API Connect), Slide 6 (App Connect + AsyncAPI)
+**Slides used:** Slide 5 (API Connect), Slide 6 (App Connect), Slide 7 (AsyncAPI)
 
 **Script outline:**
 - "The same spec that drives our open-source tooling also feeds into the IBM stack."
 - Walk through API Connect publishing: "One command publishes to the gateway. The Developer Portal is auto-generated."
 - Walk through App Connect import: "Operations are scaffolded as flows. Wire up a backend connector and you have integration."
-- Mention AsyncAPI: "For MQ and event-driven APIs, the same contract-first philosophy applies with AsyncAPI."
+- Show the AsyncAPI slide: "For MQ and event-driven APIs, the same contract-first philosophy is coming. AsyncAPI is the OpenAPI equivalent for events. The tooling is maturing — HDI Global, a German insurer, already uses it alongside OpenAPI."
+- "This is our next step once the REST workflow is established."
 
 ---
 
@@ -341,7 +349,7 @@ Record each section as a **separate video file**. This lets you re-record a sing
 
 **Format:** Slides only. No terminal.
 
-**Slides used:** Slide 7 (Timeline Comparison), Slide 8 (Role Impact Matrix), Slide 9 (What's Next)
+**Slides used:** Slide 8 (Timeline Comparison), Slide 9 (Role Impact Matrix), Slide 10 (What's Next)
 
 **Script outline:**
 1. Show the timeline comparison. Walk through each week. "Traditional: 7 weeks to stable integration. API-first: 3 weeks, with parallel work from day one."

@@ -31,7 +31,7 @@ Scope:
 
 1. Create the full directory scaffold: `specs/`, `rules/`, `mocks/`, `tests/`, `docs/`, `ci/`
 2. Create a README.md with folder purpose descriptions, prerequisites list (Node.js 18+, Python 3.8+, Hurl), and a single setup script. Include a note that the spec can be imported into any API client (Bruno, Postman, Insomnia, Hoppscotch, Scalar, Yaak) for manual exploration.
-3. Create a `setup.sh` that installs all global tools (`prism-cli`, `spectral-cli`, `@scalar/cli`, `@asyncapi/cli`, `schemathesis`, `oasdiff`) and project-level dependencies (`openapi-typescript`, `openapi-fetch`, `openapi-generator-cli` for server stubs)
+3. Create a `setup.sh` that installs all global tools (`prism-cli`, `spectral-cli`, `@scalar/cli`, `schemathesis`, `oasdiff`) and project-level dependencies (`openapi-typescript`, `openapi-fetch`, `openapi-generator-cli` for server stubs)
 4. Add `.gitignore` entries for `generated/`, `node_modules/`, `*.Zone.Identifier`
 
 Primary files:
@@ -455,45 +455,7 @@ Exit criteria:
 
 ---
 
-### Increment 11: AsyncAPI spec for event-driven contracts
-
-**Status:** pending
-
-> PRD ref: US-014
-
-Scope:
-
-1. Create `specs/order-events.asyncapi.yaml` as an AsyncAPI 2.6 spec
-2. Define server configuration (IBM MQ or Kafka broker)
-3. Define 2 channels:
-   - `order/created` — message with `orderId`, `customerId`, `createdAt`, `items`
-   - `order/statusChanged` — message with `orderId`, `previousStatus`, `newStatus`, `changedAt`
-4. Each message payload has typed properties with descriptions
-5. Validate with the AsyncAPI CLI
-
-Primary files:
-
-1. `specs/order-events.asyncapi.yaml`
-
-Test gate:
-
-1. `npx @asyncapi/cli validate specs/order-events.asyncapi.yaml` — exits 0
-2. `grep -c "channels:" specs/order-events.asyncapi.yaml` — channels section exists
-
-Alternatives:
-
-- **AsyncAPI Studio** — visual editor for event specs, similar to Stoplight Studio for OpenAPI.
-- **AsyncAPI Generator** — generates consumer/producer code from the spec (Java JMS, Node.js, etc.). Out of scope for v1 but a natural follow-up.
-- **Confluent Schema Registry / Apicurio** — centralized event schema management for Kafka environments.
-
-Exit criteria:
-
-1. AsyncAPI spec is valid and describes 2 event channels with typed payloads
-2. Spec lives alongside the REST spec in `specs/`, demonstrating unified contract-first for HTTP + events
-
----
-
-### Increment 12: CI pipeline (GitHub Actions)
+### Increment 11: CI pipeline (GitHub Actions)
 
 **Status:** pending
 
@@ -530,7 +492,7 @@ Exit criteria:
 
 ---
 
-### Increment 13: Pre-recording checklist and dry run
+### Increment 12: Pre-recording checklist and dry run
 
 **Status:** pending
 
@@ -559,7 +521,7 @@ Exit criteria:
 
 ---
 
-### Increment 14: Record video clips (core workflow)
+### Increment 13: Record video clips (core workflow)
 
 **Status:** pending
 
@@ -596,7 +558,7 @@ Exit criteria:
 
 ---
 
-### Increment 15: Record IBM slides and closing
+### Increment 14: Record IBM slides and closing
 
 **Status:** pending
 
@@ -625,7 +587,7 @@ Exit criteria:
 
 ---
 
-### Increment 16: Video editing and final delivery
+### Increment 15: Video editing and final delivery
 
 **Status:** pending
 
@@ -677,6 +639,6 @@ Exit criteria:
 | M2: Quality Gates | 03-04 | pending | Linting + mock server working | Spectral passes on good spec, fails on bad spec; Prism serves mock responses | Spec quality is enforceable; frontend can start building against mocks | `feat: add Spectral linting rules` then `feat: validate Prism mock responses` |
 | M3: Code Generation | 05-06 | pending | TypeScript types + Spring Boot server stubs | Generated types match spec; openapi-fetch usage example compiles; Spring Boot stub server starts and responds | Both frontend and backend have generated starting points from the spec | `feat: generate TypeScript types with openapi-typescript` then `feat: generate Spring Boot server stubs` |
 | M4: Testing | 07-08 | pending | Contract tests + functional tests working | Schemathesis passes 100+ tests; Hurl tests pass with JUnit output | Automated quality assurance is in place with zero hand-written contract tests | `feat: add Schemathesis contract testing` then `feat: add Hurl functional tests` |
-| M5: Ecosystem | 09-11 | pending | Breaking change detection, Scalar docs, AsyncAPI spec | oasdiff detects breaking changes; Scalar HTML renders; AsyncAPI spec validates | Full tooling ecosystem is operational — REST + event-driven contracts | `feat: add breaking change detection` then `feat: add Scalar API docs` then `feat: add AsyncAPI event spec` |
-| M6: CI & Verification | 12-13 | pending | CI pipeline + full dry run | Valid pipeline YAML with all jobs; pre-recording checklist passes | Everything works end-to-end, ready to record | `feat: add GitHub Actions CI pipeline` then `chore: pre-recording dry run` |
-| M7: Video Production | 14-16 | pending | Recorded and edited video + companion materials | Final video is 35-40 min, 1080p, with chapter markers | IT department can watch the video and access all materials | Commits not applicable (video is external) |
+| M5: Ecosystem | 09-10 | pending | Breaking change detection, Scalar docs with "Try it out" | oasdiff detects breaking changes; Scalar HTML renders with working playground | Full tooling ecosystem is operational around the spec | `feat: add breaking change detection` then `feat: add Scalar API docs` |
+| M6: CI & Verification | 11-12 | pending | CI pipeline + full dry run | Valid pipeline YAML with all jobs; pre-recording checklist passes | Everything works end-to-end, ready to record | `feat: add GitHub Actions CI pipeline` then `chore: pre-recording dry run` |
+| M7: Video Production | 13-15 | pending | Recorded and edited video + companion materials | Final video is 35-40 min, 1080p, with chapter markers | IT department can watch the video and access all materials | Commits not applicable (video is external) |

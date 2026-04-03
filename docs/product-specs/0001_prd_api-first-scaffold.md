@@ -33,6 +33,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 - **Multi-repo orchestration.** The scaffold assumes a single repo containing the spec and all generated artifacts. Mono-repo vs multi-repo strategy is a separate discussion. *Why: adds organizational complexity that distracts from the core workflow.*
 - **Interactive training app.** Will be scoped post-implementation once the workflow is finalized. *Why: the teaching content depends on the final implementation.*
 - **Multi-API developer portal.** For v1, Scalar generates static HTML per API. Evaluating Backstage or a centralized portal is a medium-term initiative after the pilot. *Why: premature before we have multiple APIs using the workflow.*
+- **AsyncAPI implementation in the scaffold.** AsyncAPI for event-driven contracts (MQ/Kafka) is covered in presentation slides only. The tooling ecosystem (especially IBM MQ mocking and v3 code generation) is not mature enough for a live demo. *Why: tooling is ~3-5 years behind OpenAPI; adding a half-working demo weakens the presentation.*
 
 ---
 
@@ -253,24 +254,10 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 **Acceptance Criteria:**
 
-- [ ] Slides cover: `apic products:publish` workflow, Developer Portal screenshot/mockup, App Connect OpenAPI import flow, AsyncAPI spec for MQ events
+- [ ] Slides cover: `apic products:publish` workflow, Developer Portal screenshot/mockup, App Connect OpenAPI import flow
+- [ ] Slides include an AsyncAPI "what's next" section: what it is, how it extends contract-first to event-driven APIs (MQ/Kafka), example spec structure, current tooling maturity
 - [ ] Slides reference the actual spec file in the repo so viewers know it is the same contract
 - [ ] No live IBM environment is required during the presentation
-
-### US-014: AsyncAPI spec for event-driven contracts
-
-**Status:** pending
-
-**Description:** As a tech lead, I want an AsyncAPI spec template for order events (MQ/Kafka) so that the team sees the same contract-first philosophy applied to event-driven APIs alongside REST.
-
-**Acceptance Criteria:**
-
-- [ ] `specs/order-events.asyncapi.yaml` exists as an AsyncAPI 2.6 spec
-- [ ] Spec defines at least 2 channels: `order/created` and `order/statusChanged`
-- [ ] Each channel has a message payload with typed properties (orderId, status, timestamps)
-- [ ] Spec includes server definition (e.g., IBM MQ or Kafka broker)
-- [ ] Spec validates with `npx @asyncapi/cli validate specs/order-events.asyncapi.yaml`
-- [ ] The AsyncAPI spec lives alongside the REST spec in the same `specs/` directory, demonstrating unified contract-first for both HTTP and events
 
 ---
 
@@ -331,5 +318,5 @@ Decisions originally tracked as open questions, now resolved:
 1. **Spectral ruleset as npm package:** Not for v1 — the ruleset lives in the scaffold repo. After the pilot validates the rules, publish as `@yourcompany/spectral-ruleset` to GitHub Packages so all repos can `npm install` and extend it. This is a follow-up milestone, not a non-goal.
 2. **Scalar hosting:** Static HTML for v1, auto-deployed by CI. For 1-5 APIs, GitHub Pages per repo is sufficient. Evaluate Backstage or a centralized portal once 10+ APIs adopt the workflow. (Moved to non-goals as medium-term initiative.)
 3. **Schemathesis in CI:** Runs only on spec changes (`specs/**` trigger). Adds ~20-30s of pipeline runtime, not minutes. Already configured this way in the pipeline.
-4. **AsyncAPI scope:** Included in the scaffold as a template spec (`specs/order-events.asyncapi.yaml`). Added as US-014.
+4. **AsyncAPI scope:** Deferred from scaffold implementation to slides-only. Tooling (IBM MQ mocking, v3 code generation) is not mature enough for a live demo. Covered as a "what's next" topic in the IBM slides (US-013).
 5. **Interactive training app:** Deferred to post-implementation. Moved to non-goals.
