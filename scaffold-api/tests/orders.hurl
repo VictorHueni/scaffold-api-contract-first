@@ -104,11 +104,8 @@ jsonpath "$.total" isFloat
 # -----------------------------------------------------------------------------
 # Test 4: Create order with missing required field (400)
 # -----------------------------------------------------------------------------
-# POST with missing "items" array (a required field). Prism's request
-# validation rejects this with a 422 Unprocessable Entity.
-# Note: Prism returns 422 (not 400) for request body validation errors.
-# This is Prism's built-in validation behavior — in a real API implementation,
-# the status code would match the spec's 400 definition.
+# POST with missing "items" array (a required field). Prism returns the
+# spec's 400 response example with the validation error body.
 
 POST http://localhost:4010/orders
 X-API-Key: test-key
@@ -126,7 +123,7 @@ Content-Type: application/json
     }
   }
 }
-HTTP 422
+HTTP 400
 [Asserts]
 header "Content-Type" contains "application/json"
 
