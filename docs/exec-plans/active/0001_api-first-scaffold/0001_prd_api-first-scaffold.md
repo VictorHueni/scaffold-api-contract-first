@@ -130,17 +130,17 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ### US-005: Generate a TypeScript client from the spec
 
-**Status:** pending
+**Status:** done
 
 **Description:** As a frontend developer, I want to generate a typed TypeScript client from the spec so that I have compile-time safety and IDE autocompletion for all API calls.
 
 **Acceptance Criteria:**
 
-- [ ] Running `npx openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts` produces a types file
-- [ ] Generated types include typed interfaces for Order, Customer, OrderItem, ErrorResponse
-- [ ] All field names, types, and optionality match the spec exactly
-- [ ] `openapi-fetch` can be used with the generated types for type-safe API calls with IDE autocompletion
-- [ ] A minimal usage example exists showing a typed GET request with autocompletion
+- [x] Running `npx openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts` produces a types file
+- [x] Generated types include typed interfaces for Order, Customer, OrderItem, ErrorResponse
+- [x] All field names, types, and optionality match the spec exactly
+- [x] `openapi-fetch` can be used with the generated types for type-safe API calls with IDE autocompletion
+- [x] A minimal usage example exists showing a typed GET request with autocompletion
 
 ---
 

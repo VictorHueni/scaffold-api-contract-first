@@ -15,7 +15,7 @@
     "------- DEV -------": "",
     "mock": "prism mock specs/order-api.bundled.yaml --port 4010",
     "mock:dynamic": "prism mock -d specs/order-api.bundled.yaml --port 4010",
-    "types": "openapi-typescript specs/order-api.bundled.yaml -o generated/api-types.d.ts",
+    "types": "openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts --read-write-markers",
     "docs": "scalar document serve specs/order-api.bundled.yaml --port 8081 --watch",
     "docs:build": "scalar document bundle specs/order-api.bundled.yaml -o docs/scalar-reference.html",
 
@@ -35,6 +35,7 @@
     "@scalar/cli": "^1",
     "openapi-typescript": "^7",
     "openapi-fetch": "^0.17",
-    "@openapitools/openapi-generator-cli": "^2"
+    "@openapitools/openapi-generator-cli": "^2",
+    "typescript": "^5"
   }
 }

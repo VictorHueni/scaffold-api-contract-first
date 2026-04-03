@@ -42,3 +42,16 @@
 - Learnings: Prism in static mode picks the first named example (pendingOrder) for GET /orders/{orderId}. The bundled spec uses mangled $ref keys (e.g., `x-ext/b050c23`) from Scalar CLI bundling — Prism handles these correctly. Mock response files serve as reference artifacts showing what Prism produces. package.json already has `mock` and `mock:dynamic` scripts configured from Increment 01.
 - Commit: pending (sandbox blocks git — run manually)
 - Timestamp: 2026-04-02T12:30:00Z
+
+## Iteration 5
+- Increment: 05 — TypeScript types and client generation
+- Status: done
+- Files changed: examples/client-usage.ts (new, typed openapi-fetch usage example), tsconfig.json (new, TypeScript config for examples + generated types), package.json (added typescript ^5 to devDependencies), exec plan + PRD updates
+- Test gate: Sandbox blocks npx/node — must be run manually:
+  1. `cd scaffold-api && npm install` (installs typescript)
+  2. `npx openapi-typescript specs/order-api.bundled.yaml -o generated/api-types.d.ts` (expect exit 0, types file created)
+  3. `grep -c "Order\|Customer\|OrderItem\|ErrorResponse" generated/api-types.d.ts` (expect count > 0 for each schema)
+  4. `npx tsc --noEmit examples/client-usage.ts` (expect exit 0, no type errors)
+- Learnings: Sandbox blocks npx/node/npm execution, consistent with previous increments. The bundled spec uses mangled x-ext/ $ref keys from Scalar CLI bundling — openapi-typescript handles these and generates proper path-based types. The `readOnly: true` fields (id, status, total, createdAt, updatedAt, subtotal) are excluded from request body types by openapi-typescript, so the POST body in the example only includes writable fields. The example may need minor adjustments once the actual generated types are inspected — field names and path structures should match the spec but type naming depends on openapi-typescript's output format.
+- Commit: pending (sandbox blocks git — run manually)
+- Timestamp: 2026-04-02T13:00:00Z

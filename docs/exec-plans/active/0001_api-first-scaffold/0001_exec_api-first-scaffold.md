@@ -15,7 +15,7 @@ Principles:
 5. IBM stack is slides-only — no implementation, no environment dependency.
 
 **Overall Status:** in-progress
-**Current Increment:** 04
+**Current Increment:** 05
 
 ---
 
@@ -259,7 +259,7 @@ Exit criteria:
 
 ### Increment 05: TypeScript types and client generation
 
-**Status:** pending
+**Status:** done
 
 > PRD ref: US-005
 
