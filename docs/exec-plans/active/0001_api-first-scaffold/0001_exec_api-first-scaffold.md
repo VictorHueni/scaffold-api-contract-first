@@ -14,8 +14,8 @@ Principles:
 4. The OpenAPI spec is the foundation; everything downstream depends on it.
 5. IBM stack is slides-only — no implementation, no environment dependency.
 
-**Overall Status:** in-progress
-**Current Increment:** 11
+**Overall Status:** done
+**Current Increment:** 12
 
 ---
 
@@ -520,7 +520,7 @@ Exit criteria:
 
 ### Increment 12: End-to-end smoke test
 
-**Status:** pending
+**Status:** done
 
 > PRD ref: all (verification of Increments 01-11)
 
@@ -590,4 +590,4 @@ Exit criteria:
 | M3: Code Generation | 05-06 | done | TypeScript types + Spring Boot server stubs | Generated types match spec; openapi-fetch usage example compiles; Spring Boot stub server starts and responds | Both frontend and backend have generated starting points from the spec | `feat: generate TypeScript types with openapi-typescript` then `feat: generate Spring Boot server stubs` |
 | M4: Testing | 07-08 | done | Contract tests + functional tests working | Schemathesis passes 100+ tests; Hurl tests pass with JUnit output | Automated quality assurance is in place with zero hand-written contract tests | `feat: add Schemathesis contract testing` then `feat: add Hurl functional tests` |
 | M5: Ecosystem | 09-10 | done | Breaking change detection, Scalar docs with "Try it out" | oasdiff detects breaking changes; Scalar HTML renders with working playground | Full tooling ecosystem is operational around the spec | `feat: add breaking change detection` then `feat: add Scalar API docs` |
-| M6: CI & Smoke Test | 11-12 | in-progress | CI pipeline + end-to-end smoke test | Valid pipeline YAML with all jobs; every `npm run` script passes from clean install | Everything works end-to-end, scaffold is production-ready | `feat: add GitHub Actions CI pipeline` then `chore: end-to-end smoke test` |
+| M6: CI & Smoke Test | 11-12 | done | CI pipeline + end-to-end smoke test | Valid pipeline YAML with all jobs; every `npm run` script passes from clean install | Everything works end-to-end, scaffold is production-ready | `feat: add GitHub Actions CI pipeline` then `chore: end-to-end smoke test` |
