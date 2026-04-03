@@ -68,13 +68,15 @@ generated/                   # TypeScript types, Spring stubs (gitignored)
 
 ### Testing
 
-| Command | Description |
-|---|---|
-| `npm run test:contract` | Run Schemathesis contract tests against mock server (requires Docker + Prism on :4010) |
-| `npm run test:contract:negative` | Run Schemathesis negative tests — sends invalid data, verifies rejection (requires Docker + Prism on :4010) |
-| `npm run test:hurl` | Run Hurl functional tests against mock server |
+| Command | Description | Requires |
+|---|---|---|
+| `npm run test:hurl` | Run Hurl functional tests against mock server | Hurl binary |
+| `npm run test:hurl:docker` | Same as above via Docker (no Hurl install needed) | Docker |
+| `npm run test:contract` | Run Schemathesis contract tests (600+ auto-generated) | Docker + Prism on :4010 |
+| `npm run test:contract:negative` | Schemathesis negative tests — sends invalid data | Docker + Prism on :4010 |
+| `npm run breaking:docker` | Breaking change detection via Docker | Docker |
 
-> **Note:** Schemathesis requires Docker locally (`docker run schemathesis/schemathesis`). In CI, it runs via the `schemathesis/action@v2` GitHub Action — no Docker needed. Start the mock server first: `npm run mock &`
+> **Note:** Start the mock server first: `npm run mock &`. Schemathesis and Hurl have Docker fallbacks for environments where native binaries can't be installed. In CI, everything runs via GitHub Actions — no local install needed. See the [QA Testing Guide](../docs/guides/qa-testing.md) for detailed setup instructions.
 
 ### Backend
 

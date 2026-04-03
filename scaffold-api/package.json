@@ -23,6 +23,8 @@
     "test:contract": "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --stateful=links --hypothesis-max-examples=100 --set-header 'X-API-Key: test-key'",
     "test:contract:negative": "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --mode=negative --hypothesis-max-examples=50 --set-header 'X-API-Key: test-key'",
     "test:hurl": "hurl --test tests/**/*.hurl",
+    "test:hurl:docker": "docker run --rm --network host -v $(pwd):/app ghcr.io/orange-opensource/hurl:latest --test /app/tests/**/*.hurl",
+    "breaking:docker": "docker run --rm -v $(pwd):/app tufin/oasdiff breaking /app/specs/order-api.yaml /app/specs/order-api-v2.yaml",
 
     "------- BACKEND -------": "",
     "stubs": "openapi-generator-cli generate -i specs/order-api.bundled.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true --skip-validate-spec",

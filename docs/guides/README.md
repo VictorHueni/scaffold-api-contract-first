@@ -16,11 +16,17 @@ Practical how-to guides organized by role. Each guide follows a consistent struc
 |---|---|
 | [Backend Server Generation](backend-server-generation.md) | Generate Spring Boot interfaces with interfaceOnly pattern |
 
-### QA Engineers & DevOps
+### QA Engineers
 
 | Guide | Description |
 |---|---|
-| [CI Testing & Quality Gates](ci-testing.md) | Schemathesis contract tests, Hurl functional tests, Spectral linting, oasdiff breaking changes |
+| [QA Testing Setup](qa-testing.md) | Local test setup, Docker fallbacks, Hurl functional tests, Schemathesis contract tests, API exploration |
+
+### DevOps Engineers
+
+| Guide | Description |
+|---|---|
+| [CI Testing & Quality Gates](ci-testing.md) | CI pipeline configuration — Schemathesis, Hurl, Spectral, oasdiff in GitHub Actions |
 
 ## Quick Reference
 
@@ -30,9 +36,11 @@ Practical how-to guides organized by role. Each guide follows a consistent struc
 | Use a typed API client | [Frontend](frontend-client-generation.md) | See `examples/client-usage.ts` |
 | Generate Spring Boot stubs | [Backend](backend-server-generation.md) | `npm run stubs` |
 | Lint the spec | [CI Testing](ci-testing.md) | `npm run lint` |
-| Run contract tests | [CI Testing](ci-testing.md) | `npm run mock & npm run test:contract` |
-| Run functional tests | [CI Testing](ci-testing.md) | `npm run mock & hurl --test tests/orders.hurl` |
-| Check for breaking changes | [CI Testing](ci-testing.md) | `npm run breaking` |
+| Run contract tests | [QA Testing](qa-testing.md) | `npm run mock & npm run test:contract` |
+| Run functional tests (native) | [QA Testing](qa-testing.md) | `npm run mock & npm run test:hurl` |
+| Run functional tests (Docker) | [QA Testing](qa-testing.md) | `npm run mock & npm run test:hurl:docker` |
+| Check for breaking changes | [CI Testing](ci-testing.md) | `npm run breaking:docker` |
+| Explore the API interactively | [QA Testing](qa-testing.md) | `npm run docs` → "Try it out" |
 | Start mock server | All guides | `npm run mock` |
 
 ## Reference Material
