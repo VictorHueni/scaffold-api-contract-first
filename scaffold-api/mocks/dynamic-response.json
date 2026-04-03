@@ -1,0 +1,724 @@
+{
+  "createdAt": "2026-04-02T00:00:00.0Z",
+  "currency": "COP",
+  "customer": {
+    "email": "Darien.Kutch37@gmail.com",
+    "name": "do nisi eiusmod elit dolor",
+    "phone": "+74919990305",
+    "shippingAddress": {
+      "city": "des",
+      "country": "WG",
+      "postalCode": "6sg8",
+      "state": "elit",
+      "street": "magna voluptate non Ut"
+    }
+  },
+  "id": "18ff37fc-a632-ae9d-6122-f161fedf7344",
+  "items": [
+    {
+      "productId": "953d3417-6a10-65d0-32ab-3ac7aaf04431",
+      "productName": "Handmade Fresh Mouse",
+      "quantity": 499,
+      "unitPrice": 658447.112910237,
+      "subtotal": 78465931.70483418
+    },
+    {
+      "productId": "b8ad650c-15b3-a7a4-8ebe-c801d675dd21",
+      "productName": "Practical Granite Hat",
+      "quantity": 7767,
+      "unitPrice": 272527.41500445706,
+      "subtotal": 82223240.35433517
+    },
+    {
+      "productId": "006dd5fc-bdc5-d36d-446b-6f068bfb8433",
+      "productName": "Fantastic Granite Shirt",
+      "quantity": 201,
+      "unitPrice": 138687.7498986956,
+      "subtotal": 54596515.62616452
+    },
+    {
+      "productId": "0f816b1f-5d7f-e2ba-7a6b-ea7122030d79",
+      "productName": "Oriental Bronze Shirt",
+      "quantity": 5024,
+      "unitPrice": 852836.6940495585,
+      "subtotal": 53519068.095217876
+    },
+    {
+      "productId": "bbadb341-e41a-1c2b-5971-eacf509d7716",
+      "productName": "Practical Soft Pizza",
+      "quantity": 2419,
+      "unitPrice": 698828.087114036,
+      "subtotal": 90475278.00295587
+    },
+    {
+      "productId": "5adc6317-9dfb-dd94-81f5-728f578f6482",
+      "productName": "Sleek Wooden Pants",
+      "quantity": 9303,
+      "unitPrice": 249828.81322350574,
+      "subtotal": 15976667.097895123
+    },
+    {
+      "productId": "49255869-5acd-7859-6817-47eb1b810f8a",
+      "productName": "Licensed Metal Bacon",
+      "quantity": 2521,
+      "unitPrice": 843681.593913916,
+      "subtotal": 60162497.19832116
+    },
+    {
+      "productId": "975a79bd-99d2-6fc3-cba2-782e3265b7e6",
+      "productName": "Generic Soft Chips",
+      "quantity": 2112,
+      "unitPrice": 173496.0727227961,
+      "subtotal": 52477891.56987728
+    },
+    {
+      "productId": "c7a911a2-0590-91b5-91e9-440083493a8b",
+      "productName": "Recycled Concrete Keyboard",
+      "quantity": 8429,
+      "unitPrice": 757922.8386989178,
+      "subtotal": 84379351.89100529
+    },
+    {
+      "productId": "01dcd620-97c7-7532-ae49-4f3719104f5f",
+      "productName": "Awesome Granite Car",
+      "quantity": 9565,
+      "unitPrice": 708250.6074381677,
+      "subtotal": 83181471.62987876
+    },
+    {
+      "productId": "aec37354-7610-bbdd-2cd1-55e002786e7d",
+      "productName": "Fantastic Fresh Gloves",
+      "quantity": 4200,
+      "unitPrice": 478036.853442309,
+      "subtotal": 1296175.406388167
+    },
+    {
+      "productId": "5fee2084-668a-4a29-f516-3383b3a0a20c",
+      "productName": "Practical Plastic Chips",
+      "quantity": 178,
+      "unitPrice": 29833.096414781197,
+      "subtotal": 97095473.7337653
+    },
+    {
+      "productId": "3acf7aa0-7625-746f-8db9-f166b3d5d7f9",
+      "productName": "Oriental Metal Tuna",
+      "quantity": 1769,
+      "unitPrice": 645789.8688473371,
+      "subtotal": 95611423.10818419
+    },
+    {
+      "productId": "c860c290-085c-f6fc-0cdd-34474c32ab29",
+      "productName": "Generic Concrete Cheese",
+      "quantity": 9741,
+      "unitPrice": 807902.887351072,
+      "subtotal": 83299730.83796199
+    },
+    {
+      "productId": "32bef710-abb8-4fdc-3bf1-a3592d503045",
+      "productName": "Handcrafted Fresh Shoes",
+      "quantity": 5322,
+      "unitPrice": 871304.4082531894,
+      "subtotal": 53540478.56479966
+    },
+    {
+      "productId": "71ecebca-693a-1fc6-f1a1-e94dda19fe44",
+      "productName": "Bespoke Wooden Shoes",
+      "quantity": 1475,
+      "unitPrice": 343432.45834395004,
+      "subtotal": 3423934.947448768
+    },
+    {
+      "productId": "6977ed5b-af60-41e0-743c-a4b6f96a5718",
+      "productName": "Fantastic Granite Salad",
+      "quantity": 5889,
+      "unitPrice": 224160.5746351088,
+      "subtotal": 19602055.74190586
+    },
+    {
+      "productId": "b7086320-074f-7d8f-c4e6-f52d7a92346a",
+      "productName": "Small Cotton Shoes",
+      "quantity": 7384,
+      "unitPrice": 840939.8429973338,
+      "subtotal": 39787770.048362546
+    },
+    {
+      "productId": "108dfdaf-be64-957c-ddcc-d6c432ebf10a",
+      "productName": "Incredible Cotton Pants",
+      "quantity": 2246,
+      "unitPrice": 735111.1332449354,
+      "subtotal": 96391313.68410812
+    },
+    {
+      "productId": "60e1f5b3-38e8-690a-4e00-99002a38f888",
+      "productName": "Rustic Cotton Tuna",
+      "quantity": 8875,
+      "unitPrice": 681267.8315258158,
+      "subtotal": 23126369.275230154
+    },
+    {
+      "productId": "258858c8-0d6a-24ad-c300-99d45ad723bd",
+      "productName": "Handcrafted Concrete Cheese",
+      "quantity": 4318,
+      "unitPrice": 383746.72862718784,
+      "subtotal": 3922498.549833366
+    },
+    {
+      "productId": "606f5a93-7a33-b1ea-2f42-9779899b18a2",
+      "productName": "Electronic Rubber Towels",
+      "quantity": 9664,
+      "unitPrice": 275305.34352075215,
+      "subtotal": 42835043.22404363
+    },
+    {
+      "productId": "c960ed89-91cf-2c12-f7c6-cde207630e53",
+      "productName": "Gorgeous Bronze Gloves",
+      "quantity": 8381,
+      "unitPrice": 132358.41006562815,
+      "subtotal": 2129732.9204520094
+    },
+    {
+      "productId": "3d1122cc-96b8-ab8b-2fe5-53341f8ac50a",
+      "productName": "Sleek Plastic Computer",
+      "quantity": 1432,
+      "unitPrice": 435079.4478357266,
+      "subtotal": 61042032.74467989
+    },
+    {
+      "productId": "aa0b504b-f12f-2c2e-a003-212c46dbb8d2",
+      "productName": "Unbranded Steel Tuna",
+      "quantity": 8303,
+      "unitPrice": 955597.5178557099,
+      "subtotal": 19399178.85190696
+    },
+    {
+      "productId": "11260450-44a3-24fc-5764-c805dba4f47c",
+      "productName": "Bespoke Metal Sausages",
+      "quantity": 3626,
+      "unitPrice": 574120.8782532824,
+      "subtotal": 71229260.81102403
+    },
+    {
+      "productId": "16554728-1662-b29d-6ed5-cc539d6cd0a0",
+      "productName": "Handcrafted Granite Chicken",
+      "quantity": 672,
+      "unitPrice": 904083.9584822177,
+      "subtotal": 65129236.181052476
+    },
+    {
+      "productId": "0b29bb10-4588-fe18-aa14-16184875b2da",
+      "productName": "Bespoke Plastic Ball",
+      "quantity": 250,
+      "unitPrice": 283283.34945400635,
+      "subtotal": 42732621.89817449
+    },
+    {
+      "productId": "cd4c613a-c19c-9abe-31a8-6725df1dad15",
+      "productName": "Elegant Steel Pizza",
+      "quantity": 5877,
+      "unitPrice": 348406.8667305924,
+      "subtotal": 91249098.2041284
+    },
+    {
+      "productId": "9c3ce269-9a13-d48f-c3b8-202ed95ca1f4",
+      "productName": "Sleek Fresh Shirt",
+      "quantity": 2479,
+      "unitPrice": 757469.6119141254,
+      "subtotal": 74725893.2272605
+    },
+    {
+      "productId": "7a5419dd-36da-c9d5-972e-866c57d645d2",
+      "productName": "Oriental Steel Shoes",
+      "quantity": 9469,
+      "unitPrice": 895140.5469774292,
+      "subtotal": 99353073.96053846
+    },
+    {
+      "productId": "118f7b16-8e33-fa99-5645-b8ac001bab0f",
+      "productName": "Elegant Bronze Computer",
+      "quantity": 7251,
+      "unitPrice": 856126.7296340831,
+      "subtotal": 55815075.920406446
+    },
+    {
+      "productId": "3e7730e5-a048-6755-68b3-7d34b8d89bb9",
+      "productName": "Refined Soft Hat",
+      "quantity": 7595,
+      "unitPrice": 238205.486929417,
+      "subtotal": 29511650.89275883
+    },
+    {
+      "productId": "825881ef-0e77-3cd4-64a6-eac8000ea583",
+      "productName": "Fantastic Plastic Bike",
+      "quantity": 1817,
+      "unitPrice": 142660.05356324223,
+      "subtotal": 34378925.81165742
+    },
+    {
+      "productId": "f9ab9e78-366c-5a7b-4428-a058d1fadc5b",
+      "productName": "Electronic Rubber Salad",
+      "quantity": 6151,
+      "unitPrice": 152242.55123421692,
+      "subtotal": 30779087.051803906
+    },
+    {
+      "productId": "58208e18-09ed-6b33-fb8f-d4a8a673a92b",
+      "productName": "Handcrafted Cotton Chair",
+      "quantity": 3854,
+      "unitPrice": 494248.3475160439,
+      "subtotal": 5637038.613473777
+    },
+    {
+      "productId": "4e6f92d9-0352-0dc8-8cf7-18f17650ec2b",
+      "productName": "Intelligent Bronze Pizza",
+      "quantity": 2414,
+      "unitPrice": 821863.9254564884,
+      "subtotal": 55120079.34938696
+    },
+    {
+      "productId": "681b8324-4f33-3f14-eeec-f78156259988",
+      "productName": "Electronic Concrete Car",
+      "quantity": 9032,
+      "unitPrice": 114448.85052935481,
+      "subtotal": 36534841.73494038
+    },
+    {
+      "productId": "861a7108-fd39-4e18-2c3a-ceae64ed8f2a",
+      "productName": "Refined Rubber Shoes",
+      "quantity": 9001,
+      "unitPrice": 709866.9893685087,
+      "subtotal": 15857213.525869515
+    },
+    {
+      "productId": "ef68fb5c-cbc8-02cf-9266-81c99687f465",
+      "productName": "Sleek Cotton Pizza",
+      "quantity": 5351,
+      "unitPrice": 61387.0527310709,
+      "subtotal": 79544619.32907632
+    },
+    {
+      "productId": "19c8842d-efe8-31c4-3081-de536cd9ba36",
+      "productName": "Elegant Bronze Tuna",
+      "quantity": 3559,
+      "unitPrice": 233567.96069327815,
+      "subtotal": 47967530.51838696
+    },
+    {
+      "productId": "339906b8-ac4c-7f88-578d-642343e0592f",
+      "productName": "Intelligent Cotton Chips",
+      "quantity": 6085,
+      "unitPrice": 481580.0314814021,
+      "subtotal": 13435456.301086113
+    },
+    {
+      "productId": "dee507a1-c957-040c-6aa2-12a077153357",
+      "productName": "Rustic Cotton Fish",
+      "quantity": 6186,
+      "unitPrice": 469631.98543214507,
+      "subtotal": 15614637.81578218
+    },
+    {
+      "productId": "0c27b0b4-390b-c06c-1b9c-0e403c73df97",
+      "productName": "Sleek Wooden Bacon",
+      "quantity": 297,
+      "unitPrice": 505220.53008360957,
+      "subtotal": 82120768.21448167
+    },
+    {
+      "productId": "579e43f8-4c1a-6b74-104e-96b5a2ec97e8",
+      "productName": "Small Granite Table",
+      "quantity": 6839,
+      "unitPrice": 103079.83216806062,
+      "subtotal": 99317983.31469949
+    },
+    {
+      "productId": "e59555f6-6cb3-d2eb-b613-6052d7e4e081",
+      "productName": "Handcrafted Frozen Shoes",
+      "quantity": 6973,
+      "unitPrice": 701001.6477343978,
+      "subtotal": 47703283.84061629
+    },
+    {
+      "productId": "6cd88d6a-c026-6777-ed4c-688a3f00b1bb",
+      "productName": "Unbranded Granite Pizza",
+      "quantity": 3565,
+      "unitPrice": 306125.3653253693,
+      "subtotal": 59189266.105742775
+    },
+    {
+      "productId": "667a74b6-8f2e-2598-fbc6-89514d435ed8",
+      "productName": "Gorgeous Metal Chicken",
+      "quantity": 4215,
+      "unitPrice": 747438.2280314052,
+      "subtotal": 40938755.709963374
+    },
+    {
+      "productId": "347ccaa4-3c08-5264-27ab-fa4a75a55ff1",
+      "productName": "Gorgeous Wooden Chair",
+      "quantity": 5710,
+      "unitPrice": 257328.60595618444,
+      "subtotal": 53859905.63216428
+    },
+    {
+      "productId": "31b51c12-ef0d-a8a1-b661-8cb410f669ae",
+      "productName": "Oriental Rubber Chair",
+      "quantity": 4072,
+      "unitPrice": 412484.5164897979,
+      "subtotal": 4247522.8978469735
+    },
+    {
+      "productId": "705af1fc-2fff-1d1d-4719-397ac8c5453b",
+      "productName": "Refined Bronze Car",
+      "quantity": 5566,
+      "unitPrice": 929309.219442169,
+      "subtotal": 73734162.72136845
+    },
+    {
+      "productId": "2f6582b7-9b53-b4ea-2408-845ae08adef6",
+      "productName": "Small Metal Chair",
+      "quantity": 4527,
+      "unitPrice": 398977.33824274386,
+      "subtotal": 41904061.96881004
+    },
+    {
+      "productId": "ad4de557-40e7-78d9-be34-b15812421402",
+      "productName": "Practical Plastic Hat",
+      "quantity": 6637,
+      "unitPrice": 140185.20348181814,
+      "subtotal": 13607807.878712714
+    },
+    {
+      "productId": "54a3703e-2611-9f34-63b3-8baa52e0412a",
+      "productName": "Modern Concrete Sausages",
+      "quantity": 9753,
+      "unitPrice": 289377.58633240307,
+      "subtotal": 21229392.57214545
+    },
+    {
+      "productId": "50c8867d-df83-b534-6908-46e9c9e27c33",
+      "productName": "Small Wooden Salad",
+      "quantity": 7701,
+      "unitPrice": 996382.1104896006,
+      "subtotal": 72461491.99860908
+    },
+    {
+      "productId": "58257fcc-e8c8-5fff-6788-41ffe41844d2",
+      "productName": "Refined Cotton Table",
+      "quantity": 9252,
+      "unitPrice": 435801.4672197034,
+      "subtotal": 3322023.7124794465
+    },
+    {
+      "productId": "483a1258-ed5c-7875-d7dc-e3a8f4f541f6",
+      "productName": "Fantastic Metal Keyboard",
+      "quantity": 964,
+      "unitPrice": 265756.0443021146,
+      "subtotal": 20839815.314083938
+    },
+    {
+      "productId": "bff7a08e-048c-d8d3-8626-90689cb8fe75",
+      "productName": "Luxurious Rubber Soap",
+      "quantity": 139,
+      "unitPrice": 957362.1280329938,
+      "subtotal": 11841534.497044979
+    },
+    {
+      "productId": "65b57699-d56d-e1e6-ab8c-a1028160004b",
+      "productName": "Elegant Concrete Towels",
+      "quantity": 5346,
+      "unitPrice": 355551.7718974679,
+      "subtotal": 91743781.83765669
+    },
+    {
+      "productId": "22523a1f-a64c-2c28-7e48-f0a53c350d00",
+      "productName": "Rustic Frozen Shoes",
+      "quantity": 9356,
+      "unitPrice": 41727.42037813131,
+      "subtotal": 36926647.82360619
+    },
+    {
+      "productId": "22e734e3-80cc-0399-5d30-38133a4c52d3",
+      "productName": "Oriental Cotton Keyboard",
+      "quantity": 6491,
+      "unitPrice": 897640.1552879554,
+      "subtotal": 42682447.22698327
+    },
+    {
+      "productId": "0cfb410d-6f0f-15b0-3a64-9a5847e5393b",
+      "productName": "Small Cotton Salad",
+      "quantity": 7438,
+      "unitPrice": 175220.03498212562,
+      "subtotal": 85636273.47212687
+    },
+    {
+      "productId": "02726831-e727-833c-52bc-89b27f7147cb",
+      "productName": "Intelligent Rubber Cheese",
+      "quantity": 3067,
+      "unitPrice": 103207.8235212405,
+      "subtotal": 17831843.806058213
+    },
+    {
+      "productId": "65f1baff-2ceb-a785-d850-ae270afd9766",
+      "productName": "Modern Frozen Computer",
+      "quantity": 3080,
+      "unitPrice": 741490.5476782566,
+      "subtotal": 40745742.40487328
+    },
+    {
+      "productId": "cf0807ef-663a-a8a1-a855-ed867a62bcf9",
+      "productName": "Intelligent Concrete Shoes",
+      "quantity": 4417,
+      "unitPrice": 730385.2236347747,
+      "subtotal": 1605580.0095248667
+    },
+    {
+      "productId": "cd5579c3-cd3b-f1a2-f2a7-1bce5e7e5cce",
+      "productName": "Licensed Rubber Salad",
+      "quantity": 5211,
+      "unitPrice": 192011.76299671637,
+      "subtotal": 22573370.37928383
+    },
+    {
+      "productId": "822b56fd-d253-3bd4-384b-ebca3e10a2bc",
+      "productName": "Handcrafted Fresh Shirt",
+      "quantity": 3216,
+      "unitPrice": 572631.4788540787,
+      "subtotal": 59714810.186409496
+    },
+    {
+      "productId": "3804bc45-617a-842b-8e25-bf8d5e9fc1aa",
+      "productName": "Handmade Fresh Ball",
+      "quantity": 4487,
+      "unitPrice": 326739.61817329493,
+      "subtotal": 631202.8084877913
+    },
+    {
+      "productId": "16ce0f62-149c-4ab2-55bb-b9ef59590dbc",
+      "productName": "Oriental Rubber Bacon",
+      "quantity": 3572,
+      "unitPrice": 144753.43030959542,
+      "subtotal": 4783802.593977851
+    },
+    {
+      "productId": "0470efbd-6e04-41fb-7307-9bdb3ffedd9f",
+      "productName": "Luxurious Plastic Shoes",
+      "quantity": 4473,
+      "unitPrice": 648787.03791442,
+      "subtotal": 54358045.74939038
+    },
+    {
+      "productId": "d33f6627-0c88-771d-67b4-71bd1a37fe7a",
+      "productName": "Unbranded Steel Cheese",
+      "quantity": 3261,
+      "unitPrice": 787053.2514661279,
+      "subtotal": 9720987.224824917
+    },
+    {
+      "productId": "6c9dbfcd-9e9e-b3fa-dc61-1874b1d3c3f7",
+      "productName": "Elegant Bronze Computer",
+      "quantity": 9699,
+      "unitPrice": 283419.9439620252,
+      "subtotal": 17661972.254833937
+    },
+    {
+      "productId": "56ed19c9-efea-45b1-7c02-7672bf10ff45",
+      "productName": "Recycled Frozen Bike",
+      "quantity": 9526,
+      "unitPrice": 488259.2996693112,
+      "subtotal": 79094128.57711725
+    },
+    {
+      "productId": "e300617c-807e-4c41-b91c-670929e1c144",
+      "productName": "Awesome Plastic Chicken",
+      "quantity": 4016,
+      "unitPrice": 141020.3077071825,
+      "subtotal": 59592424.07054642
+    },
+    {
+      "productId": "5809b4e7-d3ee-df90-025b-04764e70380b",
+      "productName": "Electronic Frozen Gloves",
+      "quantity": 9270,
+      "unitPrice": 420499.58816009806,
+      "subtotal": 59421278.48954078
+    },
+    {
+      "productId": "f93c0ba5-47fe-acab-7b89-7a9129721a0b",
+      "productName": "Fantastic Granite Bacon",
+      "quantity": 638,
+      "unitPrice": 479784.7060125564,
+      "subtotal": 85300882.47639787
+    },
+    {
+      "productId": "17d25a65-78b4-254b-a469-cc2fc6186c93",
+      "productName": "Gorgeous Fresh Gloves",
+      "quantity": 7604,
+      "unitPrice": 449828.329801076,
+      "subtotal": 92140476.1463818
+    },
+    {
+      "productId": "31543b51-90d3-79b0-6506-bb6099e3131b",
+      "productName": "Small Frozen Bike",
+      "quantity": 3938,
+      "unitPrice": 731665.656783656,
+      "subtotal": 83318877.7241605
+    },
+    {
+      "productId": "59d7ac77-c4e5-23cc-31e2-c8971d5ac0a0",
+      "productName": "Rustic Soft Keyboard",
+      "quantity": 353,
+      "unitPrice": 483813.5505076266,
+      "subtotal": 96622663.99401729
+    },
+    {
+      "productId": "c2b64403-32fb-85b2-6b72-da912a63b880",
+      "productName": "Modern Bronze Pizza",
+      "quantity": 9865,
+      "unitPrice": 765290.9987492503,
+      "subtotal": 46394482.70868473
+    },
+    {
+      "productId": "028526cc-c25b-817c-5c57-cd527ec2035a",
+      "productName": "Luxurious Bronze Fish",
+      "quantity": 5201,
+      "unitPrice": 219157.59295056664,
+      "subtotal": 93336359.58946523
+    },
+    {
+      "productId": "0f9d727e-dcfa-dbed-bf39-1f70fe2a3743",
+      "productName": "Incredible Soft Shirt",
+      "quantity": 4620,
+      "unitPrice": 490916.7576246273,
+      "subtotal": 30748072.521461144
+    },
+    {
+      "productId": "664ed8b8-a03b-4d7c-f25c-126bbd749afa",
+      "productName": "Unbranded Soft Sausages",
+      "quantity": 2356,
+      "unitPrice": 49466.214918555306,
+      "subtotal": 84260700.9864646
+    },
+    {
+      "productId": "0e20ccf9-8566-dfa8-203e-0cce0782bcb0",
+      "productName": "Practical Wooden Chair",
+      "quantity": 1091,
+      "unitPrice": 21072.408327926412,
+      "subtotal": 83136722.92972067
+    },
+    {
+      "productId": "9bf3754f-0d39-98ac-8cc4-acf4d2264a91",
+      "productName": "Sleek Plastic Gloves",
+      "quantity": 9482,
+      "unitPrice": 542568.6124800238,
+      "subtotal": 36251284.40210418
+    },
+    {
+      "productId": "e9f5b96c-7060-a294-9268-e156e1ae4d9a",
+      "productName": "Generic Wooden Hat",
+      "quantity": 9508,
+      "unitPrice": 964330.6196362404,
+      "subtotal": 65329714.24178611
+    },
+    {
+      "productId": "41fa6263-235b-e8e5-f136-7974d6a56047",
+      "productName": "Small Frozen Sausages",
+      "quantity": 9052,
+      "unitPrice": 816536.688517632,
+      "subtotal": 1360049.3740117035
+    },
+    {
+      "productId": "a3553a71-0234-34cc-28cb-4f6f405d9d84",
+      "productName": "Modern Granite Ball",
+      "quantity": 9452,
+      "unitPrice": 471160.8638129973,
+      "subtotal": 57754517.850644685
+    },
+    {
+      "productId": "3410166e-5f09-0cad-4086-5d6565f3ba4d",
+      "productName": "Luxurious Steel Gloves",
+      "quantity": 2465,
+      "unitPrice": 282152.85507248295,
+      "subtotal": 40217829.58708486
+    },
+    {
+      "productId": "2a4aa75d-800f-477d-eebb-870fa8f2e43e",
+      "productName": "Bespoke Plastic Salad",
+      "quantity": 6684,
+      "unitPrice": 842428.8663436123,
+      "subtotal": 94752044.14536428
+    },
+    {
+      "productId": "5602ac6d-ef4c-4c0f-0406-2a7afd74c91f",
+      "productName": "Modern Plastic Sausages",
+      "quantity": 2573,
+      "unitPrice": 978499.1967343399,
+      "subtotal": 28156899.84063202
+    },
+    {
+      "productId": "bb629cf4-7fb1-a249-dbd5-05db0c6846d2",
+      "productName": "Modern Wooden Mouse",
+      "quantity": 1409,
+      "unitPrice": 705911.2420046653,
+      "subtotal": 22741754.85011021
+    },
+    {
+      "productId": "a0247bb5-6496-c15c-303a-99eebbbf044e",
+      "productName": "Modern Soft Chips",
+      "quantity": 8219,
+      "unitPrice": 21576.44269294455,
+      "subtotal": 68231707.50134757
+    },
+    {
+      "productId": "4a10f3c9-17b8-a822-88bf-a56089e4b24a",
+      "productName": "Tasty Frozen Hat",
+      "quantity": 556,
+      "unitPrice": 996472.8668623358,
+      "subtotal": 26186212.259846557
+    },
+    {
+      "productId": "2794bf37-6c1b-dab4-0e26-53b4bc912510",
+      "productName": "Generic Wooden Mouse",
+      "quantity": 5215,
+      "unitPrice": 646616.3520565759,
+      "subtotal": 95578728.073969
+    },
+    {
+      "productId": "ced96b1d-be56-1a7d-db3c-895814c3f41c",
+      "productName": "Rustic Steel Cheese",
+      "quantity": 3518,
+      "unitPrice": 378433.10739846603,
+      "subtotal": 75978791.3641312
+    },
+    {
+      "productId": "7775d458-be2e-f8cb-3086-e5af06b1e896",
+      "productName": "Licensed Fresh Soap",
+      "quantity": 678,
+      "unitPrice": 502323.38421922835,
+      "subtotal": 68128791.43874823
+    },
+    {
+      "productId": "600514ee-be68-d5ce-d80b-1e57f2273bab",
+      "productName": "Unbranded Granite Tuna",
+      "quantity": 215,
+      "unitPrice": 339089.2681283585,
+      "subtotal": 5819623.057301164
+    },
+    {
+      "productId": "732bbb1c-53d3-fc9f-aacd-6b3c223360bb",
+      "productName": "Practical Concrete Chips",
+      "quantity": 1340,
+      "unitPrice": 898593.595111653,
+      "subtotal": 82580901.27360171
+    },
+    {
+      "productId": "047a4732-f850-7fec-f4e7-bdabb02662a1",
+      "productName": "Sleek Frozen Computer",
+      "quantity": 8423,
+      "unitPrice": 922417.5343637867,
+      "subtotal": 27394670.14587818
+    }
+  ],
+  "notes": "Ipsam dolorum molestias.",
+  "status": "confirmed",
+  "total": 8900488.951110085,
+  "trackingNumber": "laborum",
+  "updatedAt": "2026-04-02T00:00:00.0Z"
+}

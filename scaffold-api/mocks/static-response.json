@@ -1,0 +1,30 @@
+{
+  "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+  "customer": {
+    "name": "Jane Doe",
+    "email": "jane.doe@example.com",
+    "phone": "+15551234567",
+    "shippingAddress": {
+      "street": "742 Evergreen Terrace",
+      "city": "Springfield",
+      "state": "IL",
+      "postalCode": "62704",
+      "country": "US"
+    }
+  },
+  "items": [
+    {
+      "productId": "8f14e45f-ceea-467f-a020-9e2f5a5c5e01",
+      "productName": "Wireless Bluetooth Headphones",
+      "quantity": 2,
+      "unitPrice": 49.99,
+      "subtotal": 99.98
+    }
+  ],
+  "status": "pending",
+  "total": 99.98,
+  "currency": "USD",
+  "notes": "Please leave at the front door.",
+  "createdAt": "2026-03-15T10:30:00Z",
+  "updatedAt": "2026-03-15T10:30:00Z"
+}

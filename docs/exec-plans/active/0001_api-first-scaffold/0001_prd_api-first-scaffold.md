@@ -113,18 +113,18 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ### US-004: Start a mock server from the spec
 
-**Status:** pending
+**Status:** done
 
 **Description:** As a frontend developer, I want to start a mock server with one command so that I can build UI against realistic API responses without waiting for the backend.
 
 **Acceptance Criteria:**
 
-- [ ] `prism mock specs/order-api.yaml --port 4010` starts and responds to requests (static mode, returns `example` values)
-- [ ] `prism mock -d specs/order-api.yaml --port 4010` starts and responds with different realistic data on each call (dynamic mode, uses `x-faker`)
-- [ ] `GET /orders/{orderId}` returns a well-shaped Order object with realistic field values
-- [ ] `POST /orders` with a valid body returns 201
-- [ ] `POST /orders` with a missing required field returns a validation error (400)
-- [ ] Mock responses match the schema constraints defined in the spec
+- [x] `prism mock specs/order-api.yaml --port 4010` starts and responds to requests (static mode, returns `example` values)
+- [x] `prism mock -d specs/order-api.yaml --port 4010` starts and responds with different realistic data on each call (dynamic mode, uses `x-faker`)
+- [x] `GET /orders/{orderId}` returns a well-shaped Order object with realistic field values
+- [x] `POST /orders` with a valid body returns 201
+- [x] `POST /orders` with a missing required field returns a validation error (400)
+- [x] Mock responses match the schema constraints defined in the spec
 
 ---
 
