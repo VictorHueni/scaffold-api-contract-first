@@ -386,8 +386,10 @@ A sync script (`scripts/sync-apis.sh`) downloads specs from their sources, verif
 
 ### 5.5 Folder Structure
 
+The integration scaffold lives in `scaffold-integration/` within the meta-repo. When a team adopts it, they copy `scaffold-integration/` into their own repo as the project root. All internal paths are relative to the scaffold root.
+
 ```
-integration-order-flow/                # Integration repo (owned by integration team)
+scaffold-integration/                  # Integration scaffold template
   apis/                                # Referenced API specs (downloaded, gitignored)
     consumer-order-api.yaml            #   ← downloaded from consumer team's repo
     provider-acme-api.yaml             #   ← downloaded from provider team's repo

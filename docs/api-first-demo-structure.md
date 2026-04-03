@@ -379,10 +379,12 @@ Share these alongside the video so viewers can explore on their own:
 
 | Material | Where | Purpose |
 |---|---|---|
-| Scaffold repository | GitHub (internal) | Clone and try the full workflow |
-| `specs/order-api.yaml` | In the repo | The spec itself — explore it, import it, generate from it |
-| `rules/.spectral.yaml` | In the repo | Teams can adopt the ruleset immediately |
-| `ci/pipeline.yaml` | In the repo | DevOps can evaluate and adapt for their CI |
+| Meta-repository | GitHub (internal) | Contains docs, PRDs, and both scaffold templates |
+| `scaffold-api/` | Copy into your own repo | API scaffold — `npm install`, start building |
+| `scaffold-api/specs/order-api.yaml` | In the scaffold | The spec itself — explore it, import it, generate from it |
+| `scaffold-api/rules/.spectral.yaml` | In the scaffold | Teams can adopt the ruleset immediately |
+| `scaffold-api/ci/pipeline.yaml` | In the scaffold | DevOps can evaluate and adapt for their CI |
+| `scaffold-integration/` | Copy into your own repo | Integration mapping scaffold (PRD 0002, future) |
 | Interactive training app | To be built post-implementation | Hands-on walkthrough of the API-first workflow (scoped after all increments are delivered) |
 | Tool links | In the README or a shared doc | Prism, Spectral, openapi-generator, Scalar, Schemathesis, Hurl, oasdiff + desktop client options (Bruno, Postman, Insomnia, Hoppscotch, Yaak) |
 

@@ -48,8 +48,8 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 **Acceptance Criteria:**
 
 - [ ] Repo has a clear README explaining the folder structure and purpose of each directory
-- [ ] Running `ls` at the root reveals an intuitive layout: `specs/` (with `components/` subdirectories), `rules/`, `tests/`, `docs/`, `ci/`
-- [ ] `package.json` exists with all Node.js tools as `devDependencies` (no global installs)
+- [ ] The scaffold lives in `scaffold-api/` — running `ls scaffold-api/` reveals an intuitive layout: `specs/` (with `components/` subdirectories), `rules/`, `tests/`, `docs/`, `ci/`
+- [ ] `scaffold-api/package.json` exists with all Node.js tools as `devDependencies` (no global installs)
 - [ ] `npm install` is the single setup command — installs Spectral, Prism, Scalar CLI, openapi-typescript, openapi-fetch, openapi-generator-cli
 - [ ] `npm run` (no args) lists all available commands, organized by category
 - [ ] README documents all `npm run` scripts with a brief description of each
@@ -268,6 +268,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ## 5. Design Considerations
 
+- The scaffold lives in `scaffold-api/` within the meta-repo. When a team adopts it, they copy `scaffold-api/` into their own repo as the project root. All internal paths (`specs/`, `rules/`, `tests/`, etc.) are relative to the scaffold root, not the meta-repo root.
 - The repo should feel like a real project template, not a tutorial dump. Clean folder structure, minimal config files, no unnecessary boilerplate.
 - Scalar docs should use the `kepler` theme for a professional look during the demo.
 

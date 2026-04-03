@@ -29,7 +29,7 @@ Principles:
 
 Scope:
 
-1. Create the full directory scaffold: `specs/`, `specs/components/`, `rules/`, `mocks/`, `tests/`, `examples/`, `docs/`, `ci/`
+1. Create the `scaffold-api/` directory as the scaffold root, with subdirectories: `specs/`, `specs/components/`, `rules/`, `mocks/`, `tests/`, `examples/`, `docs/`, `ci/`
 2. Create `package.json` with all Node.js tools as `devDependencies`:
    - `@stoplight/prism-cli`, `@stoplight/spectral-cli`, `@stoplight/spectral-owasp-ruleset`
    - `@scalar/cli`
@@ -53,16 +53,16 @@ Scope:
 
 Primary files:
 
-1. `package.json`
-2. `README.md`
-3. `.gitignore`
+1. `scaffold-api/package.json`
+2. `scaffold-api/README.md`
+3. `scaffold-api/.gitignore`
 
 Test gate:
 
-1. `ls specs rules mocks tests examples docs ci` — all directories exist
-2. `npm install` — exits 0, `node_modules/` populated
-3. `npm run` — lists all available scripts
-4. `cat README.md | grep "npm install"` — quick start documented
+1. `ls scaffold-api/specs scaffold-api/rules scaffold-api/mocks scaffold-api/tests scaffold-api/examples scaffold-api/docs scaffold-api/ci` — all directories exist
+2. `cd scaffold-api && npm install` — exits 0, `node_modules/` populated
+3. `cd scaffold-api && npm run` — lists all available scripts
+4. `grep "npm install" scaffold-api/README.md` — quick start documented
 
 Exit criteria:
 
@@ -654,7 +654,7 @@ Exit criteria:
 
 | Milestone | Increments | Status | Coherent Outcome | Standalone Test Gate | Exit Criteria | Commit Guidance |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| M1: Foundation | 01-02 | pending | Scaffold repo with valid OpenAPI spec | `npm install` works, `npm run` lists scripts, `npx @scalar/cli validate specs/order-api.yaml` passes | A developer clones, runs `npm install`, and has all tools + a valid spec | `feat: scaffold project structure with package.json` then `feat: add Order Management OpenAPI spec` |
+| M1: Foundation | 01-02 | pending | Scaffold in `scaffold-api/` with valid OpenAPI spec | `cd scaffold-api && npm install` works, `npm run` lists scripts, spec validates | A developer copies `scaffold-api/`, runs `npm install`, and has all tools + a valid spec | `feat: scaffold project structure with package.json` then `feat: add Order Management OpenAPI spec` |
 | M2: Quality Gates | 03-04 | pending | Linting + mock server working | Spectral passes on good spec, fails on bad spec; Prism serves mock responses | Spec quality is enforceable; frontend can start building against mocks | `feat: add Spectral linting rules` then `feat: validate Prism mock responses` |
 | M3: Code Generation | 05-06 | pending | TypeScript types + Spring Boot server stubs | Generated types match spec; openapi-fetch usage example compiles; Spring Boot stub server starts and responds | Both frontend and backend have generated starting points from the spec | `feat: generate TypeScript types with openapi-typescript` then `feat: generate Spring Boot server stubs` |
 | M4: Testing | 07-08 | pending | Contract tests + functional tests working | Schemathesis passes 100+ tests; Hurl tests pass with JUnit output | Automated quality assurance is in place with zero hand-written contract tests | `feat: add Schemathesis contract testing` then `feat: add Hurl functional tests` |
