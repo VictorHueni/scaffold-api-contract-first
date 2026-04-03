@@ -63,8 +63,8 @@ generated/                   # TypeScript types, Spring stubs (gitignored)
 | `npm run mock` | Start Prism mock server (static mode — returns spec examples) |
 | `npm run mock:dynamic` | Start Prism mock server (dynamic mode — x-faker generated data) |
 | `npm run types` | Generate TypeScript types from spec (openapi-typescript) |
-| `npm run docs` | Start Scalar docs with live reload (--watch) |
-| `npm run docs:build` | Build static Scalar API reference HTML |
+| `npm run docs` | Start Scalar docs with live reload on port 8081 (--watch) |
+| `npm run docs:build` | Bundle spec for static Scalar reference |
 
 ### Testing
 
@@ -89,6 +89,32 @@ generated/                   # TypeScript types, Spring stubs (gitignored)
 | Command | Description |
 |---|---|
 | `npm run precheck` | Bundle + lint (run before committing) |
+
+## API Documentation (Scalar)
+
+The scaffold generates interactive API documentation using [Scalar](https://scalar.com/) with the `kepler` theme.
+
+### Live preview (development)
+
+```bash
+npm run docs     # Opens Scalar docs at http://localhost:8081 with live reload
+```
+
+Edit the spec, save, and the docs update automatically via `--watch`.
+
+### Static HTML (deployment)
+
+A CDN-based HTML wrapper is included at `docs/index.html`. It loads Scalar from the jsDelivr CDN and renders the bundled spec. To use it:
+
+1. Run `npm run bundle` to generate `specs/order-api.bundled.yaml`
+2. Serve the `scaffold-api/` directory with any static file server (e.g., `npx serve .`)
+3. Open `docs/index.html` in a browser
+
+The HTML references the bundled spec via a relative path (`../specs/order-api.bundled.yaml`), so it works with any static file server without configuration.
+
+### "Try it out" playground
+
+Scalar's built-in playground lets you send requests directly from the docs. Point it at the Prism mock server (`http://localhost:4010`) to test endpoints interactively without any additional tooling.
 
 ## Using This Scaffold for Your Own API
 

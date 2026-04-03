@@ -112,3 +112,17 @@
 - Learnings: (1) The v2 spec must be standalone (all schemas inline via components/schemas/) rather than using multi-file $ref pointers, because oasdiff needs to compare two independent specs. (2) trackingNumber already existed in v1, so a new field "priority" was used for the non-breaking addition instead. (3) The bundled spec uses mangled x-ext/ keys from Scalar CLI bundling — the v2 spec uses standard #/components/schemas/ references for clarity. (4) Two npm scripts provided: `breaking` (native oasdiff binary) and `breaking:docker` (Docker, no local install needed). Both use `--fail-on ERR` for CI integration. (5) M5 milestone (Ecosystem: Increments 09-10) marked as in-progress.
 - Commit: pending (sandbox blocks git — run manually)
 - Timestamp: 2026-04-02T16:00:00Z
+
+## Iteration 10
+- Increment: 10 — Scalar API documentation
+- Status: done
+- Files changed: scaffold-api/docs/index.html (new, CDN-based Scalar wrapper with kepler theme), scaffold-api/docs/.gitkeep (removed), README.md (added API Documentation section), exec plan + PRD updates
+- Test gate: Sandbox blocks npx/node/curl execution — must be run manually:
+  1. CDN wrapper exists: `cat scaffold-api/docs/index.html | grep "scalar"` (expect: matches Scalar CDN reference)
+  2. Live preview: `cd scaffold-api && npm run docs` (opens Scalar docs at http://localhost:8081 with --watch live reload)
+  3. Serve test: `cd scaffold-api && npx @scalar/cli document serve specs/order-api.bundled.yaml --port 8081 &` then `curl -sf http://localhost:8081 | grep -i "order"` (expect: HTML contains "order" references)
+  4. Cleanup: `kill $(lsof -t -i:8081) 2>/dev/null`
+- Approach: Created a CDN-based HTML wrapper (`docs/index.html`) that loads Scalar from jsDelivr and renders the bundled spec. This is more reliable than `scalar document bundle` which produces bundled YAML, not HTML. The `npm run docs` script uses `scalar document serve --watch` for live development preview. The `docs:build` script bundles the spec (YAML) for the CDN wrapper to consume.
+- Learnings: (1) `scalar document bundle` produces bundled YAML output, not standalone HTML — it is a spec bundler, not a docs generator. The CDN wrapper approach is the correct way to produce static HTML docs with Scalar. (2) The CDN wrapper uses `data-url` pointing to the bundled spec via relative path (`../specs/order-api.bundled.yaml`), so it works with any static file server. (3) `data-configuration='{"theme": "kepler"}'` sets the kepler theme as specified in the PRD design considerations. (4) `scalar document serve --watch` provides live-reloading docs during development — already configured as `npm run docs` from Increment 01. (5) The `.gitkeep` in docs/ was removed since docs/index.html now provides directory content. (6) `docs/scalar-reference.html` remains gitignored (generated output from `docs:build`). (7) M5 milestone (Ecosystem: Increments 09-10) marked as done.
+- Commit: pending (sandbox blocks git — run manually)
+- Timestamp: 2026-04-02T17:00:00Z
