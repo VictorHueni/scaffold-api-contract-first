@@ -49,7 +49,12 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 - [ ] Repo has a clear README explaining the folder structure and purpose of each directory
 - [ ] Running `ls` at the root reveals an intuitive layout: `specs/` (with `components/` subdirectories), `rules/`, `tests/`, `docs/`, `ci/`
-- [ ] README lists all prerequisites and a single setup command to install dependencies
+- [ ] `package.json` exists with all Node.js tools as `devDependencies` (no global installs)
+- [ ] `npm install` is the single setup command — installs Spectral, Prism, Scalar CLI, openapi-typescript, openapi-fetch, openapi-generator-cli
+- [ ] `npm run` (no args) lists all available commands, organized by category
+- [ ] README documents all `npm run` scripts with a brief description of each
+- [ ] README documents prerequisites: Node.js 18+ (required), Java 11+ (optional, for Spring stubs only), Hurl and oasdiff (optional, for local testing — also run in CI)
+- [ ] README includes a "Using this scaffold for your own API" section explaining the find-and-replace process
 - [ ] README mentions that the spec can be imported into any API client (Bruno, Postman, Insomnia, Hoppscotch, Scalar, Yaak) for manual exploration — the scaffold is unopinionated about personal tooling
 
 ---
@@ -270,11 +275,25 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ## 6. Technical Considerations
 
-- **Node.js 18+** is required for Prism, Spectral, openapi-typescript, openapi-fetch, openapi-generator-cli (server stubs only), and Scalar CLI.
-- **Python 3.8+** is required for Schemathesis and oasdiff.
-- **Hurl** is a standalone binary with no runtime dependencies.
+### Dependency management
+
+- **`package.json` is the single dependency manifest.** All Node.js tools are `devDependencies` — no global installs (`npm install -g`), no PATH manipulation, no version conflicts between projects.
+- **`npm install` is the single setup command.** Installs Spectral, Prism, Scalar CLI, openapi-typescript, openapi-fetch, and openapi-generator-cli.
+- **`npm run <script>` is the single interface.** All commands (lint, mock, types, docs, stubs, test) are `package.json` scripts. `npm run` (no args) lists them all.
+- **No Python dependency.** Schemathesis runs in CI only via `schemathesis/action@v2` (GitHub Action) or `docker run schemathesis/schemathesis`. oasdiff is a standalone Go binary downloaded in CI.
+
+### Prerequisites
+
+| Prerequisite | Required? | Who needs it | Why |
+|---|---|---|---|
+| **Node.js 18+** | Required | Everyone | Runs all local dev tools via `package.json` |
+| **Java 11+** | Optional | Backend devs only | openapi-generator-cli for Spring Boot stubs |
+| **Hurl** | Optional locally | QA | Standalone binary; also runs in CI via download |
+| **oasdiff** | Optional locally | Tech leads | Go binary; also runs in CI via download |
+
+### Other considerations
+
 - **API exploration** is left to individual preference. The OpenAPI spec can be imported into any client (Bruno, Postman, Insomnia, Hoppscotch, Scalar desktop, Yaak). Scalar's built-in "Try it out" in the generated docs provides a zero-install exploration path.
-- **Docker** is optional (for Swagger UI if needed as a fallback) but not required for the core workflow.
 - All tools are open source and free. No paid tiers are needed for any functionality in scope.
 - The CI pipeline targets GitHub Actions but the concepts are portable to GitLab CI or Jenkins.
 
@@ -311,7 +330,16 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 1. **Which real API should be the first pilot?** Hypothetical candidate: a Policy or Claims API (insurance domain). Low-risk, medium-complexity, ideally a new API rather than retrofitting an existing one. Final decision after the demo presentation.
 
-## 9. Resolved Decisions
+## 9. Future Improvements
+
+Improvements intentionally deferred from v1 to keep the scaffold simple:
+
+1. **`scaffold.config.yaml` for project-specific settings.** Currently, spec-specific commands in `package.json` reference `order-api` by name. Teams do a find-and-replace when cloning the scaffold. A future version could introduce a config file (`scaffold.config.yaml`) that defines the spec name, mock port, docs port, and output paths — with a thin CLI wrapper (`bin/scaffold.js`) that reads the config and runs the right commands. This removes the find-and-replace step but adds complexity.
+2. **Scaffold CLI (`npx create-api-first`).** A scaffolding CLI that prompts for the API name, preferred backend framework (Spring/Quarkus/Express), and generates a ready-to-use project. Similar to `create-react-app` or `create-next-app`.
+3. **Pre-commit hooks (husky).** Automatically run `npm run bundle && npm run lint` on every commit via husky. Not included in v1 to keep setup minimal, but recommended for real projects.
+4. **Multi-spec support.** The current scaffold assumes one API spec per repo. For teams managing multiple related specs (e.g., Orders API + Inventory API), a future version could support glob patterns and per-spec config.
+
+## 10. Resolved Decisions
 
 Decisions originally tracked as open questions, now resolved:
 

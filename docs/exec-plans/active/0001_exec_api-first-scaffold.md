@@ -29,27 +29,46 @@ Principles:
 
 Scope:
 
-1. Create the full directory scaffold: `specs/`, `rules/`, `mocks/`, `tests/`, `docs/`, `ci/`
-2. Create a README.md with folder purpose descriptions, prerequisites list (Node.js 18+, Python 3.8+, Hurl), and a single setup script. Include a note that the spec can be imported into any API client (Bruno, Postman, Insomnia, Hoppscotch, Scalar, Yaak) for manual exploration.
-3. Create a `setup.sh` that installs all global tools (`prism-cli`, `spectral-cli`, `@scalar/cli`, `schemathesis`, `oasdiff`) and project-level dependencies (`openapi-typescript`, `openapi-fetch`, `openapi-generator-cli` for server stubs)
-4. Add `.gitignore` entries for `generated/`, `node_modules/`, `*.Zone.Identifier`
+1. Create the full directory scaffold: `specs/`, `specs/components/`, `rules/`, `mocks/`, `tests/`, `examples/`, `docs/`, `ci/`
+2. Create `package.json` with all Node.js tools as `devDependencies`:
+   - `@stoplight/prism-cli`, `@stoplight/spectral-cli`, `@stoplight/spectral-owasp-ruleset`
+   - `@scalar/cli`
+   - `openapi-typescript`, `openapi-fetch`
+   - `@openapitools/openapi-generator-cli`
+3. Add `npm run` scripts organized by category:
+   - **Spec:** `bundle`, `validate`
+   - **Quality:** `lint`, `lint:bad`
+   - **Dev:** `mock`, `mock:dynamic`, `types`, `docs`, `docs:build`
+   - **Test:** `test:hurl`
+   - **Backend:** `stubs`
+   - **Precheck:** `precheck` (bundle + lint)
+4. Create README.md with:
+   - Folder structure and purpose of each directory
+   - Prerequisites: Node.js 18+ (required), Java 11+ (optional, Spring stubs), Hurl/oasdiff (optional, also run in CI)
+   - Quick start: `npm install` then `npm run mock`
+   - All `npm run` scripts documented with descriptions
+   - "Using this scaffold for your own API" section (find-and-replace `order-api` with your API name)
+   - API client exploration note (Bruno, Postman, Insomnia, Hoppscotch, Scalar, Yaak)
+5. Add `.gitignore` entries for `generated/`, `node_modules/`, `specs/*.bundled.yaml`, `*.Zone.Identifier`
 
 Primary files:
 
-1. `README.md`
-2. `setup.sh`
+1. `package.json`
+2. `README.md`
 3. `.gitignore`
 
 Test gate:
 
-1. `ls specs rules mocks tests docs ci` — all directories exist
-2. `cat README.md | head -5` — file exists and has content
-3. `bash -n setup.sh` — script is syntactically valid
+1. `ls specs rules mocks tests examples docs ci` — all directories exist
+2. `npm install` — exits 0, `node_modules/` populated
+3. `npm run` — lists all available scripts
+4. `cat README.md | grep "npm install"` — quick start documented
 
 Exit criteria:
 
-1. A developer cloning the repo sees an intuitive layout and can run `setup.sh` to install all dependencies
-2. README explains each directory's purpose
+1. A developer cloning the repo runs `npm install` and has all tools available
+2. `npm run` shows organized, discoverable commands
+3. README explains folder structure, prerequisites, all scripts, and how to adapt for a new API
 
 ---
 
@@ -635,7 +654,7 @@ Exit criteria:
 
 | Milestone | Increments | Status | Coherent Outcome | Standalone Test Gate | Exit Criteria | Commit Guidance |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| M1: Foundation | 01-02 | pending | Scaffold repo with valid OpenAPI spec | `npx @scalar/cli validate specs/order-api.yaml` passes, all directories exist | A developer can clone the repo, understand the structure, and read a valid spec | `feat: scaffold project structure` then `feat: add Order Management OpenAPI spec` |
+| M1: Foundation | 01-02 | pending | Scaffold repo with valid OpenAPI spec | `npm install` works, `npm run` lists scripts, `npx @scalar/cli validate specs/order-api.yaml` passes | A developer clones, runs `npm install`, and has all tools + a valid spec | `feat: scaffold project structure with package.json` then `feat: add Order Management OpenAPI spec` |
 | M2: Quality Gates | 03-04 | pending | Linting + mock server working | Spectral passes on good spec, fails on bad spec; Prism serves mock responses | Spec quality is enforceable; frontend can start building against mocks | `feat: add Spectral linting rules` then `feat: validate Prism mock responses` |
 | M3: Code Generation | 05-06 | pending | TypeScript types + Spring Boot server stubs | Generated types match spec; openapi-fetch usage example compiles; Spring Boot stub server starts and responds | Both frontend and backend have generated starting points from the spec | `feat: generate TypeScript types with openapi-typescript` then `feat: generate Spring Boot server stubs` |
 | M4: Testing | 07-08 | pending | Contract tests + functional tests working | Schemathesis passes 100+ tests; Hurl tests pass with JUnit output | Automated quality assurance is in place with zero hand-written contract tests | `feat: add Schemathesis contract testing` then `feat: add Hurl functional tests` |
