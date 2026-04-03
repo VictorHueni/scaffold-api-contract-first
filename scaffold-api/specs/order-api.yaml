@@ -1,0 +1,484 @@
+openapi: 3.1.0
+info:
+  title: Order Management API
+  version: 1.0.0
+  description: >
+    A fictional Order Management API used as a running example for the API-first
+    scaffold. Demonstrates multi-file spec structure, realistic schemas with
+    x-faker annotations, multiple named examples, security schemes, and
+    pagination. Not a production API.
+  contact:
+    name: API Platform Team
+    email: api-platform@example.com
+  license:
+    name: MIT
+    identifier: MIT
+
+servers:
+  - url: http://localhost:4010
+    description: Mock server (Prism)
+  - url: https://dev.api.example.com/v1
+    description: Development
+  - url: https://staging.api.example.com/v1
+    description: Staging
+  - url: https://api.example.com/v1
+    description: Production
+
+security:
+  - apiKey: []
+  - oauth2: []
+
+tags:
+  - name: Orders
+    description: Operations for managing customer orders.
+  - name: Order Items
+    description: Operations for viewing items within an order.
+
+paths:
+  /orders:
+    get:
+      operationId: listOrders
+      summary: List all orders
+      description: Retrieve a paginated list of orders, optionally filtered by status.
+      tags:
+        - Orders
+      parameters:
+        - $ref: ./components/parameters/pagination.yaml#/page
+        - $ref: ./components/parameters/pagination.yaml#/limit
+        - $ref: ./components/parameters/pagination.yaml#/status
+      responses:
+        "200":
+          description: A paginated list of orders.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Paginated response wrapper for a list of orders.
+                required:
+                  - data
+                  - pagination
+                properties:
+                  data:
+                    type: array
+                    description: List of orders for the current page.
+                    maxItems: 100
+                    items:
+                      $ref: ./components/schemas/Order.yaml
+                  pagination:
+                    type: object
+                    description: Pagination metadata.
+                    required:
+                      - page
+                      - limit
+                      - totalItems
+                      - totalPages
+                    properties:
+                      page:
+                        type: integer
+                        format: int32
+                        description: Current page number.
+                        example: 1
+                        x-faker:
+                          number.int:
+                            min: 1
+                            max: 10
+                      limit:
+                        type: integer
+                        format: int32
+                        description: Items per page.
+                        example: 20
+                        x-faker:
+                          number.int:
+                            min: 1
+                            max: 100
+                      totalItems:
+                        type: integer
+                        format: int32
+                        description: Total number of items across all pages.
+                        example: 47
+                        x-faker:
+                          number.int:
+                            min: 0
+                            max: 1000
+                      totalPages:
+                        type: integer
+                        format: int32
+                        description: Total number of pages.
+                        example: 3
+                        x-faker:
+                          number.int:
+                            min: 1
+                            max: 50
+                    additionalProperties: false
+                additionalProperties: false
+              examples:
+                firstPage:
+                  $ref: ./components/examples/responses/orders-first-page.yaml
+                filteredByStatus:
+                  $ref: ./components/examples/responses/orders-filtered.yaml
+        "401":
+          description: Authentication failed.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                unauthorized:
+                  $ref: ./components/examples/errors/unauthorized.yaml
+        "429":
+          description: Rate limit exceeded.
+          headers:
+            Retry-After:
+              description: Number of seconds to wait before retrying.
+              schema:
+                type: integer
+                format: int32
+                example: 60
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                rateLimited:
+                  $ref: ./components/examples/errors/rate-limited.yaml
+
+    post:
+      operationId: createOrder
+      summary: Create a new order
+      description: Submit a new order. The server assigns an ID, calculates totals, and sets the initial status to pending.
+      tags:
+        - Orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./components/schemas/Order.yaml
+            examples:
+              basicOrder:
+                $ref: ./components/examples/requests/create-basic-order.yaml
+              multiItemOrder:
+                $ref: ./components/examples/requests/create-multi-item-order.yaml
+      responses:
+        "201":
+          description: Order created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/Order.yaml
+              examples:
+                singleItem:
+                  $ref: ./components/examples/responses/single-item-order.yaml
+                multiItem:
+                  $ref: ./components/examples/responses/multi-item-order.yaml
+          links:
+            GetCreatedOrder:
+              operationId: getOrder
+              parameters:
+                orderId: $response.body#/id
+              description: Retrieve the newly created order by its ID.
+            UpdateCreatedOrder:
+              operationId: updateOrder
+              parameters:
+                orderId: $response.body#/id
+              description: Update the newly created order.
+            DeleteCreatedOrder:
+              operationId: deleteOrder
+              parameters:
+                orderId: $response.body#/id
+              description: Delete the newly created order.
+        "400":
+          description: Validation error in the request body.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                validationError:
+                  $ref: ./components/examples/errors/validation-error.yaml
+        "401":
+          description: Authentication failed.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                unauthorized:
+                  $ref: ./components/examples/errors/unauthorized.yaml
+        "429":
+          description: Rate limit exceeded.
+          headers:
+            Retry-After:
+              description: Number of seconds to wait before retrying.
+              schema:
+                type: integer
+                format: int32
+                example: 60
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                rateLimited:
+                  $ref: ./components/examples/errors/rate-limited.yaml
+
+  /orders/{orderId}:
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        description: Unique identifier of the order.
+        schema:
+          type: string
+          format: uuid
+          example: "ord-a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+
+    get:
+      operationId: getOrder
+      summary: Get an order by ID
+      description: Retrieve the full details of a single order including all line items.
+      tags:
+        - Orders
+      responses:
+        "200":
+          description: The requested order.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/Order.yaml
+              examples:
+                pendingOrder:
+                  $ref: ./components/examples/responses/pending-order.yaml
+                shippedOrder:
+                  $ref: ./components/examples/responses/shipped-order.yaml
+                deliveredOrder:
+                  $ref: ./components/examples/responses/delivered-order.yaml
+        "401":
+          description: Authentication failed.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                unauthorized:
+                  $ref: ./components/examples/errors/unauthorized.yaml
+        "404":
+          description: Order not found.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                notFound:
+                  $ref: ./components/examples/errors/not-found.yaml
+        "429":
+          description: Rate limit exceeded.
+          headers:
+            Retry-After:
+              description: Number of seconds to wait before retrying.
+              schema:
+                type: integer
+                format: int32
+                example: 60
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                rateLimited:
+                  $ref: ./components/examples/errors/rate-limited.yaml
+
+    put:
+      operationId: updateOrder
+      summary: Update an order
+      description: Update an existing order. Commonly used to change status, add tracking information, or modify notes.
+      tags:
+        - Orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./components/schemas/Order.yaml
+            examples:
+              updateStatusShipped:
+                $ref: ./components/examples/requests/update-status-shipped.yaml
+              addTracking:
+                $ref: ./components/examples/requests/update-add-tracking.yaml
+      responses:
+        "200":
+          description: Order updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/Order.yaml
+              examples:
+                shippedOrder:
+                  $ref: ./components/examples/responses/shipped-order.yaml
+        "400":
+          description: Validation error in the request body.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                validationError:
+                  $ref: ./components/examples/errors/validation-error.yaml
+        "401":
+          description: Authentication failed.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                unauthorized:
+                  $ref: ./components/examples/errors/unauthorized.yaml
+        "404":
+          description: Order not found.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                notFound:
+                  $ref: ./components/examples/errors/not-found.yaml
+        "429":
+          description: Rate limit exceeded.
+          headers:
+            Retry-After:
+              description: Number of seconds to wait before retrying.
+              schema:
+                type: integer
+                format: int32
+                example: 60
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                rateLimited:
+                  $ref: ./components/examples/errors/rate-limited.yaml
+
+    delete:
+      operationId: deleteOrder
+      summary: Delete an order
+      description: Delete an order by ID. Only orders in pending status can be deleted.
+      tags:
+        - Orders
+      responses:
+        "204":
+          description: Order deleted successfully. No content returned.
+        "401":
+          description: Authentication failed.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                unauthorized:
+                  $ref: ./components/examples/errors/unauthorized.yaml
+        "404":
+          description: Order not found.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                notFound:
+                  $ref: ./components/examples/errors/not-found.yaml
+        "429":
+          description: Rate limit exceeded.
+          headers:
+            Retry-After:
+              description: Number of seconds to wait before retrying.
+              schema:
+                type: integer
+                format: int32
+                example: 60
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                rateLimited:
+                  $ref: ./components/examples/errors/rate-limited.yaml
+
+  /orders/{orderId}/items:
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        description: Unique identifier of the order.
+        schema:
+          type: string
+          format: uuid
+          example: "ord-a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+
+    get:
+      operationId: listOrderItems
+      summary: List items in an order
+      description: Retrieve all line items for a specific order.
+      tags:
+        - Order Items
+      responses:
+        "200":
+          description: List of order items.
+          content:
+            application/json:
+              schema:
+                type: array
+                description: All line items in the order.
+                maxItems: 100
+                items:
+                  $ref: ./components/schemas/OrderItem.yaml
+        "401":
+          description: Authentication failed.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                unauthorized:
+                  $ref: ./components/examples/errors/unauthorized.yaml
+        "404":
+          description: Order not found.
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                notFound:
+                  $ref: ./components/examples/errors/not-found.yaml
+        "429":
+          description: Rate limit exceeded.
+          headers:
+            Retry-After:
+              description: Number of seconds to wait before retrying.
+              schema:
+                type: integer
+                format: int32
+                example: 60
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schemas/ErrorResponse.yaml
+              examples:
+                rateLimited:
+                  $ref: ./components/examples/errors/rate-limited.yaml
+
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: API key passed in the X-API-Key header.
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 client credentials flow for service-to-service authentication.
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.example.com/oauth/token
+          scopes:
+            orders:read: Read access to orders
+            orders:write: Create, update, and delete orders

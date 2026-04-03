@@ -1,0 +1,75 @@
+type: object
+description: Customer information associated with an order.
+required:
+  - name
+  - email
+properties:
+  name:
+    type: string
+    description: Full name of the customer.
+    minLength: 1
+    maxLength: 200
+    example: "Jane Doe"
+    x-faker: person.fullName
+  email:
+    type: string
+    format: email
+    description: Customer email address.
+    maxLength: 254
+    example: "jane.doe@example.com"
+    x-faker: internet.email
+  phone:
+    type: string
+    description: Customer phone number in E.164 format.
+    pattern: "^\\+[1-9]\\d{1,14}$"
+    maxLength: 16
+    example: "+15551234567"
+    x-faker: phone.number
+  shippingAddress:
+    type: object
+    description: Customer shipping address.
+    required:
+      - street
+      - city
+      - state
+      - postalCode
+      - country
+    properties:
+      street:
+        type: string
+        description: Street address including unit or apartment number.
+        minLength: 1
+        maxLength: 300
+        example: "742 Evergreen Terrace"
+        x-faker: location.streetAddress
+      city:
+        type: string
+        description: City name.
+        minLength: 1
+        maxLength: 100
+        example: "Springfield"
+        x-faker: location.city
+      state:
+        type: string
+        description: State or province code.
+        minLength: 2
+        maxLength: 50
+        example: "IL"
+        x-faker: location.state
+      postalCode:
+        type: string
+        description: Postal or ZIP code.
+        pattern: "^[A-Za-z0-9 -]{3,10}$"
+        maxLength: 10
+        example: "62704"
+        x-faker: location.zipCode
+      country:
+        type: string
+        description: ISO 3166-1 alpha-2 country code.
+        pattern: "^[A-Z]{2}$"
+        minLength: 2
+        maxLength: 2
+        example: "US"
+        x-faker: location.countryCode
+    additionalProperties: false
+additionalProperties: false

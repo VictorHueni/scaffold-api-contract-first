@@ -1,0 +1,91 @@
+type: object
+description: Represents a customer order with items, status tracking, and totals.
+required:
+  - id
+  - customer
+  - items
+  - status
+  - total
+  - createdAt
+properties:
+  id:
+    type: string
+    format: uuid
+    description: Unique identifier for the order.
+    readOnly: true
+    example: "ord-a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+    x-faker: string.uuid
+  customer:
+    $ref: ./Customer.yaml
+  items:
+    type: array
+    description: Line items included in the order.
+    minItems: 1
+    maxItems: 100
+    items:
+      $ref: ./OrderItem.yaml
+  status:
+    type: string
+    description: Current status of the order.
+    enum:
+      - pending
+      - confirmed
+      - shipped
+      - delivered
+      - cancelled
+    example: "pending"
+    x-faker:
+      helpers.arrayElement:
+        - - pending
+          - confirmed
+          - shipped
+          - delivered
+          - cancelled
+  total:
+    type: number
+    format: double
+    description: Total order amount in the order currency. Read-only, calculated by the server.
+    readOnly: true
+    minimum: 0.01
+    maximum: 9999999.99
+    example: 149.97
+    x-faker:
+      commerce.price:
+        min: 10
+        max: 10000
+  currency:
+    type: string
+    description: ISO 4217 currency code for the order.
+    pattern: "^[A-Z]{3}$"
+    minLength: 3
+    maxLength: 3
+    default: "USD"
+    example: "USD"
+    x-faker: finance.currencyCode
+  notes:
+    type: string
+    description: Optional notes or special instructions for the order.
+    maxLength: 1000
+    example: "Please leave at the front door."
+    x-faker: lorem.sentence
+  trackingNumber:
+    type: string
+    description: Shipping tracking number. Set when order is shipped.
+    maxLength: 100
+    example: "1Z999AA10123456784"
+    x-faker: string.alphanumeric
+  createdAt:
+    type: string
+    format: date-time
+    description: Timestamp when the order was created.
+    readOnly: true
+    example: "2026-03-15T10:30:00Z"
+    x-faker: date.recent
+  updatedAt:
+    type: string
+    format: date-time
+    description: Timestamp when the order was last updated.
+    readOnly: true
+    example: "2026-03-16T14:22:00Z"
+    x-faker: date.recent
+additionalProperties: false

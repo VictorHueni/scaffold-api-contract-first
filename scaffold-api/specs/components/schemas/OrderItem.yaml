@@ -1,0 +1,55 @@
+type: object
+description: A single line item within an order.
+required:
+  - productId
+  - productName
+  - quantity
+  - unitPrice
+properties:
+  productId:
+    type: string
+    format: uuid
+    description: Unique identifier for the product.
+    example: "prod-8f14e45f-ceea-467f-a020-9e2f5a5c5e01"
+    x-faker: string.uuid
+  productName:
+    type: string
+    description: Display name of the product.
+    minLength: 1
+    maxLength: 200
+    example: "Wireless Bluetooth Headphones"
+    x-faker: commerce.productName
+  quantity:
+    type: integer
+    format: int32
+    description: Number of units ordered.
+    minimum: 1
+    maximum: 9999
+    example: 2
+    x-faker:
+      number.int:
+        min: 1
+        max: 10
+  unitPrice:
+    type: number
+    format: double
+    description: Price per unit in the order currency.
+    minimum: 0.01
+    maximum: 999999.99
+    example: 49.99
+    x-faker:
+      commerce.price:
+        min: 1
+        max: 500
+  subtotal:
+    type: number
+    format: double
+    description: Line item subtotal (quantity x unitPrice). Read-only, calculated by the server.
+    readOnly: true
+    minimum: 0.01
+    example: 99.98
+    x-faker:
+      commerce.price:
+        min: 1
+        max: 5000
+additionalProperties: false

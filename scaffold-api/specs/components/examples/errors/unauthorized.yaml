@@ -1,0 +1,7 @@
+summary: Unauthorized
+description: The request is missing a valid API key or the key has been revoked.
+value:
+  status: 401
+  title: "Unauthorized"
+  detail: "The API key provided in the X-API-Key header is invalid or has been revoked."
+  type: "https://api.example.com/errors/unauthorized"

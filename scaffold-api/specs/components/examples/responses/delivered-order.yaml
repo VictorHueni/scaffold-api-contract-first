@@ -1,0 +1,32 @@
+summary: Delivered order with notes
+description: A completed order that has been delivered to the customer.
+value:
+  id: "ord-c3d4e5f6-a7b8-9012-cdef-123456789012"
+  customer:
+    name: "Alice Johnson"
+    email: "alice.johnson@example.com"
+    phone: "+15555551234"
+    shippingAddress:
+      street: "456 Oak Avenue"
+      city: "Portland"
+      state: "OR"
+      postalCode: "97201"
+      country: "US"
+  items:
+    - productId: "prod-2b3c4d5e-6f7a-8901-bcde-f12345678901"
+      productName: "Stainless Steel Water Bottle"
+      quantity: 3
+      unitPrice: 24.99
+      subtotal: 74.97
+    - productId: "prod-3c4d5e6f-7a8b-9012-cdef-123456789012"
+      productName: "Insulated Lunch Bag"
+      quantity: 1
+      unitPrice: 34.99
+      subtotal: 34.99
+  status: "delivered"
+  total: 109.96
+  currency: "USD"
+  trackingNumber: "9400111899223100012345"
+  notes: "Signature required on delivery."
+  createdAt: "2026-03-01T12:00:00Z"
+  updatedAt: "2026-03-12T09:30:00Z"

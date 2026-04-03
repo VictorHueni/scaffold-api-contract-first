@@ -1,0 +1,28 @@
+summary: Order with multiple items and notes
+description: A full-featured order with multiple line items, customer phone, and special instructions.
+value:
+  customer:
+    name: "Carol Martinez"
+    email: "carol.martinez@example.com"
+    phone: "+15553216789"
+    shippingAddress:
+      street: "321 Maple Drive, Suite 100"
+      city: "Chicago"
+      state: "IL"
+      postalCode: "60601"
+      country: "US"
+  items:
+    - productId: "prod-5e6f7a8b-9c0d-1234-efab-345678901234"
+      productName: "Mechanical Keyboard"
+      quantity: 1
+      unitPrice: 129.99
+    - productId: "prod-6f7a8b9c-0d1e-2345-fabc-456789012345"
+      productName: "Wireless Mouse"
+      quantity: 2
+      unitPrice: 39.99
+    - productId: "prod-7a8b9c0d-1e2f-3456-abcd-567890123456"
+      productName: "Mouse Pad XL"
+      quantity: 1
+      unitPrice: 19.99
+  notes: "Gift wrap all items please."
+  currency: "EUR"

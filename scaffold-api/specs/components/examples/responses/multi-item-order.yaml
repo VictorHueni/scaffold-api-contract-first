@@ -1,0 +1,36 @@
+summary: Multi-item order
+description: A newly created order with multiple line items and customer notes.
+value:
+  id: "ord-e5f6a7b8-c9d0-1234-efab-345678901234"
+  customer:
+    name: "Carol Martinez"
+    email: "carol.martinez@example.com"
+    phone: "+15553216789"
+    shippingAddress:
+      street: "321 Maple Drive, Suite 100"
+      city: "Chicago"
+      state: "IL"
+      postalCode: "60601"
+      country: "US"
+  items:
+    - productId: "prod-5e6f7a8b-9c0d-1234-efab-345678901234"
+      productName: "Mechanical Keyboard"
+      quantity: 1
+      unitPrice: 129.99
+      subtotal: 129.99
+    - productId: "prod-6f7a8b9c-0d1e-2345-fabc-456789012345"
+      productName: "Wireless Mouse"
+      quantity: 2
+      unitPrice: 39.99
+      subtotal: 79.98
+    - productId: "prod-7a8b9c0d-1e2f-3456-abcd-567890123456"
+      productName: "Mouse Pad XL"
+      quantity: 1
+      unitPrice: 19.99
+      subtotal: 19.99
+  status: "pending"
+  total: 229.96
+  currency: "USD"
+  notes: "Gift wrap all items please."
+  createdAt: "2026-03-22T09:00:00Z"
+  updatedAt: "2026-03-22T09:00:00Z"

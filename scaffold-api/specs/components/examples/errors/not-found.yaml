@@ -1,0 +1,8 @@
+summary: Order not found
+description: No order exists with the specified ID.
+value:
+  status: 404
+  title: "Not Found"
+  detail: "No order found with ID 'ord-nonexistent-0000-0000-000000000000'."
+  type: "https://api.example.com/errors/not-found"
+  instance: "https://api.example.com/orders/ord-nonexistent-0000-0000-000000000000"

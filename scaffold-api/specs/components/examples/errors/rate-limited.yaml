@@ -1,0 +1,7 @@
+summary: Rate limit exceeded
+description: The client has exceeded the allowed number of requests per time window.
+value:
+  status: 429
+  title: "Too Many Requests"
+  detail: "Rate limit exceeded. You have made too many requests in the current time window. Please retry after the specified delay."
+  type: "https://api.example.com/errors/rate-limited"

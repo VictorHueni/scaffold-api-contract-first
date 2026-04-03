@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "------- SPEC -------": "",
-    "bundle": "scalar-cli bundle specs/order-api.yaml -o specs/order-api.bundled.yaml",
-    "validate": "scalar-cli validate specs/order-api.yaml",
+    "bundle": "scalar document bundle specs/order-api.yaml -o specs/order-api.bundled.yaml",
+    "validate": "scalar document validate specs/order-api.yaml",
 
     "------- QUALITY -------": "",
     "lint": "spectral lint 'specs/**/*.yaml' --ruleset rules/.spectral.yaml --ignore-unknown-format",
@@ -16,8 +16,8 @@
     "mock": "prism mock specs/order-api.bundled.yaml --port 4010",
     "mock:dynamic": "prism mock -d specs/order-api.bundled.yaml --port 4010",
     "types": "openapi-typescript specs/order-api.bundled.yaml -o generated/api-types.d.ts",
-    "docs": "scalar-cli serve specs/order-api.bundled.yaml --port 8081 --watch",
-    "docs:build": "scalar-cli bundle specs/order-api.bundled.yaml -o docs/scalar-reference.html",
+    "docs": "scalar document serve specs/order-api.bundled.yaml --port 8081 --watch",
+    "docs:build": "scalar document bundle specs/order-api.bundled.yaml -o docs/scalar-reference.html",
 
     "------- TEST -------": "",
     "test:hurl": "hurl --test tests/**/*.hurl",

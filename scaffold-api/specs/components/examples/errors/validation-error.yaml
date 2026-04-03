@@ -1,0 +1,13 @@
+summary: Validation error
+description: Request body failed validation due to missing or invalid fields.
+value:
+  status: 400
+  title: "Validation Error"
+  detail: "The request body contains invalid or missing fields."
+  type: "https://api.example.com/errors/validation-error"
+  instance: "https://api.example.com/errors/abc-123"
+  errors:
+    - field: "customer.email"
+      message: "must be a valid email address"
+    - field: "items[0].quantity"
+      message: "must be greater than or equal to 1"

@@ -1,0 +1,17 @@
+summary: Basic order
+description: A minimal order with a single item and required fields only.
+value:
+  customer:
+    name: "Bob Williams"
+    email: "bob.williams@example.com"
+    shippingAddress:
+      street: "789 Pine Road"
+      city: "Austin"
+      state: "TX"
+      postalCode: "73301"
+      country: "US"
+  items:
+    - productId: "prod-4d5e6f7a-8b9c-0123-defa-234567890123"
+      productName: "USB-C Charging Cable"
+      quantity: 1
+      unitPrice: 12.99

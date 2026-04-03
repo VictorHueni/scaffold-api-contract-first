@@ -1,0 +1,71 @@
+type: object
+description: Standard error response following RFC 7807 Problem Details structure.
+required:
+  - status
+  - title
+  - detail
+properties:
+  status:
+    type: integer
+    format: int32
+    description: HTTP status code.
+    minimum: 400
+    maximum: 599
+    example: 400
+    x-faker:
+      helpers.arrayElement:
+        - - 400
+          - 401
+          - 404
+          - 429
+          - 500
+  title:
+    type: string
+    description: Short, human-readable summary of the problem type.
+    minLength: 1
+    maxLength: 200
+    example: "Validation Error"
+    x-faker: lorem.words
+  detail:
+    type: string
+    description: Human-readable explanation specific to this occurrence of the problem.
+    minLength: 1
+    maxLength: 1000
+    example: "The 'email' field is required and must be a valid email address."
+    x-faker: lorem.sentence
+  type:
+    type: string
+    format: uri
+    description: URI reference identifying the problem type.
+    maxLength: 500
+    example: "https://api.example.com/errors/validation-error"
+    x-faker: internet.url
+  instance:
+    type: string
+    format: uri
+    description: URI reference identifying the specific occurrence of the problem.
+    maxLength: 500
+    example: "https://api.example.com/errors/12345"
+    x-faker: internet.url
+  errors:
+    type: array
+    description: List of individual validation errors, if applicable.
+    maxItems: 50
+    items:
+      type: object
+      description: A single field-level validation error.
+      properties:
+        field:
+          type: string
+          description: The field that caused the error.
+          maxLength: 200
+          example: "customer.email"
+          x-faker: database.column
+        message:
+          type: string
+          description: Description of the validation error for this field.
+          maxLength: 500
+          example: "must be a valid email address"
+          x-faker: lorem.sentence
+      additionalProperties: false
+additionalProperties: false

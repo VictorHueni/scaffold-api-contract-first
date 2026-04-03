@@ -61,36 +61,36 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ### US-002: Write and validate an OpenAPI contract
 
-**Status:** pending
+**Status:** done
 
 **Description:** As a tech lead, I want to write an OpenAPI 3.1 spec for the Order Management API and validate it passes linting so that I can be confident it meets organizational standards before sharing it for review.
 
 **Acceptance Criteria:**
 
-- [ ] `specs/order-api.yaml` exists as the main spec file with `$ref` pointers to component files under `specs/components/`
-- [ ] Schemas (`Order`, `Customer`, `OrderItem`, `ErrorResponse`) live in `specs/components/schemas/*.yaml`
-- [ ] Examples live in `specs/components/examples/{responses,requests,errors}/*.yaml`
-- [ ] Reusable parameters live in `specs/components/parameters/*.yaml`
-- [ ] `npx @scalar/cli bundle specs/order-api.yaml -o specs/order-api.bundled.yaml` produces a valid single-file spec
-- [ ] Main spec is clean and readable — not bloated with inline examples or schemas
-- [ ] Complete endpoints in bundled output: GET/POST/PUT/DELETE for orders, GET for order items
-- [ ] Spec includes schemas with `type`, `format`, `example`, `x-faker`, `description`, and constraints (`minimum`, `maximum`, `enum`, `pattern`)
-- [ ] Spec includes `servers` block with mock, dev, staging, and production URLs
-- [ ] Spec includes security schemes (API key and OAuth2)
-- [ ] Spec includes OpenAPI `links` for stateful testing (POST response links to GET/PUT)
-- [ ] Response `examples` (plural) are defined on key endpoints to showcase Scalar's example picker:
+- [x] `specs/order-api.yaml` exists as the main spec file with `$ref` pointers to component files under `specs/components/`
+- [x] Schemas (`Order`, `Customer`, `OrderItem`, `ErrorResponse`) live in `specs/components/schemas/*.yaml`
+- [x] Examples live in `specs/components/examples/{responses,requests,errors}/*.yaml`
+- [x] Reusable parameters live in `specs/components/parameters/*.yaml`
+- [x] `npx @scalar/cli bundle specs/order-api.yaml -o specs/order-api.bundled.yaml` produces a valid single-file spec
+- [x] Main spec is clean and readable — not bloated with inline examples or schemas
+- [x] Complete endpoints in bundled output: GET/POST/PUT/DELETE for orders, GET for order items
+- [x] Spec includes schemas with `type`, `format`, `example`, `x-faker`, `description`, and constraints (`minimum`, `maximum`, `enum`, `pattern`)
+- [x] Spec includes `servers` block with mock, dev, staging, and production URLs
+- [x] Spec includes security schemes (API key and OAuth2)
+- [x] Spec includes OpenAPI `links` for stateful testing (POST response links to GET/PUT)
+- [x] Response `examples` (plural) are defined on key endpoints to showcase Scalar's example picker:
   - `GET /orders/{orderId}` 200: at least 3 named examples (e.g., "Pending order", "Shipped order with tracking", "Delivered order with notes")
   - `POST /orders` 201: at least 2 named examples (e.g., "Single item order", "Multi-item order with notes")
   - `GET /orders` 200: at least 2 named examples (e.g., "First page of results", "Filtered by status")
-- [ ] Request body `examples` (plural) are defined on mutation endpoints for Scalar's "Try it out" pre-fill:
+- [x] Request body `examples` (plural) are defined on mutation endpoints for Scalar's "Try it out" pre-fill:
   - `POST /orders`: at least 2 named examples (e.g., "Basic order", "Order with multiple items and notes")
   - `PUT /orders/{orderId}`: at least 2 named examples (e.g., "Update status to shipped", "Add tracking number")
-- [ ] Error response examples are defined with realistic bodies:
+- [x] Error response examples are defined with realistic bodies:
   - 400: validation error example (e.g., missing required field)
   - 401: unauthorized example
   - 404: resource not found example
   - 429: rate limit exceeded example (with `Retry-After` header)
-- [ ] `npx @scalar/cli validate specs/order-api.yaml` passes with no errors
+- [x] `npx @scalar/cli validate specs/order-api.yaml` passes with no errors
 
 ---
 

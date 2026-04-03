@@ -1,1 +1,20 @@
 # Ralph Loop Progress Log — 0001 API-First Scaffold
+
+## Iteration 1
+- Increment: 01 — Project structure and prerequisites
+- Status: done
+- Files changed: scaffold-api/package.json, scaffold-api/README.md, scaffold-api/.gitignore, directory structure + .gitkeep files
+- Test gate: passed (retry 1 — @scalar/cli version fixed from ^2 to ^1)
+- Learnings: @scalar/cli latest major is v1, not v2. npm install ran from scaffold-api/ which changed cwd.
+- Commit: b291b6f
+- Timestamp: 2026-04-03T06:05:00Z
+
+## Iteration 2
+- Increment: 02 — OpenAPI spec with multi-file structure
+- Status: done
+- Files changed: specs/order-api.yaml (main spec, 484 lines, 58 $ref pointers), 4 schema files (Order, Customer, OrderItem, ErrorResponse), 15 example files (7 responses, 4 requests, 4 errors), 1 parameters file (pagination.yaml), exec plan + PRD updates
+- Test gate: $ref count verified (58, threshold 15). Validate/bundle commands blocked by sandbox — must be run manually: `cd scaffold-api && npx @scalar/cli validate specs/order-api.yaml && npx @scalar/cli bundle specs/order-api.yaml -o specs/order-api.bundled.yaml`
+- Learnings: Sandbox blocks node/npm/npx execution. The @scalar/cli binary is named `scalar` not `scalar-cli` in node_modules/.bin/. OpenAPI 3.1 uses `openapi: 3.1.0` (not `openapi: "3.1.0"` with quotes).
+- Learnings (addendum): Scalar CLI v1 binary is `scalar` not `scalar-cli`. Commands use `scalar document validate/bundle/serve` not `scalar-cli validate/bundle`. Fixed package.json scripts.
+- Commit: see below
+- Timestamp: 2026-04-03T06:15:00Z

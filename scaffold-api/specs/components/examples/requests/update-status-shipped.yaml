@@ -1,0 +1,5 @@
+summary: Update status to shipped
+description: Mark an order as shipped with a tracking number.
+value:
+  status: "shipped"
+  trackingNumber: "1Z999AA10123456784"
