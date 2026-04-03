@@ -64,7 +64,7 @@ generated/                   # TypeScript types, Spring stubs (gitignored)
 | `npm run mock:dynamic` | Start Prism mock server (dynamic mode — x-faker generated data) |
 | `npm run types` | Generate TypeScript types from spec (openapi-typescript) |
 | `npm run docs` | Start Scalar docs with live reload on port 8081 (--watch) |
-| `npm run docs:build` | Bundle spec for static Scalar reference |
+| `npm run docs:build` | Static docs info — open `docs/index.html` (CDN-based Scalar wrapper, requires `npm run bundle` first) |
 
 ### Testing
 

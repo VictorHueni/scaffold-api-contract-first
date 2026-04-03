@@ -1,7 +1,7 @@
 ---
 title: CI Testing & Quality Gates
 description: Run contract tests, functional tests, linting, and breaking change detection in CI/CD pipelines
-audience: [qa, devops]
+audience: [devops]
 tools: [schemathesis, hurl, spectral, oasdiff, prism, github-actions]
 prd: "0001"
 user-stories: [US-007, US-008, US-009, US-010, US-011]
@@ -21,7 +21,7 @@ sleep 3
 npm run test:contract                  # Schemathesis contract tests (Docker required)
 npm run test:contract:negative         # Negative tests (sends invalid data)
 hurl --test tests/orders.hurl          # Hurl functional tests
-npm run breaking                       # Breaking change detection (oasdiff required)
+npm run breaking:docker                # Breaking change detection (Docker)
 kill $(lsof -t -i:4010) 2>/dev/null   # Cleanup
 ```
 
@@ -112,7 +112,8 @@ Three layers: OpenAPI standard (25+ rules) + OWASP security (7 rules) + custom o
 ### Breaking change detection
 
 ```bash
-npm run breaking                       # Compare order-api.yaml vs order-api-v2.yaml
+npm run breaking                       # Native oasdiff (if installed)
+npm run breaking:docker                # Docker fallback
 # Exit code 1 = breaking changes found
 ```
 

@@ -17,7 +17,7 @@
     "mock:dynamic": "prism mock -d specs/order-api.bundled.yaml --port 4010",
     "types": "openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts --read-write-markers",
     "docs": "scalar document serve specs/order-api.bundled.yaml --port 8081 --watch",
-    "docs:build": "scalar document bundle specs/order-api.bundled.yaml -o docs/scalar-reference.html",
+    "docs:build": "echo 'Static docs: open docs/index.html (CDN-based Scalar wrapper). Requires bundled spec: npm run bundle'",
 
     "------- TEST -------": "",
     "test:contract": "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --stateful=links --hypothesis-max-examples=100 --set-header 'X-API-Key: test-key'",
