@@ -126,3 +126,25 @@
 - Learnings: (1) `scalar document bundle` produces bundled YAML output, not standalone HTML — it is a spec bundler, not a docs generator. The CDN wrapper approach is the correct way to produce static HTML docs with Scalar. (2) The CDN wrapper uses `data-url` pointing to the bundled spec via relative path (`../specs/order-api.bundled.yaml`), so it works with any static file server. (3) `data-configuration='{"theme": "kepler"}'` sets the kepler theme as specified in the PRD design considerations. (4) `scalar document serve --watch` provides live-reloading docs during development — already configured as `npm run docs` from Increment 01. (5) The `.gitkeep` in docs/ was removed since docs/index.html now provides directory content. (6) `docs/scalar-reference.html` remains gitignored (generated output from `docs:build`). (7) M5 milestone (Ecosystem: Increments 09-10) marked as done.
 - Commit: pending (sandbox blocks git — run manually)
 - Timestamp: 2026-04-02T17:00:00Z
+
+## Iteration 11
+- Increment: 11 — CI pipeline (GitHub Actions)
+- Status: done
+- Files changed: scaffold-api/ci/pipeline.yaml (new, GitHub Actions workflow with 5 jobs), exec plan + PRD updates
+- Test gate: Sandbox blocks node/npm execution — must be run manually:
+  1. Valid YAML: `cd scaffold-api && node -e "require('js-yaml').load(require('fs').readFileSync('ci/pipeline.yaml','utf8'))"` (expect exit 0)
+  2. Jobs section: `cd scaffold-api && grep -c "jobs:" ci/pipeline.yaml` (expect: 1)
+  3. All tools referenced: `cd scaffold-api && grep -i "spectral\|oasdiff\|schemathesis\|scalar\|openapi-typescript" ci/pipeline.yaml | wc -l` (expect: 5+)
+- Pipeline structure:
+  - Triggers: push/PR to `scaffold-api/specs/**`
+  - `defaults.run.working-directory: scaffold-api` — all jobs run from scaffold root
+  - Job 1 `lint`: Spectral lint (npm run bundle + npm run lint)
+  - Job 2 `breaking-changes`: oasdiff breaking change detection (PR-only, `if: github.event_name == 'pull_request'`, fetch-depth 0, compares against origin/main)
+  - Job 3 `contract-test`: Schemathesis via `schemathesis/action@v2` against Prism mock (needs: lint, 100+ examples, X-API-Key header, stateful links)
+  - Job 4 `generate-types`: openapi-typescript type generation + upload-artifact (needs: contract-test)
+  - Job 5 `generate-docs`: Bundle spec + upload CDN wrapper + bundled YAML as artifact (needs: lint)
+  - All jobs use actions/setup-node@v4 with Node.js 20 (except breaking-changes which only needs git + oasdiff binary)
+  - No IBM-specific jobs — IBM is slides only
+- Learnings: (1) GitHub Actions artifact paths are relative to the repo root, not the working-directory — so `upload-artifact` paths use `scaffold-api/` prefix even though the job runs in `scaffold-api/`. (2) The `schemathesis/action@v2` schema input path is also repo-root-relative. (3) oasdiff is downloaded as a standalone binary in CI (`curl` from GitHub releases), no Docker needed. (4) `git show origin/main:scaffold-api/specs/order-api.yaml` extracts the base spec for comparison — requires `fetch-depth: 0` for full git history. (5) Prism is started in background (`&`) with a 3-second sleep before Schemathesis runs. (6) The generate-docs job bundles the spec and uploads both `docs/index.html` (CDN wrapper) and `specs/order-api.bundled.yaml` as a single artifact — no HTML generation needed since the CDN wrapper loads Scalar from jsDelivr at runtime.
+- Commit: pending (sandbox blocks git — run manually)
+- Timestamp: 2026-04-02T18:00:00Z

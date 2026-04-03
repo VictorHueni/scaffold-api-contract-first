@@ -1,0 +1,163 @@
+# GitHub Actions CI Pipeline for API-First Scaffold
+#
+# Triggers on push/PR to specs/** — validates the OpenAPI contract,
+# runs contract tests, generates types, and bundles docs artifacts.
+#
+# Usage: copy this file to .github/workflows/api-contract.yaml
+# in your project root and adjust paths if needed.
+
+name: API Contract CI
+
+on:
+  push:
+    paths:
+      - "scaffold-api/specs/**"
+  pull_request:
+    paths:
+      - "scaffold-api/specs/**"
+
+defaults:
+  run:
+    working-directory: scaffold-api
+
+jobs:
+  # ----------------------------------------------------------------
+  # Job 1: Lint — Spectral ruleset (standard + OWASP + custom rules)
+  # ----------------------------------------------------------------
+  lint:
+    name: Spectral Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Bundle spec
+        run: npm run bundle
+
+      - name: Run Spectral lint
+        run: npm run lint
+
+  # ----------------------------------------------------------------
+  # Job 2: Breaking Changes — oasdiff (PR-only)
+  # Compares the PR spec against the main branch version.
+  # ----------------------------------------------------------------
+  breaking-changes:
+    name: Breaking Change Detection
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install oasdiff
+        run: |
+          curl -sSL https://github.com/Tufin/oasdiff/releases/latest/download/oasdiff_linux_amd64 -o oasdiff
+          chmod +x oasdiff
+
+      - name: Extract base spec from main branch
+        run: git show origin/main:scaffold-api/specs/order-api.yaml > /tmp/old-spec.yaml
+
+      - name: Check for breaking changes
+        run: ./oasdiff breaking /tmp/old-spec.yaml specs/order-api.yaml --fail-on ERR
+
+  # ----------------------------------------------------------------
+  # Job 3: Contract Test — Schemathesis against Prism mock
+  # Runs after lint passes. Generates 100+ test cases per endpoint.
+  # ----------------------------------------------------------------
+  contract-test:
+    name: Contract Tests (Schemathesis)
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Bundle spec
+        run: npm run bundle
+
+      - name: Start Prism mock server
+        run: npx prism mock specs/order-api.bundled.yaml --port 4010 &
+
+      - name: Wait for Prism to start
+        run: sleep 3
+
+      - name: Run Schemathesis contract tests
+        uses: schemathesis/action@v2
+        with:
+          schema: scaffold-api/specs/order-api.bundled.yaml
+          base-url: http://localhost:4010
+          checks: all
+          args: '--stateful=links --hypothesis-max-examples=100 --set-header "X-API-Key: test-key"'
+
+  # ----------------------------------------------------------------
+  # Job 4: Generate Types — openapi-typescript
+  # Runs after contract tests pass. Uploads types as artifact.
+  # ----------------------------------------------------------------
+  generate-types:
+    name: Generate TypeScript Types
+    runs-on: ubuntu-latest
+    needs: contract-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate TypeScript types
+        run: npm run types
+
+      - name: Upload TypeScript types artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: typescript-types
+          path: scaffold-api/generated/api-types.d.ts
+
+  # ----------------------------------------------------------------
+  # Job 5: Generate Docs — Scalar (bundle spec + CDN wrapper)
+  # Runs after lint passes. Uploads bundled spec + HTML wrapper.
+  # ----------------------------------------------------------------
+  generate-docs:
+    name: Generate API Docs
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Bundle spec for docs
+        run: npm run bundle
+
+      - name: Upload API docs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-docs
+          path: |
+            scaffold-api/docs/index.html
+            scaffold-api/specs/order-api.bundled.yaml

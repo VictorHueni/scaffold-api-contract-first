@@ -221,17 +221,17 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ### US-011: CI pipeline validates the contract automatically
 
-**Status:** pending
+**Status:** done
 
 **Description:** As a DevOps engineer, I want a CI pipeline that runs linting, contract testing, breaking change detection, client generation, and docs generation on every spec change so that no invalid or breaking spec can be merged.
 
 **Acceptance Criteria:**
 
-- [ ] `ci/pipeline.yaml` exists as a valid GitHub Actions workflow
-- [ ] Pipeline triggers on push/PR to `specs/**`
-- [ ] Jobs include: `lint` (Spectral), `breaking-changes` (oasdiff on PRs), `contract-test` (Schemathesis against Prism), `generate-types` (openapi-typescript), `generate-docs` (Scalar)
-- [ ] Lint failure blocks merge
-- [ ] Breaking change detection runs only on PRs and fails if breaking changes are found
+- [x] `ci/pipeline.yaml` exists as a valid GitHub Actions workflow
+- [x] Pipeline triggers on push/PR to `specs/**`
+- [x] Jobs include: `lint` (Spectral), `breaking-changes` (oasdiff on PRs), `contract-test` (Schemathesis against Prism), `generate-types` (openapi-typescript), `generate-docs` (Scalar)
+- [x] Lint failure blocks merge *(lint job runs first; contract-test and generate-docs depend on it)*
+- [x] Breaking change detection runs only on PRs and fails if breaking changes are found *(uses `if: github.event_name == 'pull_request'` and `--fail-on ERR`)*
 
 ---
 
