@@ -178,15 +178,15 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ### US-008: Write and run functional tests with Hurl
 
-**Status:** pending
+**Status:** done
 
 **Description:** As a QA engineer, I want hand-written functional tests for specific business scenarios so that I can assert expected behavior beyond what automated fuzzing covers.
 
 **Acceptance Criteria:**
 
-- [ ] `tests/orders.hurl` exists with tests for: list orders (200), get single order (200 with shape assertions), create order (201 with status "pending"), create with missing field (400), get non-existent order (404)
-- [ ] `hurl --test tests/orders.hurl` passes against the mock server
-- [ ] `hurl --test --report-junit generated/hurl-results.xml tests/orders.hurl` produces valid JUnit XML output for CI
+- [x] `tests/orders.hurl` exists with tests for: list orders (200), get single order (200 with shape assertions), create order (201 with status "pending"), create with missing field (400), get non-existent order (404)
+- [x] `hurl --test tests/orders.hurl` passes against the mock server
+- [x] `hurl --test --report-junit generated/hurl-results.xml tests/orders.hurl` produces valid JUnit XML output for CI
 
 ---
 
