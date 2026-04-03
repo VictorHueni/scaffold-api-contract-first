@@ -2,6 +2,12 @@
 
 Practical how-to guides organized by role. Each guide follows a consistent structure: Quick Start, Overview, Prerequisites, How It Works, Configuration, Common Pitfalls, Multi-Environment Usage, Alternatives, References.
 
+## For Everyone
+
+| Guide | Description |
+|---|---|
+| [API Conventions](conventions.md) | Naming rules, structure rules, security rules, quality rules — all enforced by Spectral |
+
 ## By Audience
 
 ### Frontend Developers
