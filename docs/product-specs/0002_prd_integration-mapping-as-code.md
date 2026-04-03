@@ -8,21 +8,28 @@
 
 ## 1. Problem Statement
 
-In a SOA/ESB architecture, OpenAPI documents the edges — the consumer API exposed on the API gateway and the provider API(s) on the backend. But the middle layer — the ESB (IBM App Connect Enterprise) — transforms, maps, transcodifies, and routes data between these APIs through a canonical data model. This integration logic is the most complex, most fragile, and least documented part of the system.
+In any integration architecture — whether SOA/ESB, microservices, or event-driven — OpenAPI documents the edges: the consumer API exposed on the API gateway and the provider API(s) on the backend. But the middle layer — the integration platform that transforms, maps, transcodifies, and routes data between these APIs through a canonical data model — is the most complex, most fragile, and least documented part of the system.
 
-Today, mapping documentation lives in Excel spreadsheets, Confluence pages, or buried inside IBM ACE message maps (`.msgmap` XML files) and ESQL code that only integration developers can read. When a field is renamed, a code table changes, or a new provider is added, the documentation drifts immediately. Nobody trusts it. New team members spend weeks reverse-engineering the mapping from ACE code.
+Today, mapping documentation lives in Excel spreadsheets, Confluence pages, or buried inside platform-specific artifacts (message maps, XSLT stylesheets, DataWeave scripts, ESQL code, Camel routes) that only integration developers can read. When a field is renamed, a code table changes, or a new provider is added, the documentation drifts immediately. Nobody trusts it. New team members spend weeks reverse-engineering the mapping from implementation code.
 
-**There is no industry standard for documenting data mappings between APIs.** No "OpenAPI for mappings" exists. This PRD explores building one — a machine-readable, version-controlled, lintable mapping specification that lives in Git alongside the OpenAPI specs it connects.
+**There is no industry standard for documenting data mappings between APIs.** No "OpenAPI for mappings" exists. This PRD explores building one — a platform-agnostic, machine-readable, version-controlled, lintable mapping specification that lives in Git alongside the OpenAPI specs it connects.
 
 ### Architecture Context
 
 ```
-Consumer API  →  API Gateway  →  ESB (IBM ACE)  →  Provider API(s)
-(OpenAPI)                        ↕                  (OpenAPI)
+Consumer API  →  API Gateway  →  Integration Layer  →  Provider API(s)
+(OpenAPI)                        ↕                      (OpenAPI)
                            Canonical Model
                            (JSON Schema)
 
-What needs documentation:
+Integration layer may be:
+├── ESB (IBM ACE, MuleSoft, WSO2, Azure Logic Apps)
+├── Integration framework (Apache Camel, Spring Integration)
+├── API gateway with transformation (Kong, Tyk, APISIX)
+├── Custom middleware (Node.js, Python, Java)
+└── iPaaS (Workato, Boomi, Celigo)
+
+What needs documentation (regardless of platform):
 ├── Field-level mapping (consumer ↔ canonical ↔ provider)
 ├── Transformation rules (split, concat, convert, conditional)
 ├── Transcodification (code table mapping between systems)
@@ -32,30 +39,32 @@ What needs documentation:
 
 ### Who experiences this problem
 
-- **Integration developers** — write the ACE mapping code but have no formal spec to implement against
+- **Integration developers** — write mapping code but have no formal spec to implement against
 - **API consumers** — don't know how their fields map to provider fields, can't predict transformation behavior
 - **QA engineers** — test mappings manually, no contract to assert against
-- **New team members** — reverse-engineer mappings from ESQL code or ask someone who knows
+- **New team members** — reverse-engineer mappings from platform-specific code or ask someone who knows
 - **Architects** — can't see the full data flow across APIs without reading implementation code
+- **Platform migration teams** — when switching integration platforms (e.g., ESB to microservices), there is no portable mapping spec to carry over
 
 ---
 
 ## 2. Goals
 
-- **Define a machine-readable mapping specification** (YAML-based) that documents field-level mappings, transformations, transcodifications, and routing rules between consumer and provider APIs through a canonical model.
+- **Define a platform-agnostic, machine-readable mapping specification** (YAML-based) that documents field-level mappings, transformations, transcodifications, and routing rules between consumer and provider APIs through a canonical model.
 - **Make mapping documentation "doc as code"** — version-controlled in Git, reviewed in PRs, validated in CI, generated into human-readable output.
 - **Link mapping specs to OpenAPI specs** using OpenAPI Overlays and `x-mapping` extensions, so the mapping documentation is discoverable from the API spec itself.
 - **Enable CI validation** — Spectral custom rules that check mapping completeness (every consumer field mapped, every enum value transcodified, every `$ref` resolves).
-- **Bridge to IBM ACE** — a parser that reads `.msgmap` and `.esql` files and validates them against the mapping spec, ensuring docs match implementation.
+- **Enable platform bridges** — parsers that read platform-specific artifacts (message maps, XSLT, DataWeave, Camel routes, etc.) and validate them against the mapping spec, ensuring docs match implementation regardless of which integration platform is used.
 
 ---
 
 ## 3. Non-Goals
 
-- **Replacing IBM ACE.** The mapping spec documents what ACE does — it does not replace ACE as the runtime engine. ACE remains the ESB.
+- **Replacing any integration platform.** The mapping spec documents what the platform does — it does not replace the runtime engine. The integration platform remains the execution layer.
 - **Building a visual mapping editor.** For v1, the mapping spec is authored in YAML in a code editor. A visual UI is a future initiative.
-- **Runtime message validation.** The mapping spec is a design-time/CI-time artifact. Runtime validation of messages flowing through ACE is a separate concern.
+- **Runtime message validation.** The mapping spec is a design-time/CI-time artifact. Runtime validation of messages flowing through the integration layer is a separate concern.
 - **Standardizing the spec externally.** For v1, this is an internal specification. Publishing it as an open standard (RFC, Linux Foundation, etc.) is a future possibility if it proves valuable.
+- **Replacing platform-native transformation languages.** The mapping spec uses JSONata for documenting transformation expressions. This does not replace XSLT, DataWeave, ESQL, or any other platform-native language at runtime.
 
 ---
 
@@ -81,14 +90,15 @@ What needs documentation:
 
 ### 4.2 Transformation Languages (self-documenting)
 
-| Language | Readability | IBM ACE compatible? | Use as |
+| Language | Readability | Platform | Use as |
 |---|---|---|---|
-| **JSONata** | Excellent — `FirstName & ' ' & Surname` | Yes (Node-RED ecosystem) | Transformation expressions in mapping spec |
-| **JOLT** (bazaarvoice) | Good — JSON spec defines JSON-to-JSON transforms | Possible | Declarative transformation specs |
-| **jq** | Compact but cryptic for complex logic | CLI only | Simple one-liner transforms |
-| **XSLT 3.0** (W3C) | XML-heavy, poor readability for JSON use cases | Native in ACE | Legacy XML transformations |
-| **ESQL** (IBM ACE) | Procedural, only readable by ACE developers | IS the implementation | Bridge target (parse, don't author) |
-| **DataWeave** (MuleSoft) | Excellent readability and power | No (proprietary to MuleSoft) | Reference for DSL design inspiration |
+| **JSONata** | Excellent — `FirstName & ' ' & Surname` | Platform-agnostic (Node.js, Java, Go, Python bindings) | Recommended expression language for mapping specs |
+| **JOLT** (bazaarvoice) | Good — JSON spec defines JSON-to-JSON transforms | Java ecosystem | Declarative transformation specs |
+| **jq** | Compact but cryptic for complex logic | CLI, any platform | Simple one-liner transforms |
+| **XSLT 3.0** (W3C) | XML-heavy, poor readability for JSON use cases | Universal (XML-based platforms) | Legacy XML transformations |
+| **DataWeave** (MuleSoft) | Excellent readability and power | MuleSoft only (proprietary) | Reference for DSL design inspiration |
+| **ESQL** (IBM ACE) | Procedural, platform-specific | IBM ACE only | Bridge target (parse, don't author) |
+| **SpEL** (Spring) | Good for Java teams | Spring ecosystem | Spring Integration expressions |
 
 **References:**
 - JSONata: https://jsonata.org
@@ -97,17 +107,19 @@ What needs documentation:
 
 ### 4.3 Enterprise Approaches
 
-| Organization | Approach | Relevance |
+| Organization / Tool | Approach | Relevance |
 |---|---|---|
 | **FINOS Legend** (Goldman Sachs, open source) | Pure language for data models AND mappings with formal syntax and visual Studio IDE | The most advanced enterprise approach — treats mapping as a first-class, version-controlled artifact |
 | **MuleSoft DataWeave** | Declarative transformation language with multi-format support | Gold standard of transformation DSL design, but proprietary |
 | **AtlasMap** (formerly Red Hat / Syndesis) | Open-source visual data mapping tool for Java, XML, JSON; mapping definitions stored as JSON | Closest open-source visual mapper |
+| **Apache Camel** | Route-based integration with data transformation DSL | Widely used in Java shops; routes are code, not specs |
 | **Banking/Insurance (typical)** | Excel spreadsheets and Confluence pages | The reality in most large enterprises; constant drift |
 | **TMForum** (Telecom) | Canonical data models (Open Digital Framework) with no standard mapping format | Canonical model standard without mapping standard |
 
 **References:**
 - FINOS Legend: https://legend.finos.org
 - AtlasMap: https://www.atlasmap.io
+- Apache Camel: https://camel.apache.org
 - TMForum Open Digital Framework: https://www.tmforum.org/open-digital-framework/
 
 ### 4.4 Data Lineage Platforms (complementary)
@@ -116,7 +128,7 @@ What needs documentation:
 |---|---|---|
 | **DataHub** (LinkedIn, open source) | Column-level lineage, metadata ingestion via Python SDK | Runtime store for mapping metadata; discoverability layer |
 | **OpenMetadata** | Column-level lineage, no-code data dictionary, 84+ connectors | Alternative to DataHub |
-| **OpenLineage** (Linux Foundation) | Open standard for lineage events, extensible via facets | Batch/streaming lineage; less relevant for API mediation |
+| **OpenLineage** (Linux Foundation) | Open standard for lineage events, extensible via facets | Batch/streaming lineage; adaptable for API mediation |
 
 **References:**
 - DataHub: https://datahubproject.io
@@ -388,14 +400,26 @@ A custom script (Node.js or Python) reads the mapping YAML and generates:
 - **Routing diagram**: decision tree showing which provider is called under which conditions
 - **Coverage report**: which consumer fields are mapped, which are unmapped, which have no transformation
 
-### 6.3 IBM ACE Bridge
+### 6.3 Platform Bridge (pluggable)
 
-A parser that reads IBM ACE artifacts from Git and validates against the mapping spec:
+A bridge parser validates that the actual integration platform implementation matches the mapping spec. The bridge is a pluggable architecture — one adapter per platform:
 
-- Read `.msgmap` files (XML) — extract source/target field references and transformation logic
-- Read `.esql` files — parse `SET OutputRoot...` statements to extract field mappings
-- Compare extracted mappings against the YAML mapping spec
-- Report discrepancies: "mapping spec says `fullName` → `firstName + lastName`, but ESQL maps `fullName` → `customerName`"
+| Platform | Artifacts to parse | What to extract |
+|---|---|---|
+| **IBM ACE** | `.msgmap` (XML), `.esql` files | Field assignments, transformation logic |
+| **MuleSoft** | DataWeave `.dwl` files, Mule XML configs | Field mappings, transformation expressions |
+| **Apache Camel** | Route XML/YAML, Bean definitions | Route conditions, processor chains |
+| **WSO2** | Synapse XML configs, data mapper configs | Mediation sequences, field mappings |
+| **Spring Integration** | Java config, SpEL expressions | Transformer beans, router conditions |
+| **Custom middleware** | Source code (Node.js/Python/Java) | Function-level field assignments |
+
+Each bridge adapter:
+1. Reads platform-specific artifacts from the Git repo
+2. Extracts field-level mappings into a normalized format
+3. Compares extracted mappings against the YAML mapping spec
+4. Reports discrepancies: "mapping spec says `fullName` → `firstName + lastName`, but implementation maps `fullName` → `customerName`"
+
+For v1, build one bridge adapter for the team's primary integration platform. Additional adapters are added as other platforms are encountered.
 
 ### 6.4 CI Pipeline Integration
 
@@ -408,6 +432,7 @@ mapping-validation:
     - run: spectral lint mappings/*.mapping.yaml --ruleset rules/.spectral-mappings.yaml
     - run: node scripts/validate-mapping-coverage.js  # Check all consumer fields are mapped
     - run: node scripts/validate-transcodification-completeness.js  # Check all enums covered
+    - run: node scripts/bridge-validate.js  # Compare platform implementation vs mapping spec
 ```
 
 ---
@@ -477,7 +502,7 @@ mapping-validation:
 
 **Status:** pending
 
-**Description:** As a product owner or new team member, I want to view mapping documentation as tables and diagrams so that I can understand the data flow without reading YAML or ESQL.
+**Description:** As a product owner or new team member, I want to view mapping documentation as tables and diagrams so that I can understand the data flow without reading YAML or platform-specific code.
 
 **Acceptance Criteria:**
 
@@ -487,36 +512,38 @@ mapping-validation:
 
 ---
 
-### US-006: Validate IBM ACE implementation against mapping spec
+### US-006: Validate platform implementation against mapping spec
 
 **Status:** pending
 
-**Description:** As an integration developer, I want a bridge that compares the ACE implementation (`.msgmap` and `.esql` files) against the mapping spec so that I can detect when the code drifts from the documented contract.
+**Description:** As an integration developer, I want a bridge that compares the integration platform implementation against the mapping spec so that I can detect when the code drifts from the documented contract.
 
 **Acceptance Criteria:**
 
-- [ ] A parser reads `.msgmap` XML files and extracts field mappings
-- [ ] A parser reads `.esql` files and extracts `SET OutputRoot...` field assignments
+- [ ] A bridge adapter reads platform-specific artifacts and extracts field mappings
 - [ ] Extracted mappings are compared against the YAML mapping spec
 - [ ] Discrepancies are reported with clear messages (expected vs actual)
+- [ ] The bridge is pluggable — one adapter per integration platform
 
 ---
 
 ## 8. Design Considerations
 
 - The mapping YAML DSL borrows concepts from FHIR StructureMap (field mapping structure), FHIR ConceptMap (transcodification with relationships), and OpenAPI Arazzo (routing/workflow).
-- JSONata is the recommended transformation expression language — lightweight, readable, and compatible with the Node-RED / IBM ecosystem.
-- The mapping spec is a design-time artifact. It does not execute transformations at runtime — IBM ACE remains the runtime engine.
-- This spec could eventually be generalized beyond IBM ACE to any ESB or integration platform (MuleSoft, WSO2, Azure Logic Apps).
+- JSONata is the recommended transformation expression language — lightweight, readable, and available in Node.js, Java, Go, Python, and .NET. It is platform-agnostic.
+- The mapping spec is a design-time artifact. It does not execute transformations at runtime — the integration platform remains the execution layer.
+- The spec is deliberately platform-agnostic. Platform-specific concerns are isolated in bridge adapters, not in the spec itself.
+- The bridge adapter architecture allows incremental adoption: start with one platform, add others as needed. Migration between platforms becomes easier because the mapping spec is portable.
 
 ---
 
 ## 9. Technical Considerations
 
-- **JSONata** expressions can be validated at CI time using the `jsonata` npm package (parse without executing).
+- **JSONata** expressions can be validated at CI time using the `jsonata` npm package (parse without executing). Bindings exist for Java (`dashjoin/jsonata-java`), Go, Python, and .NET.
 - **OpenAPI Overlay** is a newly standardized spec (v1.0.0). Tooling support is limited but growing. Redocly CLI supports overlays.
-- **Spectral** can lint any YAML/JSON file, not just OpenAPI — custom rulesets for mapping files use the same infrastructure.
-- **IBM ACE** projects store `.msgmap` and `.esql` files in Git-compatible structures. No IBM API exists to query mappings programmatically; parsing must be done at the file level.
+- **Spectral** can lint any YAML/JSON file, not just OpenAPI — custom rulesets for mapping files use the same infrastructure already in place for API linting.
+- **Bridge adapters** depend on platform-specific file formats. Most integration platforms store configuration as XML or YAML in Git-compatible structures, making parsing feasible.
+- **The mapping YAML DSL should be formalized as a JSON Schema** (`mapping-spec-schema.json`) to enable IDE autocompletion and validation of mapping files themselves.
 
 ---
 
@@ -526,23 +553,26 @@ mapping-validation:
 
 - **Mapping spec adoption:** At least 1 integration flow documented using the mapping YAML format within 30 days of tooling availability.
 - **CI validation active:** Mapping completeness checks run on every PR that touches `mappings/` or `specs/`.
-- **New team member onboarding:** A new integration developer can understand an existing mapping by reading the YAML spec + generated docs, without asking someone or reading ESQL.
+- **New team member onboarding:** A new integration developer can understand an existing mapping by reading the YAML spec + generated docs, without asking someone or reading platform-specific code.
 
 ### Lagging Indicators
 
-- **Mapping drift reduction:** Fewer incidents where ACE implementation doesn't match documented behavior (measured over 1 quarter).
+- **Mapping drift reduction:** Fewer incidents where the platform implementation doesn't match documented behavior (measured over 1 quarter).
 - **Review quality:** Integration PRs that include mapping spec changes get more meaningful review feedback from architects.
 - **Transcodification bugs:** Fewer production bugs caused by missing or incorrect code table entries.
+- **Platform migration readiness:** When evaluating a platform migration, the mapping spec provides a complete, portable inventory of all field mappings, transformations, and transcodifications — independent of the source or target platform.
 
 ---
 
 ## 11. Open Questions
 
-1. **Should the mapping YAML DSL be formalized as a JSON Schema?** This would enable validation of mapping files themselves (schema for the schema).
+1. **Should the mapping YAML DSL be formalized as a JSON Schema?** This would enable validation of mapping files themselves (schema for the schema). Strongly recommended.
 2. **Which integration flow should be the first pilot?** Pick a low-complexity, well-understood mapping to validate the approach.
-3. **Should the canonical model be defined independently or derived from existing IBM ACE schemas?** Starting from existing ACE models may be faster but risks inheriting tech debt.
-4. **FINOS Legend evaluation:** Is Legend's Pure language a viable alternative to the custom YAML DSL? It would require Java infrastructure but provides more formal semantics.
+3. **Should the canonical model be defined independently or derived from existing platform schemas?** Starting from existing models may be faster but risks inheriting tech debt.
+4. **FINOS Legend evaluation:** Is Legend's Pure language a viable alternative to the custom YAML DSL? It provides more formal semantics but requires Java infrastructure.
 5. **DataHub integration:** Should mapping metadata be published to a data lineage platform for cross-team discoverability?
+6. **Which bridge adapter to build first?** Depends on the team's primary integration platform. The adapter validates implementation against the mapping spec.
+7. **Should transcodification tables support external references?** E.g., referencing a shared code table maintained by a master data management (MDM) system instead of inlining all values.
 
 ---
 
@@ -561,14 +591,16 @@ mapping-validation:
 ### Transformation Languages
 
 - JSONata — https://jsonata.org
+- JSONata Java binding — https://github.com/dashjoin/jsonata-java
 - JOLT — https://github.com/bazaarvoice/jolt
 - jq — https://jqlang.github.io/jq/
 - MuleSoft DataWeave — https://docs.mulesoft.com/dataweave/latest/
 
-### Enterprise Platforms
+### Enterprise Platforms and Tools
 
 - FINOS Legend — https://legend.finos.org
 - AtlasMap — https://www.atlasmap.io
+- Apache Camel — https://camel.apache.org
 - TMForum Open Digital Framework — https://www.tmforum.org/open-digital-framework/
 
 ### Data Lineage
@@ -577,10 +609,13 @@ mapping-validation:
 - OpenMetadata — https://open-metadata.org
 - OpenLineage — https://openlineage.io
 
-### IBM ACE
+### Integration Platforms (bridge adapter targets)
 
-- IBM ACE Message Maps — https://www.ibm.com/docs/en/app-connect/12.0?topic=maps-message
-- IBM ACE ESQL — https://www.ibm.com/docs/en/app-connect/12.0?topic=esql-overview
+- IBM ACE — https://www.ibm.com/products/app-connect
+- MuleSoft Anypoint — https://www.mulesoft.com/platform/enterprise-integration
+- WSO2 Micro Integrator — https://wso2.com/micro-integrator/
+- Apache Camel — https://camel.apache.org
+- Spring Integration — https://spring.io/projects/spring-integration
 
 ### Case Studies
 
