@@ -21,8 +21,8 @@ servers:
     description: Staging
   - url: https://api.example.com/v1
     description: Production
-  # Mock server (Prism) runs locally via: npm run mock
-  # Connect at http://localhost:4010 — not listed here to pass OWASP HTTPS checks
+  - url: http://localhost:4010
+    description: Local mock server (Prism)
 
 security:
   - apiKey: []

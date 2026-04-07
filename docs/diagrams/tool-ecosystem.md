@@ -4,7 +4,7 @@
 
 ```mermaid
 flowchart LR
-    spec["OpenAPI Spec<br/>order-api.yaml"]
+    spec["OpenAPI Spec<br/>api.yaml"]
 
     subgraph dev["Development"]
         prism_s["Prism<br/>Static Mode"]

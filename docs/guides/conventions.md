@@ -393,7 +393,7 @@ notes:
 
 ```
 specs/
-  order-api.yaml                       # Main spec — paths + $ref pointers
+  api.yaml                       # Main spec — paths + $ref pointers
   components/
     schemas/
       Order.yaml                       # One file per schema
@@ -427,7 +427,7 @@ schema:
 
 ```bash
 npm run bundle
-# Produces specs/order-api.bundled.yaml — single file for Prism, openapi-generator, Scalar
+# Produces specs/api.bundled.yaml — single file for Prism, openapi-generator, Scalar
 ```
 
 Most downstream tools (Prism, openapi-generator, Scalar) work with the bundled spec. Exception: `openapi-typescript` works better with the source spec (see [Frontend Guide](frontend-client-generation.md#how-it-works)).

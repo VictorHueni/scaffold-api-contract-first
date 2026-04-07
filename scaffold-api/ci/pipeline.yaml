@@ -63,10 +63,10 @@ jobs:
           chmod +x oasdiff
 
       - name: Extract base spec from main branch
-        run: git show origin/main:scaffold-api/specs/order-api.yaml > /tmp/old-spec.yaml
+        run: git show origin/main:scaffold-api/specs/api.yaml > /tmp/old-spec.yaml
 
       - name: Check for breaking changes
-        run: ./oasdiff breaking /tmp/old-spec.yaml specs/order-api.yaml --fail-on ERR
+        run: ./oasdiff breaking /tmp/old-spec.yaml specs/api.yaml --fail-on ERR
 
   # ----------------------------------------------------------------
   # Job 3: Contract Test — Schemathesis against Prism mock
@@ -91,7 +91,7 @@ jobs:
         run: npm run bundle
 
       - name: Start Prism mock server
-        run: npx prism mock specs/order-api.bundled.yaml --port 4010 &
+        run: npx prism mock specs/api.bundled.yaml --port 4010 &
 
       - name: Wait for Prism to start
         run: sleep 3
@@ -99,7 +99,7 @@ jobs:
       - name: Run Schemathesis contract tests
         uses: schemathesis/action@v2
         with:
-          schema: scaffold-api/specs/order-api.bundled.yaml
+          schema: scaffold-api/specs/api.bundled.yaml
           base-url: http://localhost:4010
           checks: all
           args: '--stateful=links --hypothesis-max-examples=100 --set-header "X-API-Key: test-key"'
@@ -160,4 +160,4 @@ jobs:
           name: api-docs
           path: |
             scaffold-api/docs/index.html
-            scaffold-api/specs/order-api.bundled.yaml
+            scaffold-api/specs/api.bundled.yaml

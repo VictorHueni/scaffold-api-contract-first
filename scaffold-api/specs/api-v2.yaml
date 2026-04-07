@@ -13,8 +13,8 @@
 #   1. New optional "priority" field on Order (field added)
 #
 # Usage:
-#   oasdiff breaking specs/order-api.yaml specs/order-api-v2.yaml
-#   oasdiff breaking specs/order-api.yaml specs/order-api-v2.yaml --fail-on ERR
+#   oasdiff breaking specs/api.yaml specs/api-v2.yaml
+#   oasdiff breaking specs/api.yaml specs/api-v2.yaml --fail-on ERR
 
 openapi: 3.1.0
 info:

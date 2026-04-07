@@ -215,7 +215,7 @@ overlay: 1.1.0
 info:
   title: Consumer API Mapping Annotations
   version: 1.0.0
-extends: ./apis/consumer-order-api.yaml
+extends: ./apis/consumer-api.yaml
 
 actions:
   # Annotate a field with its mapping reference
@@ -246,11 +246,11 @@ actions:
 **CI pipeline applies the overlay and renders annotated docs:**
 ```bash
 # Download spec → apply overlay → render
-npx overlays-js apply apis/consumer-order-api.yaml \
+npx overlays-js apply apis/consumer-api.yaml \
   overlays/consumer-mapping.overlay.yaml \
-  -o generated/consumer-order-api-annotated.yaml
+  -o generated/consumer-api-annotated.yaml
 
-npx @scalar/cli serve generated/consumer-order-api-annotated.yaml
+npx @scalar/cli serve generated/consumer-api-annotated.yaml
 ```
 
 Original spec stays pristine. Overlay is committed and reviewed in PRs. Annotated spec is generated.

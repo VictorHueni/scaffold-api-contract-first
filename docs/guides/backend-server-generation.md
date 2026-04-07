@@ -46,7 +46,7 @@ This guide covers generating Spring Boot server stubs from the scaffold's OpenAP
 
 ```bash
 npm run stubs
-# Runs: openapi-generator-cli generate -i specs/order-api.bundled.yaml -g spring
+# Runs: openapi-generator-cli generate -i specs/api.bundled.yaml -g spring
 #   -o generated/server-spring
 #   --additional-properties=interfaceOnly=true,useSpringBoot3=true
 #   --skip-validate-spec
@@ -131,10 +131,10 @@ public class OrdersApiImpl implements OrdersApi {
 
 ```bash
 # CORRECT for backend — use bundled spec
-openapi-generator-cli generate -i specs/order-api.bundled.yaml -g spring ...
+openapi-generator-cli generate -i specs/api.bundled.yaml -g spring ...
 
 # CORRECT for frontend — use source spec
-openapi-typescript specs/order-api.yaml ...
+openapi-typescript specs/api.yaml ...
 ```
 
 **Why the difference:** The Scalar bundler's `x-ext` artifacts break TypeScript type generation but don't affect Java code generation. `openapi-generator-cli` works best with a single resolved file.
@@ -144,7 +144,7 @@ openapi-typescript specs/order-api.yaml ...
 ### npm script
 
 ```json
-{ "stubs": "openapi-generator-cli generate -i specs/order-api.bundled.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true --skip-validate-spec" }
+{ "stubs": "openapi-generator-cli generate -i specs/api.bundled.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true --skip-validate-spec" }
 ```
 
 ### Key flags

@@ -67,11 +67,11 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 **Acceptance Criteria:**
 
-- [ ] `specs/order-api.yaml` exists as the main spec file with `$ref` pointers to component files under `specs/components/`
+- [ ] `specs/api.yaml` exists as the main spec file with `$ref` pointers to component files under `specs/components/`
 - [ ] Schemas (`Order`, `Customer`, `OrderItem`, `ErrorResponse`) live in `specs/components/schemas/*.yaml`
 - [ ] Examples live in `specs/components/examples/{responses,requests,errors}/*.yaml`
 - [ ] Reusable parameters live in `specs/components/parameters/*.yaml`
-- [ ] `npx @scalar/cli bundle specs/order-api.yaml -o specs/order-api.bundled.yaml` produces a valid single-file spec
+- [ ] `npx @scalar/cli bundle specs/api.yaml -o specs/api.bundled.yaml` produces a valid single-file spec
 - [ ] Main spec is clean and readable — not bloated with inline examples or schemas
 - [ ] Complete endpoints in bundled output: GET/POST/PUT/DELETE for orders, GET for order items
 - [ ] Spec includes schemas with `type`, `format`, `example`, `x-faker`, `description`, and constraints (`minimum`, `maximum`, `enum`, `pattern`)
@@ -90,7 +90,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
   - 401: unauthorized example
   - 404: resource not found example
   - 429: rate limit exceeded example (with `Retry-After` header)
-- [ ] `npx @scalar/cli validate specs/order-api.yaml` passes with no errors
+- [ ] `npx @scalar/cli validate specs/api.yaml` passes with no errors
 
 ---
 
@@ -106,7 +106,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 - [ ] OWASP security rules enforce: HTTPS servers, auth on unsafe methods, no API keys in URL, array `maxItems`, string `maxLength`
 - [ ] Custom organizational rules enforce: operationId required, `verbNoun` operationId pattern, camelCase properties, descriptions on operations, examples on schemas, error responses, kebab-case paths, no trailing slashes, operations must have tags, GET must return body, request bodies must use `$ref`
 - [ ] Running Spectral against a well-formed spec produces zero errors
-- [ ] A "bad spec" variant (`specs/order-api-bad.yaml`) exists with intentional violations across all three layers (convention, security, quality)
+- [ ] A "bad spec" variant (`specs/api-bad.yaml`) exists with intentional violations across all three layers (convention, security, quality)
 - [ ] Running Spectral against the bad spec produces at least 8 violations with clear messages spanning all layers
 
 ---
@@ -119,8 +119,8 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 **Acceptance Criteria:**
 
-- [ ] `prism mock specs/order-api.yaml --port 4010` starts and responds to requests (static mode, returns `example` values)
-- [ ] `prism mock -d specs/order-api.yaml --port 4010` starts and responds with different realistic data on each call (dynamic mode, uses `x-faker`)
+- [ ] `prism mock specs/api.yaml --port 4010` starts and responds to requests (static mode, returns `example` values)
+- [ ] `prism mock -d specs/api.yaml --port 4010` starts and responds with different realistic data on each call (dynamic mode, uses `x-faker`)
 - [ ] `GET /orders/{orderId}` returns a well-shaped Order object with realistic field values
 - [ ] `POST /orders` with a valid body returns 201
 - [ ] `POST /orders` with a missing required field returns a validation error (400)
@@ -136,7 +136,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 **Acceptance Criteria:**
 
-- [ ] Running `npx openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts` produces a types file
+- [ ] Running `npx openapi-typescript specs/api.yaml -o generated/api-types.d.ts` produces a types file
 - [ ] Generated types include typed interfaces for Order, Customer, OrderItem, ErrorResponse
 - [ ] All field names, types, and optionality match the spec exactly
 - [ ] `openapi-fetch` can be used with the generated types for type-safe API calls with IDE autocompletion
@@ -152,7 +152,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 **Acceptance Criteria:**
 
-- [ ] Running `openapi-generator-cli generate -i specs/order-api.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true` produces a scaffold
+- [ ] Running `openapi-generator-cli generate -i specs/api.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true` produces a scaffold
 - [ ] Generated interfaces have method signatures matching each operationId
 - [ ] Generated models match the spec schemas
 - [ ] At least one endpoint (`GET /orders/{orderId}`) has a minimal implementation class that implements the generated interface and returns a valid response
@@ -168,7 +168,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 **Acceptance Criteria:**
 
-- [ ] `schemathesis run specs/order-api.yaml --base-url http://localhost:4010 --checks all --stateful=links` runs successfully against the mock server
+- [ ] `schemathesis run specs/api.yaml --base-url http://localhost:4010 --checks all --stateful=links` runs successfully against the mock server
 - [ ] Schemathesis generates 100+ test cases covering valid and edge-case inputs
 - [ ] Introducing a deliberate bug in the stub server (e.g., returning `total` as a string) causes Schemathesis to fail with a clear schema violation message
 - [ ] Fixing the bug and re-running produces all-pass results
@@ -198,9 +198,9 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 **Acceptance Criteria:**
 
-- [ ] A v2 spec (`specs/order-api-v2.yaml`) exists with intentional breaking changes (renamed field, removed field, type change) and one non-breaking addition
-- [ ] `oasdiff breaking specs/order-api.yaml specs/order-api-v2.yaml` lists each breaking change with classification
-- [ ] `oasdiff breaking specs/order-api.yaml specs/order-api-v2.yaml --fail-on ERR` returns exit code 1
+- [ ] A v2 spec (`specs/api-v2.yaml`) exists with intentional breaking changes (renamed field, removed field, type change) and one non-breaking addition
+- [ ] `oasdiff breaking specs/api.yaml specs/api-v2.yaml` lists each breaking change with classification
+- [ ] `oasdiff breaking specs/api.yaml specs/api-v2.yaml --fail-on ERR` returns exit code 1
 
 ---
 
@@ -212,10 +212,10 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 **Acceptance Criteria:**
 
-- [ ] `npx @scalar/cli bundle specs/order-api.yaml -o docs/scalar-reference.html` produces a single HTML file
+- [ ] `npx @scalar/cli bundle specs/api.yaml -o docs/scalar-reference.html` produces a single HTML file
 - [ ] Opening the HTML shows all endpoints, schemas, descriptions, and examples from the spec
 - [ ] The built-in "Try it out" playground works against the mock server
-- [ ] `npx @scalar/cli serve specs/order-api.yaml --watch` provides live-reloading preview during development
+- [ ] `npx @scalar/cli serve specs/api.yaml --watch` provides live-reloading preview during development
 
 ---
 
@@ -312,7 +312,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 Improvements intentionally deferred from v1 to keep the scaffold simple:
 
-1. **`scaffold.config.yaml` for project-specific settings.** Currently, spec-specific commands in `package.json` reference `order-api` by name. Teams do a find-and-replace when cloning the scaffold. A future version could introduce a config file (`scaffold.config.yaml`) that defines the spec name, mock port, docs port, and output paths — with a thin CLI wrapper (`bin/scaffold.js`) that reads the config and runs the right commands. This removes the find-and-replace step but adds complexity.
+1. **`scaffold.config.yaml` for project-specific settings.** Currently, spec-specific commands in `package.json` reference `api` by name. Teams do a find-and-replace when cloning the scaffold. A future version could introduce a config file (`scaffold.config.yaml`) that defines the spec name, mock port, docs port, and output paths — with a thin CLI wrapper (`bin/scaffold.js`) that reads the config and runs the right commands. This removes the find-and-replace step but adds complexity.
 2. **Scaffold CLI (`npx create-api-first`).** A scaffolding CLI that prompts for the API name, preferred backend framework (Spring/Quarkus/Express), and generates a ready-to-use project. Similar to `create-react-app` or `create-next-app`.
 3. **Pre-commit hooks (husky).** Automatically run `npm run bundle && npm run lint` on every commit via husky. Not included in v1 to keep setup minimal, but recommended for real projects.
 4. **Multi-spec support.** The current scaffold assumes one API spec per repo. For teams managing multiple related specs (e.g., Orders API + Inventory API), a future version could support glob patterns and per-spec config.
