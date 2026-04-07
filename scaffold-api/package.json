@@ -25,7 +25,7 @@
     "breaking": "oasdiff breaking specs/api.yaml specs/api-v2.yaml --fail-on ERR",
     "breaking:docker": "docker run --rm -v $(pwd):/app tufin/oasdiff breaking /app/specs/api.yaml /app/specs/api-v2.yaml --fail-on ERR",
     "------- BACKEND -------": "",
-    "stubs": "openapi-generator-cli generate -i specs/api.bundled.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true --skip-validate-spec",
+    "stubs": "docker run --rm -v $(pwd):/app openapitools/openapi-generator-cli generate -i /app/specs/api.bundled.yaml -g spring -o /app/generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true --skip-validate-spec",
     "------- PRECHECK -------": "",
     "precheck": "npm run bundle && npm run lint"
   },
