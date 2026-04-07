@@ -69,8 +69,8 @@ This guide covers running the full quality gate pipeline: contract testing (Sche
 ```bash
 npm run test:contract
 # Runs: docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run
-#   /app/specs/order-api.bundled.yaml
-#   --base-url http://localhost:4010
+#   /app/specs/api.bundled.yaml
+#   --base-url http://host.docker.internal:4010
 #   --checks all --stateful=links
 #   --hypothesis-max-examples=100
 #   --set-header "X-API-Key: test-key"
@@ -120,8 +120,8 @@ npm run breaking:docker                # Docker fallback
 In CI, compare current spec against the main branch:
 
 ```bash
-git show origin/main:scaffold-api/specs/order-api.yaml > /tmp/old-spec.yaml
-oasdiff breaking /tmp/old-spec.yaml specs/order-api.yaml --fail-on ERR
+git show origin/main:scaffold-api/specs/api.yaml > /tmp/old-spec.yaml
+oasdiff breaking /tmp/old-spec.yaml specs/api.yaml --fail-on ERR
 ```
 
 ## Configuration
@@ -130,11 +130,11 @@ oasdiff breaking /tmp/old-spec.yaml specs/order-api.yaml --fail-on ERR
 
 ```json
 {
-  "lint":                   "spectral lint specs/order-api.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format",
-  "lint:bad":               "spectral lint specs/order-api-bad.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format",
-  "test:contract":          "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --stateful=links --hypothesis-max-examples=100 --set-header 'X-API-Key: test-key'",
-  "test:contract:negative": "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --mode=negative --hypothesis-max-examples=50 --set-header 'X-API-Key: test-key'",
-  "test:hurl":              "hurl --test tests/**/*.hurl"
+  "lint":                   "spectral lint specs/api.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format",
+  "lint:bad":               "spectral lint specs/api-bad.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format",
+  "test:contract":          "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/api.bundled.yaml --base-url http://host.docker.internal:4010 --checks all --stateful=links --hypothesis-max-examples=100 --set-header 'X-API-Key: test-key'",
+  "test:contract:negative": "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/api.bundled.yaml --base-url http://host.docker.internal:4010 --checks all --mode=negative --hypothesis-max-examples=50 --set-header 'X-API-Key: test-key'",
+  "test:hurl":              "hurl --test --variable base_url=http://localhost:4010 tests/**/*.hurl"
 }
 ```
 
@@ -156,8 +156,8 @@ breaking-changes:
       with: { fetch-depth: 0 }
     - run: |
         curl -sSL https://github.com/Tufin/oasdiff/releases/latest/download/oasdiff_linux_amd64 -o oasdiff && chmod +x oasdiff
-        git show origin/main:scaffold-api/specs/order-api.yaml > /tmp/old-spec.yaml
-        ./oasdiff breaking /tmp/old-spec.yaml specs/order-api.yaml --fail-on ERR
+        git show origin/main:scaffold-api/specs/api.yaml > /tmp/old-spec.yaml
+        ./oasdiff breaking /tmp/old-spec.yaml specs/api.yaml --fail-on ERR
 
 contract-test:
   runs-on: ubuntu-latest
@@ -165,11 +165,11 @@ contract-test:
   steps:
     - uses: actions/checkout@v4
     - run: npm install
-    - run: npx prism mock specs/order-api.bundled.yaml --port 4010 &
+    - run: npx prism mock specs/api.bundled.yaml --port 4010 &
     - run: sleep 3
     - uses: schemathesis/action@v2
       with:
-        schema: specs/order-api.bundled.yaml
+        schema: specs/api.bundled.yaml
         base-url: http://localhost:4010
         checks: all
         args: '--stateful=links --hypothesis-max-examples=100 --set-header "X-API-Key: test-key"'

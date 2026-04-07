@@ -107,6 +107,8 @@ The mock server runs on `http://localhost:4010`. It:
 
 ### 2. Run functional tests (Hurl)
 
+> **Important:** Hurl tests assert on exact values from the spec examples (specific UUIDs, status `"pending"`, etc.). They only pass against **static mode** (`npm run mock`). If you started the mock with `npm run mock:dynamic`, the tests will fail because Prism returns randomized faker data instead of the fixed examples.
+
 ```bash
 # Native (if Hurl is installed):
 npm run test:hurl
@@ -115,10 +117,10 @@ npm run test:hurl
 npm run test:hurl:docker
 
 # Verbose output (good for debugging):
-hurl --test --very-verbose tests/orders.hurl
+hurl --test --very-verbose --variable base_url=http://localhost:4010 tests/orders.hurl
 
 # JUnit XML output (for CI reporting):
-hurl --test --report-junit generated/hurl-results.xml tests/orders.hurl
+hurl --test --report-junit generated/hurl-results.xml --variable base_url=http://localhost:4010 tests/orders.hurl
 ```
 
 The test file (`tests/orders.hurl`) contains 5 scenarios:
@@ -151,11 +153,17 @@ npm run docs                           # Start Scalar docs with live reload
 # Open http://localhost:8081
 ```
 
-Click "Try it out" on any endpoint. Select from named examples (e.g., "Pending order", "Shipped order with tracking"). Send requests against the mock server directly from the docs.
+To use "Try it out":
+
+1. Open the **server dropdown** (top of the page) and select **"Local mock server (Prism)"** (`http://localhost:4010`)
+2. Open the **Authentication** section and enter any value (e.g., `test-key`) as the API key
+3. Click "Try it out" on any endpoint. Select from named examples (e.g., "Pending order", "Shipped order with tracking").
+
+> If you skip the server selection, Scalar defaults to `https://dev.api.example.com/v1` which doesn't exist — you'll get a network error.
 
 ### 5. Import into a desktop client (optional)
 
-Import `specs/order-api.yaml` (or `specs/order-api.bundled.yaml`) into any API client:
+Import `specs/api.yaml` (or `specs/api.bundled.yaml`) into any API client:
 - Bruno, Postman, Insomnia, Hoppscotch, Yaak
 - All endpoints, parameters, and request bodies are pre-filled from the spec
 - The scaffold doesn't mandate a specific client — use what you prefer
@@ -166,21 +174,21 @@ Import `specs/order-api.yaml` (or `specs/order-api.bundled.yaml`) into any API c
 
 ```json
 {
-  "mock":                   "prism mock specs/order-api.bundled.yaml --port 4010",
-  "mock:dynamic":           "prism mock -d specs/order-api.bundled.yaml --port 4010",
-  "test:hurl":              "hurl --test tests/**/*.hurl",
-  "test:hurl:docker":       "docker run --rm --network host -v $(pwd):/app ghcr.io/orange-opensource/hurl:latest --test /app/tests/**/*.hurl",
-  "test:contract":          "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --stateful=links --hypothesis-max-examples=100 --set-header 'X-API-Key: test-key'",
-  "test:contract:negative": "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --mode=negative --hypothesis-max-examples=50 --set-header 'X-API-Key: test-key'",
-  "breaking:docker":        "docker run --rm -v $(pwd):/app tufin/oasdiff breaking /app/specs/order-api.yaml /app/specs/order-api-v2.yaml"
+  "mock":                   "prism mock specs/api.bundled.yaml --port 4010",
+  "mock:dynamic":           "prism mock -d specs/api.bundled.yaml --port 4010",
+  "test:hurl":              "hurl --test --variable base_url=http://localhost:4010 tests/**/*.hurl",
+  "test:hurl:docker":       "docker run --rm --network host -v $(pwd):/app --entrypoint sh ghcr.io/orange-opensource/hurl:latest -c 'hurl --test --variable base_url=http://host.docker.internal:4010 /app/tests/*.hurl'",
+  "test:contract":          "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/api.bundled.yaml --base-url http://host.docker.internal:4010 --checks all --stateful=links --hypothesis-max-examples=100 --set-header 'X-API-Key: test-key'",
+  "test:contract:negative": "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/api.bundled.yaml --base-url http://host.docker.internal:4010 --checks all --mode=negative --hypothesis-max-examples=50 --set-header 'X-API-Key: test-key'",
+  "breaking:docker":        "docker run --rm -v $(pwd):/app tufin/oasdiff breaking /app/specs/api.yaml /app/specs/api-v2.yaml"
 }
 ```
 
 ### Hurl test file conventions
 
 ```hurl
-# Every request needs the API key
-GET http://localhost:4010/orders/a1b2c3d4-e5f6-7890-abcd-ef1234567890
+# Every request needs the API key and uses the base_url variable
+GET {{base_url}}/orders/a1b2c3d4-e5f6-7890-abcd-ef1234567890
 X-API-Key: test-key
 HTTP 200
 [Asserts]
@@ -216,15 +224,9 @@ Key conventions:
 - Problem: Prism may not perfectly implement all spec edge cases.
 - Fix: Mock failures may be Prism limitations, not spec bugs. Run against the real API in QA to confirm.
 
-**6. Docker `--network host` doesn't work on macOS**
-- Problem: Docker on macOS doesn't support `--network host`. Schemathesis and Hurl Docker containers can't reach `localhost:4010`.
-- Fix: Use `host.docker.internal` instead of `localhost`:
-  ```bash
-  docker run --rm -v $(pwd):/app schemathesis/schemathesis run \
-    /app/specs/order-api.bundled.yaml \
-    --base-url http://host.docker.internal:4010 \
-    --checks all --set-header "X-API-Key: test-key"
-  ```
+**6. Docker `--network host` doesn't work on macOS / Docker Desktop (WSL2)**
+- Problem: Docker Desktop (macOS and WSL2) doesn't fully support `--network host`. Containers can't reach `localhost:4010` on the host.
+- Fix: The npm scripts already use `host.docker.internal` instead of `localhost`. This is handled automatically — just run `npm run test:hurl:docker` or `npm run test:contract`.
 
 **7. Contract tests are slow**
 - Problem: `--hypothesis-max-examples=100` per endpoint takes time.
@@ -240,18 +242,15 @@ Same tests, different base URL:
 | **QA (real API)** | `https://qa.yourcompany.com/v1` | `hurl --test --variable base_url=https://qa.yourcompany.com/v1 tests/orders.hurl` |
 | **Acceptance** | `https://acp.yourcompany.com/v1` | Same pattern with acceptance URL |
 
-For Hurl to support variable base URLs, update test files to use `{{base_url}}`:
-```hurl
-GET {{base_url}}/orders/a1b2c3d4-e5f6-7890-abcd-ef1234567890
-X-API-Key: {{api_key}}
+Hurl test files already use `{{base_url}}` — just override the variable:
+```bash
+hurl --test --variable base_url=https://qa.example.com --variable api_key=$QA_KEY tests/orders.hurl
 ```
-
-Then run: `hurl --test --variable base_url=https://qa.example.com --variable api_key=$QA_KEY tests/orders.hurl`
 
 For Schemathesis, change `--base-url`:
 ```bash
 docker run --rm schemathesis/schemathesis run \
-  specs/order-api.bundled.yaml \
+  specs/api.bundled.yaml \
   --base-url https://qa.yourcompany.com/v1 \
   --checks all --set-header "X-API-Key: $QA_KEY"
 ```
