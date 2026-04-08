@@ -7,6 +7,7 @@ Practical how-to guides organized by role. Each guide follows a consistent struc
 | Guide | Description |
 |---|---|
 | [API Conventions](conventions.md) | Naming rules, structure rules, security rules, quality rules — all enforced by Spectral |
+| [Manual Smoke Test](manual-smoke-test.md) | Copy-paste curl commands to walk through every scaffold feature locally in ~10 minutes |
 
 ## By Audience
 
@@ -47,6 +48,7 @@ Practical how-to guides organized by role. Each guide follows a consistent struc
 | Run functional tests (Docker) | [QA Testing](qa-testing.md) | `npm run mock & npm run test:hurl:docker` |
 | Check for breaking changes | [CI Testing](ci-testing.md) | `npm run breaking:docker` |
 | Explore the API interactively | [QA Testing](qa-testing.md) | `npm run docs` → "Try it out" |
+| Run a quick manual smoke test | [Manual Smoke Test](manual-smoke-test.md) | Follow the curl walkthrough |
 | Start mock server | All guides | `npm run mock` |
 
 ## Reference Material

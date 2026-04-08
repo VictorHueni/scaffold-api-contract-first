@@ -5,42 +5,38 @@
   "private": true,
   "scripts": {
     "------- SPEC -------": "",
-    "bundle": "scalar document bundle specs/order-api.yaml -o specs/order-api.bundled.yaml",
-    "validate": "scalar document validate specs/order-api.yaml",
-
+    "bundle": "scalar document bundle specs/api.yaml -o specs/api.bundled.yaml",
+    "validate": "scalar document validate specs/api.yaml",
     "------- QUALITY -------": "",
-    "lint": "spectral lint specs/order-api.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format",
-    "lint:bad": "spectral lint specs/order-api-bad.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format",
-
+    "lint": "spectral lint specs/api.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format",
+    "lint:bad": "spectral lint specs/api-bad.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format",
     "------- DEV -------": "",
-    "mock": "prism mock specs/order-api.bundled.yaml --port 4010",
-    "mock:dynamic": "prism mock -d specs/order-api.bundled.yaml --port 4010",
-    "types": "openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts --read-write-markers",
-    "docs": "scalar document serve specs/order-api.bundled.yaml --port 8081 --watch",
+    "mock": "prism mock specs/api.bundled.yaml --port 4010",
+    "mock:dynamic": "prism mock -d specs/api.bundled.yaml --port 4010",
+    "types": "openapi-typescript specs/api.yaml -o generated/api-types.d.ts --read-write-markers",
+    "docs": "scalar document serve specs/api.bundled.yaml --port 8081 --watch",
     "docs:build": "echo 'Static docs: open docs/index.html (CDN-based Scalar wrapper). Requires bundled spec: npm run bundle'",
-
     "------- TEST -------": "",
-    "test:contract": "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --stateful=links --hypothesis-max-examples=100 --set-header 'X-API-Key: test-key'",
-    "test:contract:negative": "docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --mode=negative --hypothesis-max-examples=50 --set-header 'X-API-Key: test-key'",
-    "test:hurl": "hurl --test tests/**/*.hurl",
-    "test:hurl:docker": "docker run --rm --network host -v $(pwd):/app ghcr.io/orange-opensource/hurl:latest --test /app/tests/**/*.hurl",
-    "breaking": "oasdiff breaking specs/order-api.yaml specs/order-api-v2.yaml --fail-on ERR",
-    "breaking:docker": "docker run --rm -v $(pwd):/app tufin/oasdiff breaking /app/specs/order-api.yaml /app/specs/order-api-v2.yaml --fail-on ERR",
-
+    "test:contract": "docker run --rm --network host -v $(pwd)/specs:/specs schemathesis/schemathesis run /specs/api.bundled.yaml --url http://host.docker.internal:4010 --checks not_a_server_error,status_code_conformance,content_type_conformance,response_schema_conformance --phases examples,coverage,fuzzing,stateful --max-examples 100 -H 'X-API-Key: test-key'",
+    "test:contract:full": "docker run --rm --network host -v $(pwd)/specs:/specs schemathesis/schemathesis run /specs/api.bundled.yaml --url http://host.docker.internal:4010 --checks all --phases examples,coverage,fuzzing,stateful --max-examples 100 -H 'X-API-Key: test-key'",
+    "test:contract:negative": "docker run --rm --network host -v $(pwd)/specs:/specs schemathesis/schemathesis run /specs/api.bundled.yaml --url http://host.docker.internal:4010 --checks not_a_server_error,status_code_conformance,content_type_conformance,response_schema_conformance --mode negative --max-examples 50 -H 'X-API-Key: test-key'",
+    "test:hurl": "hurl --test --variable base_url=http://localhost:4010 tests/**/*.hurl",
+    "test:hurl:docker": "docker run --rm --network host -v $(pwd):/app --entrypoint sh ghcr.io/orange-opensource/hurl:latest -c 'hurl --test --variable base_url=http://host.docker.internal:4010 /app/tests/*.hurl'",
+    "breaking": "oasdiff breaking specs/api.yaml specs/api-v2.yaml --fail-on ERR",
+    "breaking:docker": "docker run --rm -v $(pwd):/app tufin/oasdiff breaking /app/specs/api.yaml /app/specs/api-v2.yaml --fail-on ERR",
     "------- BACKEND -------": "",
-    "stubs": "openapi-generator-cli generate -i specs/order-api.bundled.yaml -g spring -o generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true --skip-validate-spec",
-
+    "stubs": "docker run --rm -v $(pwd):/app openapitools/openapi-generator-cli generate -i /app/specs/api.bundled.yaml -g spring -o /app/generated/server-spring --additional-properties=interfaceOnly=true,useSpringBoot3=true --skip-validate-spec",
     "------- PRECHECK -------": "",
     "precheck": "npm run bundle && npm run lint"
   },
   "devDependencies": {
-    "@stoplight/prism-cli": "^5",
-    "@stoplight/spectral-cli": "^6",
-    "@stoplight/spectral-owasp-ruleset": "^2",
-    "@scalar/cli": "^1",
-    "openapi-typescript": "^7",
-    "openapi-fetch": "^0.17",
-    "@openapitools/openapi-generator-cli": "^2",
-    "typescript": "^5"
+    "@openapitools/openapi-generator-cli": "^0.0.6",
+    "@scalar/cli": "^1.3.2",
+    "@stoplight/prism-cli": "^5.14.2",
+    "@stoplight/spectral-cli": "^6.15.0",
+    "@stoplight/spectral-owasp-ruleset": "^2.0.1",
+    "openapi-fetch": "^0.17.0",
+    "openapi-typescript": "^7.13.0",
+    "typescript": "^5.9.3"
   }
 }

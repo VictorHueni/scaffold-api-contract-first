@@ -4,7 +4,7 @@
 
 ```mermaid
 mindmap
-  root((OpenAPI Spec<br/>order-api.yaml))
+  root((OpenAPI Spec<br/>api.yaml))
     Development
       Prism Mock Server
         Static examples

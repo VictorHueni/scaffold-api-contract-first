@@ -1,11 +1,11 @@
-# order-api-bad.yaml — Intentionally broken spec for Spectral demonstration
+# api-bad.yaml — Intentionally broken spec for Spectral demonstration (demo-only)
 #
 # This spec contains violations across all three linting layers:
 # - Layer 1 (OpenAPI standard): missing operationId, trailing slash
 # - Layer 2 (OWASP security): http:// server, missing auth, API key in URL, no maxItems
 # - Layer 3 (Custom org rules): snake_case, empty description, inline schema, missing tag
 #
-# Run: npx spectral lint specs/order-api-bad.yaml --ruleset rules/.spectral.yaml
+# Run: npx spectral lint specs/api-bad.yaml --ruleset rules/.spectral.yaml
 
 openapi: 3.1.0
 info:

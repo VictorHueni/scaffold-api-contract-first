@@ -45,7 +45,7 @@ All tools install via `npm install` — no additional setup.
 
 ```bash
 npm run types
-# Runs: openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts --read-write-markers
+# Runs: openapi-typescript specs/api.yaml -o generated/api-types.d.ts --read-write-markers
 ```
 
 **Two critical flags:**
@@ -142,7 +142,7 @@ console.log(data.id);
 ### npm script
 
 ```json
-{ "types": "openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts --read-write-markers" }
+{ "types": "openapi-typescript specs/api.yaml -o generated/api-types.d.ts --read-write-markers" }
 ```
 
 ### tsconfig.json
@@ -183,7 +183,7 @@ Key settings:
 
 **1. Generated from bundled spec breaks TypeScript**
 - Problem: `scalar document bundle` creates `x-ext` hash references that generate invalid TypeScript type references (`x-ext["c8ae298"]["page"]`).
-- Fix: Always generate from `specs/order-api.yaml` (source), not `specs/order-api.bundled.yaml`.
+- Fix: Always generate from `specs/api.yaml` (source), not `specs/api.bundled.yaml`.
 
 **2. POST body requires server-assigned fields**
 - Problem: Without `--read-write-markers`, POST body type includes `id`, `status`, `createdAt` as required.

@@ -3,11 +3,14 @@
 # =============================================================================
 # Run against Prism mock server on port 4010:
 #   cd scaffold-api
-#   npx prism mock specs/order-api.bundled.yaml --port 4010 &
-#   hurl --test tests/orders.hurl
+#   npx prism mock specs/api.bundled.yaml --port 4010 &
+#   hurl --test --variable base_url={{base_url}} tests/orders.hurl
 #
 # Generate JUnit XML report:
-#   hurl --test --report-junit generated/hurl-results.xml tests/orders.hurl
+#   hurl --test --report-junit generated/hurl-results.xml --variable base_url={{base_url}} tests/orders.hurl
+#
+# base_url variable: defaults to {{base_url}} for native runs.
+# Docker runs override with http://host.docker.internal:4010.
 # =============================================================================
 
 
@@ -17,7 +20,7 @@
 # Prism returns the first named example (firstPage) which contains a paginated
 # response with a data array and pagination object.
 
-GET http://localhost:4010/orders?page=1&limit=20
+GET {{base_url}}/orders?page=1&limit=20
 X-API-Key: test-key
 HTTP 200
 [Asserts]
@@ -36,7 +39,7 @@ jsonpath "$.pagination.totalPages" isInteger
 # Prism returns the first named example (pendingOrder) for GET /orders/{orderId}.
 # All required Order fields are verified with type assertions.
 
-GET http://localhost:4010/orders/a1b2c3d4-e5f6-7890-abcd-ef1234567890
+GET {{base_url}}/orders/a1b2c3d4-e5f6-7890-abcd-ef1234567890
 X-API-Key: test-key
 HTTP 200
 [Asserts]
@@ -67,7 +70,7 @@ jsonpath "$.createdAt" isString
 # POST a valid order body. Prism returns the first named example (singleItem)
 # from the 201 response with status "pending".
 
-POST http://localhost:4010/orders
+POST {{base_url}}/orders
 X-API-Key: test-key
 Content-Type: application/json
 {
@@ -107,7 +110,7 @@ jsonpath "$.total" isFloat
 # POST with missing "items" array (a required field). Prism returns the
 # spec's 400 response example with the validation error body.
 
-POST http://localhost:4010/orders
+POST {{base_url}}/orders
 X-API-Key: test-key
 Content-Type: application/json
 {
@@ -140,7 +143,7 @@ header "Content-Type" contains "application/json"
 # The test validates the response is well-formed (same as Test 2).
 # In CI against a real API, change the expected status to 404.
 
-GET http://localhost:4010/orders/00000000-0000-0000-0000-000000000000
+GET {{base_url}}/orders/00000000-0000-0000-0000-000000000000
 X-API-Key: test-key
 HTTP 200
 [Asserts]

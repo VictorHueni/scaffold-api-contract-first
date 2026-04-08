@@ -363,11 +363,11 @@ The integration repo does not own consumer or provider API specs. It **reference
 ```yaml
 # apis.lock.yaml — committed, version-controlled
 specs:
-  - name: consumer-order-api
-    source: https://github.com/your-org/order-api/raw/main/specs/order-api.bundled.yaml
+  - name: consumer-api
+    source: https://github.com/your-org/api/raw/main/specs/api.bundled.yaml
     version: 1.2.0
     sha256: a1b2c3d4e5f6...
-    downloaded: apis/consumer-order-api.yaml
+    downloaded: apis/consumer-api.yaml
 
   - name: provider-acme-api
     source: https://github.com/your-org/acme-backend/raw/main/specs/acme-api.yaml
@@ -391,7 +391,7 @@ The integration scaffold lives in `scaffold-integration/` within the meta-repo. 
 ```
 scaffold-integration/                  # Integration scaffold template
   apis/                                # Referenced API specs (downloaded, gitignored)
-    consumer-order-api.yaml            #   ← downloaded from consumer team's repo
+    consumer-api.yaml            #   ← downloaded from consumer team's repo
     provider-acme-api.yaml             #   ← downloaded from provider team's repo
     provider-eu-api.yaml               #   ← downloaded from external partner URL
   apis.lock.yaml                       # Source URLs + versions (committed, lockfile)

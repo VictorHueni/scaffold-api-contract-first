@@ -176,7 +176,7 @@ Record each section as a **separate video file**. This lets you re-record a sing
 
 ### Clip 2: The Contract (5 min)
 
-**Format:** Editor (VS Code) showing `specs/order-api.yaml`
+**Format:** Editor (VS Code) showing `specs/api.yaml`
 
 **What to show:**
 - The `info` block — title, version, description
@@ -196,7 +196,7 @@ Record each section as a **separate video file**. This lets you re-record a sing
 
 **What to show:**
 1. Briefly show `rules/.spectral.yaml` — point out the three layers: "We extend the OpenAPI standard rules, add OWASP security rules, and add our own organizational rules."
-2. Run `spectral lint` against `specs/order-api-bad.yaml`. Show violations from all three layers:
+2. Run `spectral lint` against `specs/api-bad.yaml`. Show violations from all three layers:
    - **Convention:** snake_case field, missing operationId, trailing slash, missing tag
    - **Security:** HTTP server (not HTTPS), missing auth on POST, API key in query param, array without `maxItems`
    - **Quality:** empty description, inline schema, missing error response
@@ -213,9 +213,9 @@ Record each section as a **separate video file**. This lets you re-record a sing
 **Format:** Terminal + browser/curl
 
 **What to show:**
-1. Start Prism in static mode: `prism mock specs/order-api.yaml --port 4010`
+1. Start Prism in static mode: `prism mock specs/api.yaml --port 4010`
 2. `curl` a GET endpoint. Show the response using the exact `example` values from the spec. "Static mode returns what you wrote in the spec."
-3. Stop Prism. Restart in dynamic mode: `prism mock -d specs/order-api.yaml --port 4010`
+3. Stop Prism. Restart in dynamic mode: `prism mock -d specs/api.yaml --port 4010`
 4. `curl` the same endpoint twice. Show two different realistic responses. "Dynamic mode uses x-faker to generate new data every call."
 5. Send an invalid POST (missing required field). Show Prism rejecting it with a proper 400 error. "The mock validates input. Frontend discovers errors before backend exists."
 
@@ -228,7 +228,7 @@ Record each section as a **separate video file**. This lets you re-record a sing
 **Format:** Terminal + editor
 
 **What to show:**
-1. Run `npx openapi-typescript specs/order-api.yaml -o generated/api-types.d.ts`. Show it completing in under a second.
+1. Run `npx openapi-typescript specs/api.yaml -o generated/api-types.d.ts`. Show it completing in under a second.
 2. Open `generated/api-types.d.ts`. Show the typed interfaces — Order, Customer, OrderItem, ErrorResponse. Every field typed, every enum defined, every optional marker present. "One command, complete type safety."
 3. Open `examples/client-usage.ts`. Show a typed API call using `openapi-fetch` — IDE autocompletion on endpoint paths, typed request params, typed response body.
 4. "No generated runtime code to maintain. Just types. The spec changes, you regenerate, and the compiler tells you what broke."
@@ -257,7 +257,7 @@ Record each section as a **separate video file**. This lets you re-record a sing
 **Format:** Terminal. This is the most impactful section — take your time.
 
 **What to show:**
-1. Start Prism. Run Schemathesis against the mock: `schemathesis run specs/order-api.yaml --base-url http://localhost:4010 --checks all --stateful=links`. Show hundreds of tests passing.
+1. Start Prism (`npm run mock`). Run Schemathesis against the mock: `npm run test:contract`. Show hundreds of tests passing.
 2. Introduce a deliberate bug in the stub server: change `total` from a number to a string.
 3. Run Schemathesis against the stub server. Show it catching the bug with a clear schema violation message and a reproduction `curl` command.
 4. Fix the bug. Run again. All passing.
@@ -273,8 +273,8 @@ Record each section as a **separate video file**. This lets you re-record a sing
 **Format:** Terminal + editor (diff view)
 
 **What to show:**
-1. Open `specs/order-api.yaml` and `specs/order-api-v2.yaml` side by side in diff view. Point out: renamed field, removed field, type change, new optional field.
-2. Run `oasdiff breaking specs/order-api.yaml specs/order-api-v2.yaml`. Show each breaking change classified.
+1. Open `specs/api.yaml` and `specs/api-v2.yaml` side by side in diff view. Point out: renamed field, removed field, type change, new optional field.
+2. Run `oasdiff breaking specs/api.yaml specs/api-v2.yaml`. Show each breaking change classified.
 3. Show exit code: `--fail-on ERR` returns exit code 1. "In CI, this blocks the merge."
 
 **Key line:** "This runs on every PR. Breaking changes require a major version bump and a migration guide. No more surprise breakages."
@@ -292,9 +292,9 @@ Record each section as a **separate video file**. This lets you re-record a sing
 4. Navigate to `POST /orders`. Show the request body example picker — "Basic order" vs "Order with multiple items and notes". Select one, send it, show the 201 response.
 5. Show an error example — send a malformed request, show the 400 response with the error body matching the spec's error example.
 6. (Optional) Put a screenshot of a stale Confluence doc next to the Scalar page. "Which one do you trust?"
-7. **Live import demo:** Open one or two desktop clients and import `specs/order-api.yaml` on camera:
-   - **Bruno:** File > Import Collection > OpenAPI V3 Import > select `order-api.yaml`. Show the generated collection with all endpoints, pre-filled request bodies.
-   - **Postman:** Import > File > select `order-api.yaml`. Show the collection organized by tags. Send one request against the mock.
+7. **Live import demo:** Open one or two desktop clients and import `specs/api.yaml` on camera:
+   - **Bruno:** File > Import Collection > OpenAPI V3 Import > select `api.yaml`. Show the generated collection with all endpoints, pre-filled request bodies.
+   - **Postman:** Import > File > select `api.yaml`. Show the collection organized by tags. Send one request against the mock.
    - Pick whichever one or two the audience is most likely to already use. The point is to show it takes 10 seconds, not to advocate for a specific tool.
 6. "The spec is the standard. Your client is your choice. Import, explore, done."
 
@@ -381,7 +381,7 @@ Share these alongside the video so viewers can explore on their own:
 |---|---|---|
 | Meta-repository | GitHub (internal) | Contains docs, PRDs, and both scaffold templates |
 | `scaffold-api/` | Copy into your own repo | API scaffold — `npm install`, start building |
-| `scaffold-api/specs/order-api.yaml` | In the scaffold | The spec itself — explore it, import it, generate from it |
+| `scaffold-api/specs/api.yaml` | In the scaffold | The spec itself — explore it, import it, generate from it |
 | `scaffold-api/rules/.spectral.yaml` | In the scaffold | Teams can adopt the ruleset immediately |
 | `scaffold-api/ci/pipeline.yaml` | In the scaffold | DevOps can evaluate and adapt for their CI |
 | `scaffold-integration/` | Copy into your own repo | Integration mapping scaffold (PRD 0002, future) |

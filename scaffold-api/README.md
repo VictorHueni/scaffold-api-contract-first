@@ -23,7 +23,7 @@ npm run mock        # Start mock server — frontend starts building immediately
 
 ```
 specs/                       # OpenAPI spec (multi-file with $ref)
-  order-api.yaml             #   Main spec — paths, servers, security
+  api.yaml                   #   Main spec — paths, servers, security
   components/
     schemas/                 #   Order, Customer, OrderItem, ErrorResponse
     examples/                #   Named examples for Scalar "Try it out"
@@ -46,7 +46,7 @@ generated/                   # TypeScript types, Spring stubs (gitignored)
 
 | Command | Description |
 |---|---|
-| `npm run bundle` | Bundle multi-file spec into single `order-api.bundled.yaml` |
+| `npm run bundle` | Bundle multi-file spec into single `api.bundled.yaml` |
 | `npm run validate` | Validate spec structure |
 
 ### Quality
@@ -106,11 +106,11 @@ Edit the spec, save, and the docs update automatically via `--watch`.
 
 A CDN-based HTML wrapper is included at `docs/index.html`. It loads Scalar from the jsDelivr CDN and renders the bundled spec. To use it:
 
-1. Run `npm run bundle` to generate `specs/order-api.bundled.yaml`
+1. Run `npm run bundle` to generate `specs/api.bundled.yaml`
 2. Serve the `scaffold-api/` directory with any static file server (e.g., `npx serve .`)
 3. Open `docs/index.html` in a browser
 
-The HTML references the bundled spec via a relative path (`../specs/order-api.bundled.yaml`), so it works with any static file server without configuration.
+The HTML references the bundled spec via a relative path (`../specs/api.bundled.yaml`), so it works with any static file server without configuration.
 
 ### "Try it out" playground
 
@@ -119,9 +119,9 @@ Scalar's built-in playground lets you send requests directly from the docs. Poin
 ## Using This Scaffold for Your Own API
 
 1. Copy `scaffold-api/` into your own repo
-2. Find-and-replace `order-api` with your API name in `package.json`
-3. Replace `specs/order-api.yaml` and `specs/components/` with your schemas and examples
-4. Update `rules/.spectral.yaml` if you need different organizational rules
+2. Replace `specs/api.yaml` and `specs/components/` with your schemas and examples
+3. Update `rules/.spectral.yaml` if you need different organizational rules
+4. Delete the demo-only files: `specs/api-bad.yaml`, `specs/api-v2.yaml`
 5. Run `npm install && npm run mock` — start building
 
 ## API Exploration
@@ -129,6 +129,6 @@ Scalar's built-in playground lets you send requests directly from the docs. Poin
 The OpenAPI spec can be imported into any API client for manual exploration:
 
 - **Scalar "Try it out"** — built into the generated docs (`npm run docs`), zero install
-- **Bruno, Postman, Insomnia, Hoppscotch, Yaak** — import `specs/order-api.yaml` (or the bundled file)
+- **Bruno, Postman, Insomnia, Hoppscotch, Yaak** — import `specs/api.yaml` (or the bundled file)
 
 The scaffold is opinionated about automation (Spectral, Prism, Schemathesis, Hurl, Scalar, CI) and unopinionated about personal exploration tools.

@@ -12,8 +12,8 @@
 ## Iteration 2
 - Increment: 02 — OpenAPI spec with multi-file structure
 - Status: done
-- Files changed: specs/order-api.yaml (main spec, 484 lines, 58 $ref pointers), 4 schema files (Order, Customer, OrderItem, ErrorResponse), 15 example files (7 responses, 4 requests, 4 errors), 1 parameters file (pagination.yaml), exec plan + PRD updates
-- Test gate: $ref count verified (58, threshold 15). Validate/bundle commands blocked by sandbox — must be run manually: `cd scaffold-api && npx @scalar/cli validate specs/order-api.yaml && npx @scalar/cli bundle specs/order-api.yaml -o specs/order-api.bundled.yaml`
+- Files changed: specs/api.yaml (main spec, 484 lines, 58 $ref pointers), 4 schema files (Order, Customer, OrderItem, ErrorResponse), 15 example files (7 responses, 4 requests, 4 errors), 1 parameters file (pagination.yaml), exec plan + PRD updates
+- Test gate: $ref count verified (58, threshold 15). Validate/bundle commands blocked by sandbox — must be run manually: `cd scaffold-api && npx @scalar/cli validate specs/api.yaml && npx @scalar/cli bundle specs/api.yaml -o specs/api.bundled.yaml`
 - Learnings: Sandbox blocks node/npm/npx execution. The @scalar/cli binary is named `scalar` not `scalar-cli` in node_modules/.bin/. OpenAPI 3.1 uses `openapi: 3.1.0` (not `openapi: "3.1.0"` with quotes).
 - Learnings (addendum): Scalar CLI v1 binary is `scalar` not `scalar-cli`. Commands use `scalar document validate/bundle/serve` not `scalar-cli validate/bundle`. Fixed package.json scripts.
 - Commit: see below
@@ -22,11 +22,11 @@
 ## Iteration 3
 - Increment: 03 — Spectral linting ruleset and bad spec variant
 - Status: done
-- Files changed: rules/.spectral.yaml (new, 3-layer ruleset), specs/order-api-bad.yaml (new, intentional violations), specs/order-api.yaml (removed http://localhost from servers for OWASP compliance), package.json (updated lint scripts), exec plan + PRD updates
+- Files changed: rules/.spectral.yaml (new, 3-layer ruleset), specs/api-bad.yaml (new, intentional violations), specs/api.yaml (removed http://localhost from servers for OWASP compliance), package.json (updated lint scripts), exec plan + PRD updates
 - Test gate: Sandbox blocks npx/node — must be run manually:
-  1. `cd scaffold-api && npx spectral lint specs/order-api.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format` (expect exit 0, zero errors)
-  2. `cd scaffold-api && npx spectral lint specs/order-api-bad.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format 2>&1 | grep -c "warning\|error"` (expect 8+)
-- Learnings: OWASP ruleset v2 uses `owasp:apiN:2023-*` naming (not `owasp:api-security:*` from v1). Many OWASP rules are overly strict for initial adoption (CORS headers, rate-limit headers on every response, JWT RFC8725 reference, integer bounds). Pragmatic approach: enable 7 key rules, disable 18 others with `off`. Mock server URL (`http://localhost:4010`) triggers OWASP HTTPS rule — removed from servers block (documented in comments, users run `npm run mock`). Lint script changed from glob `specs/**/*.yaml` to specific `specs/order-api.yaml` to exclude bad spec.
+  1. `cd scaffold-api && npx spectral lint specs/api.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format` (expect exit 0, zero errors)
+  2. `cd scaffold-api && npx spectral lint specs/api-bad.yaml --ruleset rules/.spectral.yaml --ignore-unknown-format 2>&1 | grep -c "warning\|error"` (expect 8+)
+- Learnings: OWASP ruleset v2 uses `owasp:apiN:2023-*` naming (not `owasp:api-security:*` from v1). Many OWASP rules are overly strict for initial adoption (CORS headers, rate-limit headers on every response, JWT RFC8725 reference, integer bounds). Pragmatic approach: enable 7 key rules, disable 18 others with `off`. Mock server URL (`http://localhost:4010`) triggers OWASP HTTPS rule — removed from servers block (documented in comments, users run `npm run mock`). Lint script changed from glob `specs/**/*.yaml` to specific `specs/api.yaml` to exclude bad spec.
 - Commit: pending (sandbox blocks git add/commit — run manually)
 - Timestamp: 2026-04-02T12:00:00Z
 
@@ -35,8 +35,8 @@
 - Status: done
 - Files changed: mocks/static-response.json (new, static example from GET /orders/{orderId}), mocks/dynamic-response.json (new, two sample dynamic responses showing x-faker variation), exec plan + PRD updates
 - Test gate: Sandbox blocks npx/node/curl — must be run manually:
-  1. Static mode: `cd scaffold-api && npx prism mock specs/order-api.bundled.yaml --port 4010 & sleep 3 && curl -sf http://localhost:4010/orders/test-123 | jq .id` (expect: `"a1b2c3d4-e5f6-7890-abcd-ef1234567890"`)
-  2. Dynamic mode: `cd scaffold-api && npx prism mock -d specs/order-api.bundled.yaml --port 4011 & sleep 3 && curl -sf http://localhost:4011/orders/test-123 > /tmp/resp1.json && curl -sf http://localhost:4011/orders/test-123 > /tmp/resp2.json && ! diff -q /tmp/resp1.json /tmp/resp2.json` (expect: files differ)
+  1. Static mode: `cd scaffold-api && npx prism mock specs/api.bundled.yaml --port 4010 & sleep 3 && curl -sf http://localhost:4010/orders/test-123 | jq .id` (expect: `"a1b2c3d4-e5f6-7890-abcd-ef1234567890"`)
+  2. Dynamic mode: `cd scaffold-api && npx prism mock -d specs/api.bundled.yaml --port 4011 & sleep 3 && curl -sf http://localhost:4011/orders/test-123 > /tmp/resp1.json && curl -sf http://localhost:4011/orders/test-123 > /tmp/resp2.json && ! diff -q /tmp/resp1.json /tmp/resp2.json` (expect: files differ)
   3. Validation: `curl -s -o /dev/null -w '%{http_code}' -X POST http://localhost:4010/orders -H 'Content-Type: application/json' -d '{"customer":{"name":"Test"}}'` (expect: 400 or 422)
   4. Cleanup: `kill $(lsof -t -i:4010) 2>/dev/null; kill $(lsof -t -i:4011) 2>/dev/null`
 - Learnings: Prism in static mode picks the first named example (pendingOrder) for GET /orders/{orderId}. The bundled spec uses mangled $ref keys (e.g., `x-ext/b050c23`) from Scalar CLI bundling — Prism handles these correctly. Mock response files serve as reference artifacts showing what Prism produces. package.json already has `mock` and `mock:dynamic` scripts configured from Increment 01.
@@ -49,7 +49,7 @@
 - Files changed: examples/client-usage.ts (new, typed openapi-fetch usage example), tsconfig.json (new, TypeScript config for examples + generated types), package.json (added typescript ^5 to devDependencies), exec plan + PRD updates
 - Test gate: Sandbox blocks npx/node — must be run manually:
   1. `cd scaffold-api && npm install` (installs typescript)
-  2. `npx openapi-typescript specs/order-api.bundled.yaml -o generated/api-types.d.ts` (expect exit 0, types file created)
+  2. `npx openapi-typescript specs/api.bundled.yaml -o generated/api-types.d.ts` (expect exit 0, types file created)
   3. `grep -c "Order\|Customer\|OrderItem\|ErrorResponse" generated/api-types.d.ts` (expect count > 0 for each schema)
   4. `npx tsc --noEmit examples/client-usage.ts` (expect exit 0, no type errors)
 - Learnings: Sandbox blocks npx/node/npm execution, consistent with previous increments. The bundled spec uses mangled x-ext/ $ref keys from Scalar CLI bundling — openapi-typescript handles these and generates proper path-based types. The `readOnly: true` fields (id, status, total, createdAt, updatedAt, subtotal) are excluded from request body types by openapi-typescript, so the POST body in the example only includes writable fields. The example may need minor adjustments once the actual generated types are inspected — field names and path structures should match the spec but type naming depends on openapi-typescript's output format.
@@ -71,9 +71,9 @@
 - Status: done (documented — Schemathesis runs in CI only per PRD design)
 - Files changed: package.json (added test:contract + test:contract:negative scripts), README.md (documented contract testing commands + Docker prerequisite), exec plan + PRD updates
 - Test gate: Sandbox blocks docker/npx/node execution — must be run manually:
-  1. Start Prism: `cd scaffold-api && npx prism mock specs/order-api.bundled.yaml --port 4010 &` (wait 3s)
-  2. Contract tests: `docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --stateful=links --hypothesis-max-examples=100 --set-header "X-API-Key: test-key"` (expect exit 0, 100+ test cases pass)
-  3. Negative tests: `docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/order-api.bundled.yaml --base-url http://localhost:4010 --checks all --mode=negative --hypothesis-max-examples=50 --set-header "X-API-Key: test-key"` (expect exit 0)
+  1. Start Prism: `cd scaffold-api && npx prism mock specs/api.bundled.yaml --port 4010 &` (wait 3s)
+  2. Contract tests: `docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/api.bundled.yaml --base-url http://host.docker.internal:4010 --checks all --stateful=links --hypothesis-max-examples=100 --set-header "X-API-Key: test-key"` (expect exit 0, 100+ test cases pass)
+  3. Negative tests: `docker run --rm --network host -v $(pwd):/app schemathesis/schemathesis run /app/specs/api.bundled.yaml --base-url http://host.docker.internal:4010 --checks all --mode=negative --hypothesis-max-examples=50 --set-header "X-API-Key: test-key"` (expect exit 0)
   4. Or via npm: `npm run test:contract` and `npm run test:contract:negative` (with Prism running on :4010)
   5. Cleanup: `kill $(lsof -t -i:4010) 2>/dev/null`
   6. CI alternative: `schemathesis/action@v2` GitHub Action (no Docker needed, configured in Increment 11)
@@ -86,7 +86,7 @@
 - Status: done
 - Files changed: tests/orders.hurl (new, 5 functional tests), exec plan + PRD updates
 - Test gate: Sandbox blocks hurl/npx/node execution — must be run manually:
-  1. Start Prism: `cd scaffold-api && npx prism mock specs/order-api.bundled.yaml --port 4010 &` (wait 3s)
+  1. Start Prism: `cd scaffold-api && npx prism mock specs/api.bundled.yaml --port 4010 &` (wait 3s)
   2. Run tests: `hurl --test tests/orders.hurl` (expect all 5 tests pass)
   3. JUnit output: `hurl --test --report-junit generated/hurl-results.xml tests/orders.hurl` (expect exit 0, XML file created)
   4. Cleanup: `kill $(lsof -t -i:4010) 2>/dev/null`
@@ -97,10 +97,10 @@
 ## Iteration 9
 - Increment: 09 — Breaking change detection with oasdiff
 - Status: done
-- Files changed: specs/order-api-v2.yaml (new, standalone v2 spec with 3 breaking + 1 non-breaking changes), package.json (added `breaking` script for native oasdiff, updated `breaking:docker` to include `--fail-on ERR`), exec plan + PRD updates
+- Files changed: specs/api-v2.yaml (new, standalone v2 spec with 3 breaking + 1 non-breaking changes), package.json (added `breaking` script for native oasdiff, updated `breaking:docker` to include `--fail-on ERR`), exec plan + PRD updates
 - Test gate: Sandbox blocks oasdiff/docker/npm execution — must be run manually:
-  1. Native oasdiff: `cd scaffold-api && oasdiff breaking specs/order-api.yaml specs/order-api-v2.yaml` (expect: lists 3 breaking changes — field renamed, field removed, type changed)
-  2. Fail-on ERR: `cd scaffold-api && oasdiff breaking specs/order-api.yaml specs/order-api-v2.yaml --fail-on ERR; echo $?` (expect: exit code 1)
+  1. Native oasdiff: `cd scaffold-api && oasdiff breaking specs/api.yaml specs/api-v2.yaml` (expect: lists 3 breaking changes — field renamed, field removed, type changed)
+  2. Fail-on ERR: `cd scaffold-api && oasdiff breaking specs/api.yaml specs/api-v2.yaml --fail-on ERR; echo $?` (expect: exit code 1)
   3. Docker variant: `cd scaffold-api && npm run breaking:docker` (same result via Docker)
   4. Or via npm: `cd scaffold-api && npm run breaking` (native) or `npm run breaking:docker` (Docker)
 - Breaking changes in v2 spec:
@@ -120,10 +120,10 @@
 - Test gate: Sandbox blocks npx/node/curl execution — must be run manually:
   1. CDN wrapper exists: `cat scaffold-api/docs/index.html | grep "scalar"` (expect: matches Scalar CDN reference)
   2. Live preview: `cd scaffold-api && npm run docs` (opens Scalar docs at http://localhost:8081 with --watch live reload)
-  3. Serve test: `cd scaffold-api && npx @scalar/cli document serve specs/order-api.bundled.yaml --port 8081 &` then `curl -sf http://localhost:8081 | grep -i "order"` (expect: HTML contains "order" references)
+  3. Serve test: `cd scaffold-api && npx @scalar/cli document serve specs/api.bundled.yaml --port 8081 &` then `curl -sf http://localhost:8081 | grep -i "order"` (expect: HTML contains "order" references)
   4. Cleanup: `kill $(lsof -t -i:8081) 2>/dev/null`
 - Approach: Created a CDN-based HTML wrapper (`docs/index.html`) that loads Scalar from jsDelivr and renders the bundled spec. This is more reliable than `scalar document bundle` which produces bundled YAML, not HTML. The `npm run docs` script uses `scalar document serve --watch` for live development preview. The `docs:build` script bundles the spec (YAML) for the CDN wrapper to consume.
-- Learnings: (1) `scalar document bundle` produces bundled YAML output, not standalone HTML — it is a spec bundler, not a docs generator. The CDN wrapper approach is the correct way to produce static HTML docs with Scalar. (2) The CDN wrapper uses `data-url` pointing to the bundled spec via relative path (`../specs/order-api.bundled.yaml`), so it works with any static file server. (3) `data-configuration='{"theme": "kepler"}'` sets the kepler theme as specified in the PRD design considerations. (4) `scalar document serve --watch` provides live-reloading docs during development — already configured as `npm run docs` from Increment 01. (5) The `.gitkeep` in docs/ was removed since docs/index.html now provides directory content. (6) `docs/scalar-reference.html` remains gitignored (generated output from `docs:build`). (7) M5 milestone (Ecosystem: Increments 09-10) marked as done.
+- Learnings: (1) `scalar document bundle` produces bundled YAML output, not standalone HTML — it is a spec bundler, not a docs generator. The CDN wrapper approach is the correct way to produce static HTML docs with Scalar. (2) The CDN wrapper uses `data-url` pointing to the bundled spec via relative path (`../specs/api.bundled.yaml`), so it works with any static file server. (3) `data-configuration='{"theme": "kepler"}'` sets the kepler theme as specified in the PRD design considerations. (4) `scalar document serve --watch` provides live-reloading docs during development — already configured as `npm run docs` from Increment 01. (5) The `.gitkeep` in docs/ was removed since docs/index.html now provides directory content. (6) `docs/scalar-reference.html` remains gitignored (generated output from `docs:build`). (7) M5 milestone (Ecosystem: Increments 09-10) marked as done.
 - Commit: pending (sandbox blocks git — run manually)
 - Timestamp: 2026-04-02T17:00:00Z
 
@@ -145,7 +145,7 @@
   - Job 5 `generate-docs`: Bundle spec + upload CDN wrapper + bundled YAML as artifact (needs: lint)
   - All jobs use actions/setup-node@v4 with Node.js 20 (except breaking-changes which only needs git + oasdiff binary)
   - No IBM-specific jobs — IBM is slides only
-- Learnings: (1) GitHub Actions artifact paths are relative to the repo root, not the working-directory — so `upload-artifact` paths use `scaffold-api/` prefix even though the job runs in `scaffold-api/`. (2) The `schemathesis/action@v2` schema input path is also repo-root-relative. (3) oasdiff is downloaded as a standalone binary in CI (`curl` from GitHub releases), no Docker needed. (4) `git show origin/main:scaffold-api/specs/order-api.yaml` extracts the base spec for comparison — requires `fetch-depth: 0` for full git history. (5) Prism is started in background (`&`) with a 3-second sleep before Schemathesis runs. (6) The generate-docs job bundles the spec and uploads both `docs/index.html` (CDN wrapper) and `specs/order-api.bundled.yaml` as a single artifact — no HTML generation needed since the CDN wrapper loads Scalar from jsDelivr at runtime.
+- Learnings: (1) GitHub Actions artifact paths are relative to the repo root, not the working-directory — so `upload-artifact` paths use `scaffold-api/` prefix even though the job runs in `scaffold-api/`. (2) The `schemathesis/action@v2` schema input path is also repo-root-relative. (3) oasdiff is downloaded as a standalone binary in CI (`curl` from GitHub releases), no Docker needed. (4) `git show origin/main:scaffold-api/specs/api.yaml` extracts the base spec for comparison — requires `fetch-depth: 0` for full git history. (5) Prism is started in background (`&`) with a 3-second sleep before Schemathesis runs. (6) The generate-docs job bundles the spec and uploads both `docs/index.html` (CDN wrapper) and `specs/api.bundled.yaml` as a single artifact — no HTML generation needed since the CDN wrapper loads Scalar from jsDelivr at runtime.
 - Commit: pending (sandbox blocks git — run manually)
 - Timestamp: 2026-04-02T18:00:00Z
 
@@ -155,11 +155,11 @@
 - Files changed: exec plan (increment 12 + M6 milestone + overall status marked done), progress.txt (this entry)
 - File-level verification: ALL artifacts confirmed present:
   - package.json: 8 devDependencies, 15 npm scripts across 6 categories
-  - specs/order-api.yaml: main spec with 58+ $ref pointers, 6 endpoints, 4 schemas
+  - specs/api.yaml: main spec with 58+ $ref pointers, 6 endpoints, 4 schemas
   - specs/components/: 4 schemas, 15 examples, 1 parameters file (20 YAML files)
-  - specs/order-api.bundled.yaml: generated (36KB), exists and was produced by Scalar CLI
-  - specs/order-api-bad.yaml: intentional violations for linting demo
-  - specs/order-api-v2.yaml: 3 breaking + 1 non-breaking changes for oasdiff demo
+  - specs/api.bundled.yaml: generated (36KB), exists and was produced by Scalar CLI
+  - specs/api-bad.yaml: intentional violations for linting demo
+  - specs/api-v2.yaml: 3 breaking + 1 non-breaking changes for oasdiff demo
   - rules/.spectral.yaml: 3-layer ruleset (OAS + OWASP + custom, 12+ custom rules)
   - mocks/static-response.json + dynamic-response.json: Prism response samples
   - examples/client-usage.ts: typed openapi-fetch usage example
@@ -172,11 +172,11 @@
   - node_modules/: installed (391 packages)
 - Runtime verification commands (sandbox blocks npm/npx/node/curl — run manually):
   1. `cd scaffold-api && npm install` (expect: exit 0, already installed)
-  2. `npm run bundle` (expect: exit 0, specs/order-api.bundled.yaml regenerated)
+  2. `npm run bundle` (expect: exit 0, specs/api.bundled.yaml regenerated)
   3. `npm run lint` (expect: exit 0, zero errors)
   4. `npm run lint:bad 2>&1 | grep -c "error\|warning"` (expect: 8+)
-  5. `npx prism mock specs/order-api.bundled.yaml --port 4010 &` → wait 3s → `curl -sf http://localhost:4010/orders/a1b2c3d4-e5f6-7890-abcd-ef1234567890 -H "X-API-Key: test-key" | jq .id` (expect: UUID string)
-  6. `npx prism mock -d specs/order-api.bundled.yaml --port 4011 &` → wait 3s → curl twice → verify different responses
+  5. `npx prism mock specs/api.bundled.yaml --port 4010 &` → wait 3s → `curl -sf http://localhost:4010/orders/a1b2c3d4-e5f6-7890-abcd-ef1234567890 -H "X-API-Key: test-key" | jq .id` (expect: UUID string)
+  6. `npx prism mock -d specs/api.bundled.yaml --port 4011 &` → wait 3s → curl twice → verify different responses
   7. `npm run types && test -f generated/api-types.d.ts` (expect: exit 0, types file exists)
   8. `npx tsc --noEmit` (expect: exit 0, compiles without errors)
   9. `npm run stubs` (expect: exit 0 if Java installed, generates generated/server-spring/)
