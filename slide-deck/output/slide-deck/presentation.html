@@ -1,0 +1,2018 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API-First: One Contract, Everything Generated</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+<style>
+/* ── Reset ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* ── Design Tokens (victorhuni.ch light mode) ── */
+  :root {
+    --bg: #ffffff;
+    --text: #111111;
+    --muted: #555555;
+    --dim: #999999;
+    --border: #e0e0e0;
+    --accent: #006039;
+    --accent-lt: #e6f0eb;
+    --card-bg: #fafafa;
+    --red: #b91c1c;
+    --red-lt: #fef2f2;
+    --font-heading: 'Syne', sans-serif;
+    --font-body: 'Space Grotesk', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  body {
+    background: #1a1a1a;
+    font-family: var(--font-body);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+    gap: 2rem;
+  }
+
+  /* ── Slide frame ── */
+  .slide {
+    width: 960px;
+    height: 540px;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    border-radius: 2px;
+  }
+
+  /* ── Presentation mode ── */
+  body.presenting {
+    background: #000;
+    padding: 0;
+    gap: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  body.presenting .slide {
+    display: none;
+    width: 960px;
+    height: 540px;
+    box-shadow: none;
+    border-radius: 0;
+    transform-origin: center center;
+  }
+  body.presenting .slide.active { display: flex; }
+  body.presenting .controls-hint,
+  body.presenting .slide-number { display: none; }
+
+  /* ── Reusable atoms ── */
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+  .slide-title {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+  .accent-line {
+    width: 48px;
+    height: 4px;
+    background: var(--accent);
+  }
+  .accent-bar-left {
+    position: absolute;
+    left: 0; top: 0;
+    width: 6px;
+    height: 100%;
+    background: var(--accent);
+  }
+  .dot-grid {
+    position: absolute;
+    display: grid;
+    gap: 14px;
+  }
+  .dot-grid .dot {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  /* ── Controls hint ── */
+  .controls-hint {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .controls-hint kbd {
+    background: #333;
+    color: #ccc;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+  }
+
+  /* ── Slide number ── */
+  .slide-number {
+    position: absolute;
+    bottom: 12px;
+    right: 20px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--dim);
+  }
+
+  /* ════════════════════════════════════════════
+     SLIDE 1: TITLE
+     ════════════════════════════════════════════ */
+  .s1 .section-label { position: absolute; top: 60px; left: 64px; }
+  .s1 .slide-title { position: absolute; top: 100px; left: 64px; font-size: 38px; max-width: 560px; }
+  .s1 .accent-line { position: absolute; top: 240px; left: 64px; }
+  .s1 .subtitle {
+    position: absolute; top: 260px; left: 64px;
+    font-family: var(--font-body); font-size: 16px; color: var(--muted);
+  }
+  .s1 .author {
+    position: absolute; top: 310px; left: 64px;
+    font-family: var(--font-mono); font-size: 11px; color: var(--dim);
+  }
+  .s1 .dot-grid {
+    right: 60px; top: 40px;
+    grid-template-columns: repeat(8, 4px);
+    grid-template-rows: repeat(12, 4px);
+  }
+
+  /* ════════════════════════════════════════════
+     SLIDE 1b: DISCLAIMER
+     ════════════════════════════════════════════ */
+  .s-disc { display: flex; align-items: center; justify-content: center; }
+  .s-disc .disc-box {
+    max-width: 680px; text-align: center;
+    padding: 0 48px;
+  }
+  .s-disc .disc-icon {
+    font-size: 32px; margin-bottom: 16px;
+  }
+  .s-disc .disc-title {
+    font-family: var(--font-heading); font-size: 22px; font-weight: 800;
+    color: var(--accent); margin-bottom: 12px; line-height: 1.3;
+  }
+  .s-disc .disc-body {
+    font-size: 14px; color: var(--muted); line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .s-disc .disc-body strong { color: var(--text); font-weight: 600; }
+  .s-disc .disc-footer {
+    font-family: var(--font-mono); font-size: 10px; color: var(--dim);
+    letter-spacing: 1px; text-transform: uppercase;
+    padding-top: 16px; border-top: 1px solid var(--border);
+    display: inline-block;
+  }
+
+  /* ════════════════════════════════════════════
+     SLIDE 2: WALL OF PAIN
+     ════════════════════════════════════════════ */
+  .s2 .section-label { position: absolute; top: 32px; left: 48px; }
+  .s2 .slide-title { position: absolute; top: 56px; left: 48px; font-size: 30px; }
+  .s2 .pain-grid {
+    position: absolute;
+    top: 110px; left: 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    width: 864px;
+  }
+  .pain-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--card-bg);
+    border-left: 4px solid var(--red);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .pain-card svg,
+  .pain-card [data-lucide] {
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    color: var(--red);
+    stroke-width: 1.75;
+  }
+  .pain-card span {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  /* ════════════════════════════════════════════
+     SLIDE 3: CODE FIRST vs CONTRACT FIRST (Flow Lanes)
+     ════════════════════════════════════════════ */
+  .s-compare .section-label { position: absolute; top: 32px; left: 48px; }
+  .s-compare .slide-title { position: absolute; top: 56px; left: 48px; font-size: 28px; }
+
+  .s-compare .lanes {
+    position: absolute;
+    top: 108px; left: 36px;
+    width: 888px;
+    height: 400px;
+  }
+
+  .lane {
+    position: absolute;
+    left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .lane-label {
+    position: absolute;
+    left: -2px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 13px;
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    letter-spacing: 1px;
+    padding: 8px 4px;
+    border-radius: 4px 0 0 4px;
+    text-align: center;
+    min-height: 100px;
+  }
+  .lane.code-first { top: 0; height: 170px; }
+  .lane.code-first .lane-label { background: var(--red-lt); color: var(--red); }
+  .lane.contract-first { top: 210px; height: 170px; }
+  .lane.contract-first .lane-label { background: var(--accent-lt); color: var(--accent); }
+
+  .lane-track {
+    margin-left: 30px;
+    flex: 1;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+  }
+  .lane.code-first .lane-track {
+    background: linear-gradient(135deg, var(--red-lt) 0%, #fff5f5 100%);
+    border: 1px solid rgba(185,28,28,0.12);
+  }
+  .lane.contract-first .lane-track {
+    background: linear-gradient(135deg, var(--accent-lt) 0%, #f0faf5 100%);
+    border: 1px solid rgba(0,96,57,0.12);
+  }
+
+  .flow-nodes {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .flow-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    position: relative;
+    z-index: 2;
+  }
+  .flow-node .node-circle {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .flow-node .node-circle [data-lucide] {
+    width: 20px; height: 20px;
+    stroke-width: 2;
+  }
+  .code-first .node-circle { background: #fff; border: 2px solid var(--red); color: var(--red); }
+  .contract-first .node-circle { background: #fff; border: 2px solid var(--accent); color: var(--accent); }
+
+  .flow-node .node-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+    max-width: 80px;
+    line-height: 1.25;
+  }
+  .code-first .node-label { color: var(--red); }
+  .contract-first .node-label { color: var(--accent); }
+
+  .flow-node .node-sub {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: var(--dim);
+    text-align: center;
+    max-width: 90px;
+    line-height: 1.3;
+  }
+  .flow-node .node-week {
+    font-family: var(--font-mono);
+    font-size: 7px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.45;
+    position: absolute;
+    top: -12px;
+  }
+  .code-first .node-week { color: var(--red); }
+  .contract-first .node-week { color: var(--accent); }
+
+  /* Connector arrows */
+  .flow-connector {
+    flex: 0 0 20px;
+    width: 20px;
+    height: 3px;
+    position: relative;
+    z-index: 1;
+    margin: 0 4px;
+    margin-top: -20px;
+    border-radius: 1px;
+  }
+  .code-first .flow-connector { background: var(--red); opacity: 0.4; }
+  .contract-first .flow-connector { background: var(--accent); opacity: 0.4; }
+  .flow-connector::after {
+    content: '';
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+  }
+  .code-first .flow-connector::after { border-left: 7px solid var(--red); opacity: 0.5; }
+  .contract-first .flow-connector::after { border-left: 7px solid var(--accent); opacity: 0.5; }
+
+  /* Parallel group */
+  .parallel-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    border: 2px dashed rgba(0,96,57,0.25);
+    border-radius: 12px;
+    padding: 24px 16px 12px;
+  }
+  .parallel-group .parallel-badge {
+    font-family: var(--font-mono);
+    font-size: 7px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    opacity: 0.7;
+    position: absolute;
+    top: 6px;
+    background: var(--accent-lt);
+    padding: 1px 8px;
+    border-radius: 4px;
+  }
+  .parallel-row {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  /* Duration badges */
+  .duration-badge {
+    position: absolute;
+    right: 16px;
+    bottom: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 12px;
+  }
+  .code-first .duration-badge { background: var(--red); color: #fff; }
+  .contract-first .duration-badge { background: var(--accent); color: #fff; }
+
+  /* VS divider */
+  .s-compare .vs-divider {
+    position: absolute;
+    top: 180px; left: 36px;
+    width: 888px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .s-compare .vs-divider .line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .s-compare .vs-divider .vs-text {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--dim);
+    letter-spacing: 2px;
+  }
+
+  .s-compare .callout-bar {
+    position: absolute;
+    bottom: 16px; left: 48px;
+    width: 864px;
+    padding: 8px 20px;
+    background: var(--accent-lt);
+    font-size: 11px;
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  /* ════════════════════════════════════════════
+     SLIDE 5: THE SHIFT (Hub Diagram)
+     ════════════════════════════════════════════ */
+  .s4 .section-label { position: absolute; top: 32px; left: 48px; }
+  .s4 .hub-diagram {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+  .s4 .hub-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 180px;
+    padding: 16px;
+    background: var(--accent);
+    text-align: center;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .s4 .hub-center .hub-file {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: #fff;
+  }
+  .s4 .hub-center .hub-label {
+    font-family: var(--font-body);
+    font-size: 10px;
+    color: #c0ddd0;
+    margin-top: 2px;
+  }
+  .s4 .sat-node {
+    position: absolute;
+    width: 150px;
+    padding: 10px 8px 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    text-align: center;
+    z-index: 2;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    font-family: var(--font-mono);
+    color: var(--text);
+    line-height: 1.35;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .s4 .sat-node .sat-icon {
+    width: 32px; height: 32px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .s4 .sat-node .sat-icon.icon-lg {
+    width: 120px; height: 36px;
+    border-radius: 0;
+    margin: 0 auto;
+  }
+  .s4 .sat-node .sat-icon img,
+  .s4 .sat-node .sat-icon svg {
+    width: 100%; height: 100%;
+    object-fit: contain;
+  }
+  .s4 .sat-node .sat-tool {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .s4 .sat-node a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .s4 .sat-node a:hover .sat-tool { color: var(--accent); }
+  .s4 .sat-node .sat-desc {
+    font-size: 8px;
+    color: var(--dim);
+  }
+  .s4 svg.connections {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+  }
+  .s4 .tagline {
+    position: absolute;
+    bottom: 28px; left: 48px;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  /* ════════════════════════════════════════════
+     SLIDE 6: DEMO AGENDA
+     ════════════════════════════════════════════ */
+  .s5 .section-label { position: absolute; top: 32px; left: 48px; }
+  .s5 .slide-title { position: absolute; top: 56px; left: 48px; font-size: 26px; }
+  .s5 .cards-wrap {
+    position: absolute;
+    top: 98px; left: 40px; right: 40px;
+    bottom: 50px;
+    display: flex;
+    gap: 16px;
+  }
+  .s5 .card-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+  }
+  .s5 .card-col-header {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding-bottom: 6px;
+    border-bottom: 2px solid;
+    margin-bottom: 2px;
+  }
+  .s5 .card-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid;
+    border-radius: 4px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .s5 .card-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    color: #fff;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  /* Column colors */
+  .s5 .card-col[data-color="green"] .card-col-header { color: #006039; border-bottom-color: #006039; }
+  .s5 .card-col[data-color="green"] .card-item { border-left-color: #006039; }
+  .s5 .card-col[data-color="green"] .card-num { background: #006039; }
+  .s5 .card-col[data-color="blue"] .card-col-header { color: #1d4ed8; border-bottom-color: #1d4ed8; }
+  .s5 .card-col[data-color="blue"] .card-item { border-left-color: #1d4ed8; }
+  .s5 .card-col[data-color="blue"] .card-num { background: #1d4ed8; }
+  .s5 .card-col[data-color="amber"] .card-col-header { color: #7c3aed; border-bottom-color: #7c3aed; }
+  .s5 .card-col[data-color="amber"] .card-item { border-left-color: #7c3aed; }
+  .s5 .card-col[data-color="amber"] .card-num { background: #7c3aed; }
+  .s5 .card-col[data-color="slate"] .card-col-header { color: #475569; border-bottom-color: #475569; }
+  .s5 .card-col[data-color="slate"] .card-item { border-left-color: #475569; }
+  .s5 .card-col[data-color="slate"] .card-num { background: #475569; }
+  .s5 .card-text {
+    display: flex;
+    flex-direction: column;
+  }
+  .s5 .card-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .s5 .card-sub {
+    font-size: 9px;
+    color: var(--dim);
+    font-family: var(--font-mono);
+    margin-top: 2px;
+  }
+
+  /* ════════════════════════════════════════════
+     SLIDE 6b: IBM CHALLENGES
+     ════════════════════════════════════════════ */
+  .s-ibm-ch .section-label { position: absolute; top: 32px; left: 48px; }
+  .s-ibm-ch .slide-title { position: absolute; top: 52px; left: 48px; font-size: 24px; }
+  .s-ibm-ch .ch-grid {
+    position: absolute; top: 96px; left: 48px; right: 48px; bottom: 36px;
+    display: flex; flex-direction: column;
+    gap: 8px;
+  }
+  .s-ibm-ch .ch-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 6px; padding: 8px 14px;
+    display: flex; align-items: baseline; gap: 10px;
+    border-left: 3px solid #dc2626;
+    transition: border-color 0.15s;
+  }
+  .s-ibm-ch .ch-card:hover { border-color: var(--accent); }
+  .s-ibm-ch .ch-num {
+    font-family: var(--font-mono); font-size: 8px; font-weight: 700;
+    color: #dc2626; letter-spacing: 1px; text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .s-ibm-ch .ch-body { flex: 1; }
+  .s-ibm-ch .ch-title {
+    font-size: 11px; font-weight: 700; color: var(--text); line-height: 1.3;
+    display: inline;
+  }
+  .s-ibm-ch .ch-desc {
+    font-size: 9px; color: var(--muted); line-height: 1.5;
+    display: inline; margin-left: 4px;
+  }
+  .s-ibm-ch .ch-desc a {
+    color: var(--accent); text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+  }
+  .s-ibm-ch .ch-desc a:hover { border-bottom-style: solid; }
+  .s-ibm-ch .ch-bottom {
+    position: absolute; bottom: 14px; left: 32px; right: 32px;
+    text-align: center;
+    font-family: var(--font-mono); font-size: 9px; color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  /* ════════════════════════════════════════════
+     SLIDE 6: IBM STACK ARCHITECTURE
+     ════════════════════════════════════════════ */
+  .s6 .section-label { position: absolute; top: 32px; left: 48px; }
+  .s6 .slide-title { position: absolute; top: 56px; left: 48px; font-size: 24px; }
+  .s6 .arch-wrap {
+    position: absolute;
+    top: 92px; left: 16px; right: 16px;
+    bottom: 36px;
+    display: flex;
+    flex-direction: column;
+  }
+  /* Zone headers */
+  .s6 .zone-headers {
+    display: grid;
+    grid-template-columns: 44px 1fr 1fr 1fr 1fr 1fr;
+    margin-bottom: 0;
+  }
+  .s6 .zone-hdr {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-align: center;
+    padding: 3px 0 5px;
+  }
+  /* Grid */
+  .s6 .arch-grid-wrap { position: relative; flex: 1; min-height: 0; }
+  .s6 .arch-grid-wrap svg.cross-arrows {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 3;
+  }
+  .s6 .arch-grid {
+    width: 100%; height: 100%;
+    display: grid;
+    grid-template-columns: 44px 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    min-height: 0;
+  }
+  .s6 .zone.span2 { grid-column: span 2; }
+  /* Env labels */
+  .s6 .env-cell {
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 8px; font-weight: 700;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    writing-mode: vertical-lr; text-orientation: mixed; transform: rotate(180deg);
+    border-radius: 6px 0 0 6px;
+  }
+  .s6 .env-cell.dev { background: #eef2ff; color: #4338ca; border-bottom: 2px solid var(--border); }
+  .s6 .env-cell.prod { background: #ecfdf5; color: #065f46; }
+  /* Zone cells */
+  .s6 .zone {
+    display: flex; align-items: center; justify-content: center;
+    padding: 6px 4px; position: relative;
+  }
+  .s6 .zone.sep-right { border-right: 2px dotted var(--border); }
+  .s6 .arch-grid .dev-bg { background: #fafafe; border-bottom: 2px solid var(--border); }
+  .s6 .arch-grid .dev-bg.sep-right { border-right: 2px dotted #c7d2fe; }
+  .s6 .arch-grid .prod-bg { background: #f8fdfb; }
+  .s6 .arch-grid .prod-bg.sep-right { border-right: 2px dotted #a7f3d0; }
+  /* Uniform boxes */
+  .s6 .arch-box {
+    width: 108px; height: 48px;
+    border-radius: 4px; text-align: center;
+    font-size: 10px; font-weight: 600; line-height: 1.25;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  .s6 .arch-box.frontend { background: #1d4ed8; color: #fff; }
+  .s6 .arch-box.apic { background: var(--accent); color: #fff; }
+  .s6 .arch-box.mock { background: #eef2ff; color: #4338ca; border: 2px dashed #818cf8; }
+  .s6 .arch-box.ace { background: #fefce8; color: #854d0e; border: 1px solid #fde68a; }
+  .s6 .arch-box.ace-conn { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+  .s6 .arch-box.backend { background: #111; color: #fff; }
+  .s6 .arch-box.backend-mock { background: #f0fdf4; color: #166534; border: 2px dashed #86efac; }
+  .s6 .arch-box.api-badge {
+    width: auto; height: auto;
+    background: none; border: 1.5px solid var(--accent);
+    color: var(--accent); padding: 3px 8px; font-size: 8px;
+    margin-top: 4px;
+  }
+  .s6 .arch-box-sub {
+    font-size: 7px; font-family: var(--font-mono);
+    font-weight: 400; opacity: 0.8; margin-top: 1px;
+  }
+  /* ACE zone: horizontal row */
+  .s6 .ace-row {
+    display: flex; align-items: center;
+    gap: 12px; justify-content: center;
+    width: 100%;
+  }
+  .s6 .ace-row.align-right {
+    justify-content: flex-end;
+    padding-right: 12px;
+  }
+  /* Backend with API badge */
+  .s6 .backend-stack {
+    display: flex; flex-direction: column; align-items: center; gap: 0;
+  }
+  /* Use-cases strip */
+  .s6 .usecases {
+    display: flex; gap: 8px;
+    margin-top: 6px; padding: 0 44px;
+  }
+  .s6 .usecase {
+    flex: 1; padding: 6px 8px;
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent); border-radius: 3px;
+    font-size: 8px; color: var(--muted); line-height: 1.35;
+  }
+  .s6 .usecase strong {
+    display: block; font-size: 9px;
+    color: var(--text); margin-bottom: 1px;
+  }
+
+  /* ════════════════════════════════════════════
+     SLIDE 7: ACE CI/CD
+     ════════════════════════════════════════════ */
+  .s7 .section-label { position: absolute; top: 32px; left: 48px; }
+  .s7 .slide-title { position: absolute; top: 56px; left: 48px; font-size: 24px; }
+  .s7 .cicd-wrap {
+    position: absolute;
+    top: 100px; left: 40px; right: 40px;
+    bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .s7 .cicd-item {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    flex: 1;
+    min-height: 0;
+  }
+  .s7 .cicd-status {
+    width: 56px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  .s7 .cicd-status.ready { background: #ecfdf5; }
+  .s7 .cicd-status.wip { background: #eef2ff; }
+  .s7 .cicd-status.planned { background: #fafafa; }
+  .s7 .cicd-body {
+    flex: 1;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .s7 .cicd-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .s7 .cicd-title a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted var(--dim);
+  }
+  .s7 .cicd-title a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .s7 .cicd-desc {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.4;
+  }
+  .s7 .cicd-links {
+    margin-top: 3px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .s7 .cicd-links a {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+  }
+  .s7 .cicd-links a:hover {
+    border-bottom-style: solid;
+  }
+  .s7 .cicd-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+    width: fit-content;
+  }
+  .s7 .cicd-tag.ready { background: #d1fae5; color: #065f46; }
+  .s7 .cicd-tag.wip { background: #e0e7ff; color: #3730a3; }
+  .s7 .cicd-tag.planned { background: #f1f5f9; color: #64748b; }
+
+  /* ════════════════════════════════════════════
+     SLIDE 8: CONTRACT-FIRST MATURITY MODEL (concentric rings)
+     ════════════════════════════════════════════ */
+  .s8 .section-label { position: absolute; top: 32px; left: 48px; }
+  .s8 .slide-title { position: absolute; top: 52px; left: 48px; font-size: 24px; }
+  .s8 .mc-wrap {
+    position: absolute; top: 88px; left: 20px; right: 20px; bottom: 36px;
+    display: flex;
+  }
+  .s8 .mc-rings {
+    width: 480px; height: 100%; position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .s8 .mc-ring {
+    position: absolute; border-radius: 50%; border: 1.5px solid;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .s8 .mc-ring.r1 { width: 380px; height: 380px; border-color: #e2e8f0; background: #fafbfc; }
+  .s8 .mc-ring.r2 { width: 280px; height: 280px; border-color: #ddd6fe; background: #faf8ff; }
+  .s8 .mc-ring.r3 { width: 180px; height: 180px; border-color: #bfdbfe; background: #f0f5ff; }
+  .s8 .mc-ring.r4 { width: 90px; height: 90px; border-color: #a7f3d0; background: #ecfdf5; }
+  .s8 .mc-ring-label {
+    font-family: var(--font-mono); font-size: 7px;
+    letter-spacing: 1px; text-transform: uppercase;
+    position: absolute;
+  }
+  .s8 .mc-ring.r1 .mc-ring-label { bottom: 6px; color: #475569; }
+  .s8 .mc-ring.r2 .mc-ring-label { bottom: 4px; color: #7c3aed; }
+  .s8 .mc-ring.r3 .mc-ring-label { bottom: 4px; color: #1d4ed8; }
+  .s8 .mc-ring.r4 .mc-ring-label { color: var(--accent); font-size: 6px; }
+  .s8 .mc-dot {
+    position: absolute;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 4px; padding: 3px 6px;
+    display: flex; align-items: center; gap: 4px;
+    font-size: 8px; font-weight: 700; white-space: nowrap;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    z-index: 2; cursor: pointer;
+  }
+  .s8 .mc-dot:hover { border-color: var(--accent); box-shadow: 0 2px 6px rgba(0,0,0,0.1); z-index: 20; }
+  .s8 .mc-dot-emoji { font-size: 11px; display: none; }
+  .s8 .mc-dot [data-lucide] { width: 12px; height: 12px; flex-shrink: 0; stroke-width: 2; color: var(--muted); }
+  /* Tooltips */
+  .s8 .mc-tip {
+    display: none; position: absolute; left: 105%; top: -8px;
+    width: 220px; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 8px 10px; box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    white-space: normal; z-index: 30;
+  }
+  .s8 .mc-dot:hover .mc-tip { display: block; }
+  /* Flip tooltip left when dot is on right side */
+  .s8 .mc-dot.tip-left .mc-tip { left: auto; right: 105%; }
+  .s8 .mc-tip-hdr {
+    font-family: var(--font-heading); font-size: 10px; font-weight: 800;
+    margin-bottom: 2px; color: var(--text);
+  }
+  .s8 .mc-tip-level {
+    font-family: var(--font-mono); font-size: 7px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 1px 5px; border-radius: 3px; color: #fff;
+    display: inline-block; margin-bottom: 4px;
+  }
+  .s8 .mc-tip-level.tl1 { background: var(--accent); }
+  .s8 .mc-tip-level.tl2 { background: #1d4ed8; }
+  .s8 .mc-tip-level.tl3 { background: #7c3aed; }
+  .s8 .mc-tip-level.tl4 { background: #475569; }
+  .s8 .mc-tip-desc {
+    font-size: 8px; font-weight: 400; color: var(--muted);
+    line-height: 1.4; margin-bottom: 4px;
+  }
+  .s8 .mc-tip-links {
+    display: flex; flex-wrap: wrap; gap: 3px;
+  }
+  .s8 .mc-tip-links a {
+    font-family: var(--font-mono); font-size: 7px;
+    color: var(--accent); text-decoration: none;
+    padding: 1px 4px; border: 1px solid var(--border);
+    border-radius: 3px; transition: background 0.15s;
+  }
+  .s8 .mc-tip-links a:hover { background: var(--accent-lt); }
+  .s8 .mc-legend {
+    flex: 1; padding: 10px 16px;
+    display: flex; flex-direction: column; gap: 6px;
+    justify-content: center;
+  }
+  .s8 .mc-leg-group { display: flex; flex-direction: column; gap: 4px; }
+  .s8 .mc-leg-hdr {
+    font-family: var(--font-mono); font-size: 8px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 3px; width: fit-content;
+    color: #fff;
+  }
+  .s8 .mc-leg-hdr.l1 { background: var(--accent); }
+  .s8 .mc-leg-hdr.l2 { background: #1d4ed8; }
+  .s8 .mc-leg-hdr.l3 { background: #7c3aed; }
+  .s8 .mc-leg-hdr.l4 { background: #475569; }
+  .s8 .mc-leg-item {
+    display: flex; align-items: center; gap: 5px;
+    padding: 3px 6px;
+  }
+  .s8 .mc-leg-emoji { font-size: 12px; display: none; }
+  .s8 .mc-leg-item [data-lucide] { width: 13px; height: 13px; flex-shrink: 0; stroke-width: 2; color: var(--muted); }
+  .s8 .mc-leg-text { font-size: 8px; color: var(--text); font-weight: 600; }
+  .s8 .mc-leg-sub { font-size: 7px; color: var(--muted); margin-left: auto; }
+
+  /* ════════════════════════════════════════════
+     SLIDE 9: ROLE IMPACT MATRIX
+     ════════════════════════════════════════════ */
+  .s9 .section-label { position: absolute; top: 32px; left: 48px; }
+  .s9 .slide-title { position: absolute; top: 56px; left: 48px; font-size: 24px; }
+  .s9 table {
+    position: absolute;
+    top: 102px; left: 36px;
+    width: 888px;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .s9 th {
+    background: var(--accent);
+    color: #fff;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    padding: 9px 14px;
+    text-align: left;
+  }
+  .s9 td {
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .s9 tr:nth-child(even) td { background: var(--card-bg); }
+  .s9 td:first-child {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--accent);
+    white-space: nowrap;
+    width: 130px;
+  }
+  .s9 td:nth-child(2) {
+    color: var(--muted);
+    width: 320px;
+  }
+  .s9 td:nth-child(3) {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  /* ════════════════════════════════════════════
+     SLIDE 10: NEXT STEPS
+     ════════════════════════════════════════════ */
+  .s10 .section-label { position: absolute; top: 48px; left: 64px; }
+  .s10 .slide-title { position: absolute; top: 76px; left: 64px; font-size: 30px; max-width: 560px; }
+  .s10 .accent-line { position: absolute; top: 168px; left: 64px; }
+  .s10 .actions {
+    position: absolute;
+    top: 192px; left: 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .action-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .action-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: #fff;
+    background: var(--accent);
+    padding: 6px 16px;
+    white-space: nowrap;
+    min-width: 90px;
+    text-align: center;
+  }
+  .action-text {
+    font-size: 13px;
+    color: var(--text);
+  }
+  .s10 .repo-callout {
+    position: absolute;
+    bottom: 48px; left: 64px;
+    width: 600px;
+    padding: 16px 24px;
+    background: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .repo-callout .repo-name {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .repo-callout .repo-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .s10 .questions {
+    position: absolute;
+    bottom: 48px; right: 64px;
+    font-family: var(--font-heading);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 800;
+  }
+  .s10 .dot-grid {
+    right: 60px; top: 40px;
+    grid-template-columns: repeat(5, 4px);
+    grid-template-rows: repeat(8, 4px);
+  }
+</style>
+</head>
+<body>
+
+<div class="controls-hint">
+  Press <kbd>F</kbd> for fullscreen presentation &middot; <kbd>&larr;</kbd> <kbd>&rarr;</kbd> to navigate &middot; <kbd>Esc</kbd> to exit
+</div>
+
+
+<!-- slide 1: Title -->
+
+<div class="slide s1">
+  <div class="accent-bar-left"></div>
+  <div class="section-label">API-FIRST WORKFLOW</div>
+  <h1 class="slide-title">One Contract,<br>Everything Generated.</h1>
+  <div class="accent-line"></div>
+  <div class="subtitle">A demo for the IT department</div>
+  <div class="author">Victor Hüni &nbsp;/&nbsp; April 2026</div>
+  <div class="dot-grid" id="dots1"></div>
+  <div class="slide-number">1 / 12</div>
+</div>
+
+
+
+<!-- slide 2: Disclaimer -->
+
+<div class="slide s-disc">
+  <div class="disc-box">
+    <div class="disc-title">Before we start</div>
+    <div class="disc-body">
+      This demo is built on a <strong>classic three-tier application</strong>, not a complex enterprise ecosystem. The goal is to show <strong>what's possible</strong> with a contract-first approach, using simple, concrete examples.<br><br>
+      After the demo we discuss what makes sense for our context and <strong>build something meaningful and useful</strong> for the company together.
+    </div>
+    <div class="disc-footer">Demo first, then we talk</div>
+  </div>
+  <div class="slide-number">2 / 12</div>
+</div>
+
+
+
+<!-- slide 3: Wall of Pain -->
+
+<div class="slide s2">
+  <div class="section-label">THE PROBLEM</div>
+  <h2 class="slide-title">Sound familiar?</h2>
+  <div class="pain-grid">
+    <div class="pain-card">
+      <i data-lucide="timer-off"></i>
+      <span>Frontend/MoEx team blocked for 2 weeks waiting on backend/provider API</span>
+    </div>
+    <div class="pain-card">
+      <i data-lucide="file-diff"></i>
+      <span>Confluence page says "userName", the API returns "username"</span>
+    </div>
+    <div class="pain-card">
+      <i data-lucide="git-branch"></i>
+      <span>10 different versions of the same service coexist</span>
+    </div>
+    <div class="pain-card">
+      <i data-lucide="key-round"></i>
+      <span>Credentials and environment secrets shared over Teams</span>
+    </div>
+    <div class="pain-card">
+      <i data-lucide="hourglass"></i>
+      <span>Takes days to gather all the required info to try an API in a safe environment</span>
+    </div>
+    <div class="pain-card">
+      <i data-lucide="bomb"></i>
+      <span>Breaking change published on prod without safeguard or communication</span>
+    </div>
+    <div class="pain-card">
+      <i data-lucide="folder-search"></i>
+      <span>Hunting for an up-to-date Postman collection with the right version and env variables, shared via Teams</span>
+    </div>
+  </div>
+  <div class="slide-number">3 / 12</div>
+</div>
+
+
+
+<!-- slide 4: Code vs Contract -->
+
+<div class="slide s-compare">
+  <div class="section-label">THE APPROACH</div>
+  <h2 class="slide-title">Code First vs Contract First</h2>
+
+  <div class="lanes">
+    <!-- Code First Lane -->
+    <div class="lane code-first">
+      <div class="lane-label">Code First</div>
+      <div class="lane-track">
+        <div class="flow-nodes">
+          <div class="flow-node">
+            <div class="node-week">W1</div>
+            <div class="node-circle"><i data-lucide="file-text"></i></div>
+            <div class="node-label">Specify API</div>
+            <div class="node-sub">Confluence</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W2-3</div>
+            <div class="node-circle"><i data-lucide="server"></i></div>
+            <div class="node-label">Develop Provider API</div>
+            <div class="node-sub">Backend</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W3-4</div>
+            <div class="node-circle"><i data-lucide="workflow"></i></div>
+            <div class="node-label">Develop ESB Artefact</div>
+            <div class="node-sub">Middleware</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W5</div>
+            <div class="node-circle"><i data-lucide="plug"></i></div>
+            <div class="node-label">Consumer Integration</div>
+            <div class="node-sub">Blocked until now</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W6</div>
+            <div class="node-circle"><i data-lucide="file-pen"></i></div>
+            <div class="node-label">Update Docs + Tests</div>
+            <div class="node-sub">Write and execute</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W7</div>
+            <div class="node-circle"><i data-lucide="rocket"></i></div>
+            <div class="node-label">Deploy</div>
+            <div class="node-sub">Hope nothing breaks</div>
+          </div>
+        </div>
+        <div class="duration-badge">~7 weeks</div>
+      </div>
+    </div>
+
+    <!-- Separator -->
+    <div class="vs-divider" style="position:absolute;top:170px;left:0;width:100%;">
+      <div class="line"></div>
+      <div class="vs-text">VS</div>
+      <div class="line"></div>
+    </div>
+
+    <!-- Contract First Lane -->
+    <div class="lane contract-first">
+      <div class="lane-label">Contract First</div>
+      <div class="lane-track">
+        <div class="flow-nodes">
+          <div class="flow-node">
+            <div class="node-week">W1</div>
+            <div class="node-circle"><i data-lucide="file-text"></i></div>
+            <div class="node-label">Design Contract</div>
+            <div class="node-sub">OpenAPI spec</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W1</div>
+            <div class="node-circle"><i data-lucide="eye"></i></div>
+            <div class="node-label">Review + Mock</div>
+            <div class="node-sub">Validate early</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="parallel-group">
+            <div class="parallel-badge">in parallel</div>
+            <div class="node-week" style="position:absolute;top:-12px;right:12px;">W2</div>
+            <div class="parallel-row">
+              <div class="flow-node">
+                <div class="node-circle"><i data-lucide="monitor"></i></div>
+                <div class="node-label">Frontend</div>
+                <div class="node-sub">Uses mock</div>
+              </div>
+              <div class="flow-node">
+                <div class="node-circle"><i data-lucide="server"></i></div>
+                <div class="node-label">Backend</div>
+                <div class="node-sub">Implements spec</div>
+              </div>
+              <div class="flow-node">
+                <div class="node-circle"><i data-lucide="workflow"></i></div>
+                <div class="node-label">MoEx</div>
+                <div class="node-sub">Implement ESB artefact</div>
+              </div>
+            </div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W2</div>
+            <div class="node-circle"><i data-lucide="shield-check"></i></div>
+            <div class="node-label">Auto Tests + Docs</div>
+            <div class="node-sub">From the contract</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W3</div>
+            <div class="node-circle"><i data-lucide="check-circle"></i></div>
+            <div class="node-label">Deploy</div>
+            <div class="node-sub">CI catches breaks</div>
+          </div>
+        </div>
+        <div class="duration-badge">~3 weeks</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout-bar">The contract is the handshake. Design it first, and everything else falls into place.</div>
+  <div class="slide-number">4 / 12</div>
+</div>
+
+
+
+<!-- slide 5: The Shift -->
+
+<div class="slide s4">
+  <div class="section-label">THE SHIFT</div>
+  <svg class="connections" viewBox="0 0 960 540" id="connections-svg"></svg>
+  <div class="hub-center">
+    <div class="hub-file">openapi.yaml</div>
+    <div class="hub-label">OpenAPI Spec</div>
+  </div>
+  <!-- Satellites positioned via JS -->
+  <!-- Prism (Stoplight/SmartBear) -->
+  <div class="sat-node" id="sat0" style="left:82%;top:47%">
+    <a href="https://docs.stoplight.io/docs/prism/674b27b261c3c-overview" target="_blank">
+      <div class="sat-icon icon-lg"><img src="https://cdn.prod.website-files.com/6320e912264435aca2ab0351/64e3b752b85041d8632ea08c_Stoplight%20SmartBear%20Logo_Light.svg" alt="Prism"></div>
+      <span class="sat-tool">Prism</span>
+      <span class="sat-desc">Mock Server</span>
+    </a>
+  </div>
+  <!-- TypeScript -->
+  <div class="sat-node" id="sat1" style="left:76%;top:72%">
+    <a href="https://www.typescriptlang.org/docs/" target="_blank">
+      <div class="sat-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg" alt="TypeScript"></div>
+      <span class="sat-tool">TypeScript</span>
+      <span class="sat-desc">Client SDK</span>
+    </a>
+  </div>
+  <!-- Spring Boot (Server Stubs) -->
+  <div class="sat-node" id="sat2" style="left:50%;top:84%">
+    <a href="https://openapi-generator.tech/docs/generators" target="_blank">
+      <div class="sat-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/7/79/Spring_Boot.svg" alt="Spring Boot"></div>
+      <span class="sat-tool">Server Stubs</span>
+      <span class="sat-desc">Spring Boot</span>
+    </a>
+  </div>
+  <!-- Schemathesis -->
+  <div class="sat-node" id="sat3" style="left:24%;top:72%">
+    <a href="https://schemathesis.readthedocs.io/" target="_blank">
+      <div class="sat-icon icon-lg"><img src="https://schemathesis.io/images/logo.svg" alt="Schemathesis"></div>
+      <span class="sat-tool">Schemathesis</span>
+      <span class="sat-desc">Contract Tests</span>
+    </a>
+  </div>
+  <!-- Hurl -->
+  <div class="sat-node" id="sat4" style="left:18%;top:47%">
+    <a href="https://hurl.dev/docs/manual.html" target="_blank">
+      <div class="sat-icon"><img src="https://hurl.dev/assets/img/logo-light.svg" alt="Hurl"></div>
+      <span class="sat-tool">Hurl</span>
+      <span class="sat-desc">Functional Tests</span>
+    </a>
+  </div>
+  <!-- oasdiff -->
+  <div class="sat-node" id="sat5" style="left:24%;top:22%">
+    <a href="https://www.oasdiff.com/docs" target="_blank">
+      <div class="sat-icon"><img src="https://avatars.githubusercontent.com/u/128153573?s=200&v=4" alt="oasdiff"></div>
+      <span class="sat-tool">oasdiff</span>
+      <span class="sat-desc">Breaking Changes</span>
+    </a>
+  </div>
+  <!-- Spectral (Stoplight/SmartBear) -->
+  <div class="sat-node" id="sat6" style="left:50%;top:12%">
+    <a href="https://docs.stoplight.io/docs/spectral/674b27b261c3c-overview" target="_blank">
+      <div class="sat-icon icon-lg"><img src="https://cdn.prod.website-files.com/6320e912264435aca2ab0351/64e3b752b85041d8632ea08c_Stoplight%20SmartBear%20Logo_Light.svg" alt="Spectral"></div>
+      <span class="sat-tool">Spectral</span>
+      <span class="sat-desc">Linting</span>
+    </a>
+  </div>
+  <!-- Scalar -->
+  <div class="sat-node" id="sat7" style="left:76%;top:22%">
+    <a href="https://github.com/scalar/scalar" target="_blank">
+      <div class="sat-icon icon-lg"><img src="https://cdn.scalar.com/marketing/landing/logo-light.svg" alt="Scalar"></div>
+      <span class="sat-tool">Scalar</span>
+      <span class="sat-desc">API Docs</span>
+    </a>
+  </div>
+  <div class="tagline">One file. Everything else is generated.</div>
+  <div class="slide-number">5 / 12</div>
+</div>
+
+
+
+<!-- slide 6: Demo Agenda -->
+
+<div class="slide s5">
+  <div class="section-label">DEMO AGENDA</div>
+  <h2 class="slide-title">What we'll cover</h2>
+  <div class="cards-wrap" id="agenda-cards"></div>
+  <div class="slide-number">6 / 12</div>
+</div>
+
+
+
+<!-- slide 7: IBM Challenges -->
+
+<div class="slide s-ibm-ch">
+  <div class="section-label">IBM STACK</div>
+  <h2 class="slide-title">Why this is tricky on IBM</h2>
+  <div class="ch-grid">
+    <div class="ch-card">
+      <div class="ch-num">01</div>
+      <div class="ch-body"><div class="ch-title">Manual OpenAPI Import</div><div class="ch-desc">ACE Toolkit requires a <a href="https://www.ibm.com/docs/en/app-connect/12.0.x?topic=cra-creating-rest-api-from-imported-openapi-30-document" target="_blank">manual import</a> of OpenAPI specs via file browser. No native watch or auto-sync from Git. Every spec change means a manual re-import with risk of version mismatch.</div></div>
+    </div>
+    <div class="ch-card">
+      <div class="ch-num">02</div>
+      <div class="ch-body"><div class="ch-title">ACE Scaffolding is Create-Oriented</div><div class="ch-desc">ACE can <a href="https://github.com/abughali/ace-openapi3-sample" target="_blank">scaffold a new REST API</a> from an OpenAPI spec, but the workflow focuses on initial creation. Updating existing flows, subflows, and mappings after a spec change is not a supported path today.</div></div>
+    </div>
+    <div class="ch-card">
+      <div class="ch-num">03</div>
+      <div class="ch-body"><div class="ch-title">Spec Changes Can Ripple Through Flows</div><div class="ch-desc">Renaming a field or changing a response schema can affect ACE message maps, compute nodes, and connector logic. Flows reference schema fields directly, making the impact hard to predict without <a href="https://www.ibm.com/docs/en/app-connect/13.0.x?topic=apis-restrictions-openapi-30-documents" target="_blank">good test coverage</a>.</div></div>
+    </div>
+    <div class="ch-card">
+      <div class="ch-num">04</div>
+      <div class="ch-body"><div class="ch-title">OpenAPI 3.0 Feature Restrictions</div><div class="ch-desc">ACE doesn't support the full OpenAPI 3.0 spec. Constructs like <a href="https://medium.com/@ivansla/how-to-work-with-polymorphism-when-implementing-rest-services-in-ibm-ace-13ccdb93853f" target="_blank">oneOf, anyOf, and polymorphism</a> have <a href="https://www.ibm.com/docs/en/app-connect/13.0.x?topic=apis-restrictions-openapi-30-documents" target="_blank">documented restrictions</a>. Your spec may be valid OpenAPI but ACE can't fully consume it.</div></div>
+    </div>
+    <div class="ch-card">
+      <div class="ch-num">05</div>
+      <div class="ch-body"><div class="ch-title">Flow Development Requires Desktop Toolkit</div><div class="ch-desc">ACE v12 added a <a href="https://croz.net/ibm-app-connect-enterprise-v12/" target="_blank">web editor for API design</a>, but message flow development (node wiring, maps, compute nodes) still requires the <a href="https://www.ibm.com/docs/en/app-connect/11.0.0?topic=overview-app-connect-enterprise-toolkit" target="_blank">Eclipse-based desktop toolkit</a>. Harder to integrate into a modern Git-based workflow.</div></div>
+    </div>
+    <div class="ch-card">
+      <div class="ch-num">06</div>
+      <div class="ch-body"><div class="ch-title">CI/CD for On-Prem ACE is Exploratory</div><div class="ch-desc">No official IBM CI/CD product for on-prem ACE. BAR builds rely on community tools like <a href="https://github.com/ot4i/ace-maven-plugin" target="_blank">ace-maven-plugin</a> and <a href="https://github.com/ot4i/ace-demo-pipeline" target="_blank">ace-demo-pipeline</a>, provided AS-IS with no warranty. Teams assemble their own pipelines.</div></div>
+    </div>
+  </div>
+  <div class="ch-bottom">These are real constraints. The demo works within them.</div>
+  <div class="slide-number">7 / 12</div>
+</div>
+
+
+
+<!-- slide 8: IBM Architecture -->
+
+<div class="slide s6">
+  <div class="section-label">IBM STACK</div>
+  <h2 class="slide-title">Contract-First in the IBM Integration Layer</h2>
+  <div class="arch-wrap">
+    <!-- Zone headers -->
+    <div class="zone-headers">
+      <div class="zone-hdr"></div>
+      <div class="zone-hdr">Consumer</div>
+      <div class="zone-hdr">API Gateway</div>
+      <div class="zone-hdr" style="grid-column: span 2">Integration (ACE)</div>
+      <div class="zone-hdr">Backend</div>
+    </div>
+    <!-- Grid wrapper for SVG overlay -->
+    <div class="arch-grid-wrap">
+      <svg class="cross-arrows" id="s6-arrows"></svg>
+      <div class="arch-grid">
+        <!-- DEV / QA row: 6 cells -->
+        <div class="env-cell dev">DEV / QA</div>
+        <div class="zone dev-bg sep-right">
+          <div class="arch-box frontend" id="d-fe">Frontend App<div class="arch-box-sub">Consumer</div></div>
+        </div>
+        <div class="zone dev-bg sep-right">
+          <div class="arch-box apic" id="d-apic">API Connect<div class="arch-box-sub">Gateway + Portal</div></div>
+        </div>
+        <div class="zone dev-bg sep-right span2">
+          <div class="ace-row">
+            <div class="arch-box mock" id="d-mock">Mock Server<div class="arch-box-sub">Prism / examples</div></div>
+            <div class="arch-box ace" id="d-adapt">ACE Adapter<div class="arch-box-sub">Canonical model</div></div>
+            <div class="arch-box ace-conn" id="d-conn">ACE Connector<div class="arch-box-sub">Backend format</div></div>
+          </div>
+        </div>
+        <div class="zone dev-bg">
+          <div class="backend-stack">
+            <div class="arch-box backend-mock" id="d-be">Mock Backend<div class="arch-box-sub">Test payloads</div></div>
+          </div>
+        </div>
+        <!-- ACP / PROD row: 6 cells -->
+        <div class="env-cell prod">ACP / PROD</div>
+        <div class="zone prod-bg sep-right">
+          <div class="arch-box frontend" id="p-fe">Frontend App<div class="arch-box-sub">Consumer</div></div>
+        </div>
+        <div class="zone prod-bg sep-right">
+          <div class="arch-box apic" id="p-apic">API Connect<div class="arch-box-sub">Gateway + Portal</div></div>
+        </div>
+        <div class="zone prod-bg sep-right span2">
+          <div class="ace-row align-right">
+            <div class="arch-box ace" id="p-adapt">ACE Adapter<div class="arch-box-sub">Canonical model</div></div>
+            <div class="arch-box ace-conn" id="p-conn">ACE Connector<div class="arch-box-sub">Backend format</div></div>
+          </div>
+        </div>
+        <div class="zone prod-bg">
+          <div class="backend-stack">
+            <div class="arch-box backend" id="p-be">Real Backend<div class="arch-box-sub">Application</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Use cases -->
+    <div class="usecases">
+      <div class="usecase"><strong>Unblock consumers</strong>Publish consumed API YAML so frontend teams can work independently</div>
+      <div class="usecase"><strong>Unblock ACE dev</strong>Mock the provided API so adapter flows can be built before the backend is ready</div>
+      <div class="usecase"><strong>Test payloads</strong>Use spec examples as test data for ACE connector apps from day one</div>
+    </div>
+  </div>
+  <div class="slide-number">8 / 12</div>
+</div>
+
+
+
+<!-- slide 9: ACE CI/CD -->
+
+<div class="slide s7">
+  <div class="section-label">IBM STACK</div>
+  <h2 class="slide-title">ACE CI/CD - Small Increments, Pick Our Battles</h2>
+  <div class="cicd-wrap">
+    <div class="cicd-item">
+      <div class="cicd-status ready">&#9679;</div>
+      <div class="cicd-body">
+        <div class="cicd-title"><a href="https://github.com/ot4i/ace-maven-plugin" target="_blank">BAR file build via Maven</a></div>
+        <div class="cicd-desc">Compile message flows and package BAR artifacts in a repeatable pipeline step. No Toolkit required.</div>
+        <div class="cicd-links">
+          <a href="https://github.com/ot4i/ace-maven-plugin" target="_blank">ace-maven-plugin</a>
+          <a href="https://github.com/ot4i/ace-demo-pipeline" target="_blank">ace-demo-pipeline</a>
+          <a href="https://github.com/jpcasas/ibm-maven-plugin" target="_blank">ibm-maven-plugin (ACE+MQ+APIC)</a>
+        </div>
+        <div class="cicd-tag ready">READY</div>
+      </div>
+    </div>
+    <div class="cicd-item">
+      <div class="cicd-status ready">&#9679;</div>
+      <div class="cicd-body">
+        <div class="cicd-title"><a href="https://github.com/IBM/cloudpak-gitops" target="_blank">GitOps-driven deployment to CP4i</a></div>
+        <div class="cicd-desc">IntegrationServer CRs stored in Git, ArgoCD syncs to OpenShift. Promotes across DEV, QA, ACP, PROD.</div>
+        <div class="cicd-links">
+          <a href="https://github.com/IBM/cloudpak-gitops" target="_blank">cloudpak-gitops (ArgoCD)</a>
+          <a href="https://github.com/dalelane/app-connect-tekton-pipeline" target="_blank">ace-tekton-pipeline</a>
+          <a href="https://github.com/sreckoj/CP4I-ACE-CI-CD-Jenkins" target="_blank">CP4I-ACE-CI-CD-Jenkins</a>
+        </div>
+        <div class="cicd-tag ready">READY</div>
+      </div>
+    </div>
+    <div class="cicd-item">
+      <div class="cicd-status wip">&#9679;</div>
+      <div class="cicd-body">
+        <div class="cicd-title"><a href="https://github.com/ot4i/ace-demo-pipeline" target="_blank">Contract-based smoke tests post-deploy</a></div>
+        <div class="cicd-desc">Run Hurl / Schemathesis against deployed ACE endpoints to validate the contract after each release.</div>
+        <div class="cicd-links">
+          <a href="https://hurl.dev/docs/manual.html" target="_blank">Hurl docs</a>
+          <a href="https://schemathesis.readthedocs.io/" target="_blank">Schemathesis docs</a>
+          <a href="https://community.ibm.com/community/user/blogs/trevor-dolby/2023/03/20/app-connect-enterprise-ace-unit-and-component-test" target="_blank">ACE unit &amp; component tests</a>
+        </div>
+        <div class="cicd-tag wip">IN PROGRESS</div>
+      </div>
+    </div>
+    <div class="cicd-item">
+      <div class="cicd-status wip">&#9679;</div>
+      <div class="cicd-body">
+        <div class="cicd-title"><a href="https://www.ibm.com/docs/en/app-connect/12.0.x?topic=cra-creating-rest-api-from-imported-openapi-30-document" target="_blank">OpenAPI spec import automation</a></div>
+        <div class="cicd-desc">Auto-import updated OpenAPI 3.0 spec into ACE project on pipeline trigger. Reduces manual Toolkit steps.</div>
+        <div class="cicd-links">
+          <a href="https://www.ibm.com/docs/en/app-connect/12.0.x?topic=cra-creating-rest-api-from-imported-openapi-30-document" target="_blank">IBM docs: OpenAPI 3.0 import</a>
+          <a href="https://github.com/abughali/ace-openapi3-sample" target="_blank">ace-openapi3-sample</a>
+        </div>
+        <div class="cicd-tag wip">IN PROGRESS</div>
+      </div>
+    </div>
+    <div class="cicd-item">
+      <div class="cicd-status planned">&#9679;</div>
+      <div class="cicd-body">
+        <div class="cicd-title"><a href="https://github.com/IBMRedbooks/SG248452-Accelerating-Modernization-with-Agile-Integration-CICD-infra" target="_blank">Full integration test environment on-demand</a></div>
+        <div class="cicd-desc">Spin up ephemeral CP4i namespace with mock backends for PR-level validation. Longer-term goal.</div>
+        <div class="cicd-links">
+          <a href="https://github.com/IBMRedbooks/SG248452-Accelerating-Modernization-with-Agile-Integration-CICD-infra" target="_blank">IBM Redbook: Agile Integration CI/CD</a>
+          <a href="https://github.com/apac-cp4i-demo/multi-tenancy-gitops" target="_blank">CP4i multi-tenancy GitOps</a>
+        </div>
+        <div class="cicd-tag planned">PLANNED</div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">9 / 12</div>
+</div>
+
+
+
+<!-- slide 10: Maturity Model -->
+
+<div class="slide s8">
+  <div class="section-label">GOING FURTHER</div>
+  <h2 class="slide-title">Contract-First Maturity Model</h2>
+  <div class="mc-wrap">
+    <div class="mc-rings">
+      <!-- Rings from outer (L4) to inner (L1) -->
+      <div class="mc-ring r1"><div class="mc-ring-label">L4 Mastery</div></div>
+      <div class="mc-ring r2"><div class="mc-ring-label">L3 Scale</div></div>
+      <div class="mc-ring r3"><div class="mc-ring-label">L2 Automate</div></div>
+      <div class="mc-ring r4"><div class="mc-ring-label">L1</div></div>
+
+      <!-- L1 dots (inner) -->
+      <div class="mc-dot" style="top:42%; left:44%; border-left:3px solid var(--accent);">
+        <i data-lucide="blocks"></i>Mocks
+        <div class="mc-tip">
+          <div class="mc-tip-level tl1">L1 Foundation</div>
+          <div class="mc-tip-hdr">Shared Mock Server</div>
+          <div class="mc-tip-desc">Centralized Prism instance fed from spec examples. Frontend, ACE, and QA share the same mock. No more diverging stubs.</div>
+          <div class="mc-tip-links">
+            <a href="https://stoplight.io/open-source/prism" target="_blank">Prism</a>
+            <a href="https://docs.stoplight.io/docs/prism" target="_blank">Prism docs</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot tip-left" style="top:48%; left:55%; border-left:3px solid var(--accent);">
+        <i data-lucide="sparkles"></i>AI Spec
+        <div class="mc-tip">
+          <div class="mc-tip-level tl1">L1 Foundation</div>
+          <div class="mc-tip-hdr">AI-Assisted Specification</div>
+          <div class="mc-tip-desc">Claude Code scaffold with business context and contract-first tools injected. Devs and BAs design specs with AI guidance, linting, and best practices built in.</div>
+          <div class="mc-tip-links">
+            <a href="https://docs.anthropic.com/en/docs/claude-code" target="_blank">Claude Code</a>
+            <a href="https://spectral.stoplight.io/" target="_blank">Spectral</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot" style="top:53%; left:44%; border-left:3px solid var(--accent);">
+        <i data-lucide="key-round"></i>Auth
+        <div class="mc-tip">
+          <div class="mc-tip-level tl1">L1 Foundation</div>
+          <div class="mc-tip-hdr">Seamless Auth</div>
+          <div class="mc-tip-desc">Wire existing Vault credentials into Scalar try-it-out, Hurl tests, and Schemathesis runs. No more hunting for tokens on Slack.</div>
+          <div class="mc-tip-links">
+            <a href="https://developer.hashicorp.com/vault" target="_blank">Vault</a>
+            <a href="https://docs.scalar.com/openapi-editor/authentication" target="_blank">Scalar Auth</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- L2 dots -->
+      <div class="mc-dot" style="top:30%; left:35%; border-left:3px solid #1d4ed8;">
+        <i data-lucide="shield-alert"></i>ZAP Scan
+        <div class="mc-tip">
+          <div class="mc-tip-level tl2">L2 Automate</div>
+          <div class="mc-tip-hdr">Dynamic Security Scanning</div>
+          <div class="mc-tip-desc">OWASP ZAP runs active attacks against the mock or running API. Catches injection, auth bypass, and OWASP API Top 10 vulnerabilities at runtime. Complements the static Spectral OWASP ruleset already in the pipeline.</div>
+          <div class="mc-tip-links">
+            <a href="https://www.zaproxy.org/" target="_blank">ZAP</a>
+            <a href="https://www.zaproxy.org/docs/docker/" target="_blank">ZAP Docker</a>
+            <a href="https://www.zaproxy.org/docs/automate/" target="_blank">ZAP Automation</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot tip-left" style="top:62%; left:56%; border-left:3px solid #1d4ed8;">
+        <i data-lucide="activity"></i>Observability
+        <div class="mc-tip">
+          <div class="mc-tip-level tl2">L2 Automate</div>
+          <div class="mc-tip-hdr">API Observability</div>
+          <div class="mc-tip-desc">Pipe APIC gateway logs and ACE monitoring events into the existing ELK stack. Build Kibana dashboards for call volume, latency percentiles, error rates, and deprecation signals per endpoint.</div>
+          <div class="mc-tip-links">
+            <a href="https://www.elastic.co/kibana" target="_blank">Kibana</a>
+            <a href="https://www.elastic.co/beats/filebeat" target="_blank">Filebeat</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- L3 dots -->
+      <div class="mc-dot" style="top:18%; left:28%; border-left:3px solid #7c3aed;">
+        <i data-lucide="zap"></i>AsyncAPI
+        <div class="mc-tip">
+          <div class="mc-tip-level tl3">L3 Scale</div>
+          <div class="mc-tip-hdr">AsyncAPI Events</div>
+          <div class="mc-tip-desc">Apply the same contract-first philosophy to event-driven APIs: Kafka topics, MQ queues, MQTT. Lint with Spectral, generate docs, and produce typed consumers from AsyncAPI specs.</div>
+          <div class="mc-tip-links">
+            <a href="https://www.asyncapi.com/" target="_blank">AsyncAPI</a>
+            <a href="https://www.asyncapi.com/tools/generator" target="_blank">Generator</a>
+            <a href="https://github.com/asyncapi/studio" target="_blank">Studio</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot" style="top:72%; left:40%; border-left:3px solid #7c3aed;">
+        <i data-lucide="library"></i>Registry
+        <div class="mc-tip">
+          <div class="mc-tip-level tl3">L3 Scale</div>
+          <div class="mc-tip-hdr">Schema Registry</div>
+          <div class="mc-tip-desc">Central versioned catalog for all contracts: OpenAPI, AsyncAPI, GraphQL, Protobuf. Discover existing schemas, detect duplicates, and govern shared definitions across teams.</div>
+          <div class="mc-tip-links">
+            <a href="https://www.apicur.io/registry/" target="_blank">Apicurio</a>
+            <a href="https://backstage.io/" target="_blank">Backstage</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot tip-left" style="top:22%; left:50%; border-left:3px solid #7c3aed;">
+        <i data-lucide="package"></i>SDK Gen
+        <div class="mc-tip">
+          <div class="mc-tip-level tl3">L3 Scale</div>
+          <div class="mc-tip-hdr">SDK Generation</div>
+          <div class="mc-tip-desc">Auto-generate typed client SDKs (TypeScript, Java) from the spec and publish to internal registries. Requires consumer coordination and a distribution pipeline.</div>
+          <div class="mc-tip-links">
+            <a href="https://openapi-generator.tech/" target="_blank">OpenAPI Generator</a>
+            <a href="https://learn.microsoft.com/en-us/openapi/kiota/" target="_blank">Kiota</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot" style="top:75%; left:22%; border-left:3px solid #7c3aed;">
+        <i data-lucide="flask-conical"></i>Prod Data
+        <div class="mc-tip">
+          <div class="mc-tip-level tl3">L3 Scale</div>
+          <div class="mc-tip-hdr">Prod Data as Fixtures</div>
+          <div class="mc-tip-desc">Capture real production payloads, classify and strip PII, then feed anonymized data back as spec examples and test fixtures. Realistic tests, zero compliance risk.</div>
+          <div class="mc-tip-links">
+            <a href="https://www.tonic.ai/" target="_blank">Tonic.ai</a>
+            <a href="https://github.com/ARXDeid/ARX" target="_blank">ARX Anonymizer</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- L4 dots (outer) -->
+      <div class="mc-dot" style="top:8%; left:38%; border-left:3px solid #475569;">
+        <i data-lucide="rocket"></i>Full CI/CD
+        <div class="mc-tip">
+          <div class="mc-tip-level tl4">L4 Mastery</div>
+          <div class="mc-tip-hdr">Full CI/CD Pipeline</div>
+          <div class="mc-tip-desc">End-to-end automation: PR triggers lint, mock, contract tests, BAR build, deploy to CP4i, smoke test, and promote to production. No human in the loop from merge to prod.</div>
+          <div class="mc-tip-links">
+            <a href="https://github.com/features/actions" target="_blank">GitHub Actions</a>
+            <a href="https://tekton.dev/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot tip-left" style="top:12%; left:56%; border-left:3px solid #475569;">
+        <i data-lucide="map"></i>Mapping IDE
+        <div class="mc-tip">
+          <div class="mc-tip-level tl4">L4 Mastery</div>
+          <div class="mc-tip-hdr">Visual Mapping IDE</div>
+          <div class="mc-tip-desc">Vendor-neutral OSS tool to import any contract (OpenAPI, WSDL, AsyncAPI), visually link fields, define transformations, and generate output for any runtime: ACE maps, DataPower, MuleSoft, etc.</div>
+          <div class="mc-tip-links">
+            <a href="#">OSS Project (WIP)</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot" style="top:85%; left:42%; border-left:3px solid #475569;">
+        <i data-lucide="scan-search"></i>Traffic Val.
+        <div class="mc-tip">
+          <div class="mc-tip-level tl4">L4 Mastery</div>
+          <div class="mc-tip-hdr">Traffic Validation</div>
+          <div class="mc-tip-desc">Proxy or sidecar captures live traffic in non-prod and validates against the spec. Catches contract drift that tests miss. Less critical with solid CI, but ultimate safety net at scale.</div>
+          <div class="mc-tip-links">
+            <a href="https://www.useoptic.com/" target="_blank">Optic</a>
+            <a href="https://github.com/openclarity/apiclarity" target="_blank">APIClarity</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mc-legend">
+      <div class="mc-leg-group">
+        <div class="mc-leg-hdr l1">L1 Foundation</div>
+        <div class="mc-leg-item"><i data-lucide="blocks"></i><span class="mc-leg-text">Shared Mocks</span><span class="mc-leg-sub">Centralized Prism</span></div>
+        <div class="mc-leg-item"><i data-lucide="sparkles"></i><span class="mc-leg-text">AI-Assisted Spec</span><span class="mc-leg-sub">Claude Code + context</span></div>
+        <div class="mc-leg-item"><i data-lucide="key-round"></i><span class="mc-leg-text">Seamless Auth</span><span class="mc-leg-sub">Docs, tests, try-it-out</span></div>
+      </div>
+      <div class="mc-leg-group">
+        <div class="mc-leg-hdr l2">L2 Automate</div>
+        <div class="mc-leg-item"><i data-lucide="shield-alert"></i><span class="mc-leg-text">Dynamic Security</span><span class="mc-leg-sub">OWASP ZAP</span></div>
+        <div class="mc-leg-item"><i data-lucide="activity"></i><span class="mc-leg-text">API Observability</span><span class="mc-leg-sub">ELK + Kibana dashboards</span></div>
+      </div>
+      <div class="mc-leg-group">
+        <div class="mc-leg-hdr l3">L3 Scale</div>
+        <div class="mc-leg-item"><i data-lucide="zap"></i><span class="mc-leg-text">AsyncAPI Events</span><span class="mc-leg-sub">Kafka, MQ</span></div>
+        <div class="mc-leg-item"><i data-lucide="library"></i><span class="mc-leg-text">Schema Registry</span><span class="mc-leg-sub">Central catalog</span></div>
+        <div class="mc-leg-item"><i data-lucide="package"></i><span class="mc-leg-text">SDK Generation</span><span class="mc-leg-sub">Typed clients</span></div>
+        <div class="mc-leg-item"><i data-lucide="flask-conical"></i><span class="mc-leg-text">Prod Data as Fixtures</span><span class="mc-leg-sub">Anonymized, classified</span></div>
+      </div>
+      <div class="mc-leg-group">
+        <div class="mc-leg-hdr l4">L4 Mastery</div>
+        <div class="mc-leg-item"><i data-lucide="rocket"></i><span class="mc-leg-text">Full CI/CD</span><span class="mc-leg-sub">PR to prod</span></div>
+        <div class="mc-leg-item"><i data-lucide="map"></i><span class="mc-leg-text">Mapping IDE</span><span class="mc-leg-sub">Visual, vendor-neutral OSS</span></div>
+        <div class="mc-leg-item"><i data-lucide="scan-search"></i><span class="mc-leg-text">Traffic Validation</span><span class="mc-leg-sub">Live vs spec drift</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">10 / 12</div>
+</div>
+
+
+
+<!-- slide 11: Role Impact -->
+
+<div class="slide s9">
+  <div class="section-label">ROLE IMPACT</div>
+  <h2 class="slide-title">Every discipline benefits</h2>
+  <table>
+    <thead><tr><th>Role</th><th>Without API-First</th><th>With API-First</th></tr></thead>
+    <tbody>
+      <tr><td>Frontend Dev</td><td>Blocked until backend ready</td><td>Works from day one with mocks</td></tr>
+      <tr><td>Backend Dev</td><td>Builds shape by gut feeling</td><td>Implements validated contract</td></tr>
+      <tr><td>QA Engineer</td><td>Maintains collections by hand</td><td>Auto-generated contract tests</td></tr>
+      <tr><td>DevOps</td><td>Configures gateway manually, hopes for the best</td><td>CI guardrails (lint, diff, tests) block bad specs from reaching prod</td></tr>
+      <tr><td>Security</td><td>Reviews after deployment</td><td>Scans spec before code exists</td></tr>
+      <tr><td>Tech Lead</td><td>Polices conventions in code review</td><td>Spectral enforces automatically</td></tr>
+      <tr><td>Product Owner</td><td>Reads code or asks devs what the API does</td><td>Browses Scalar docs: endpoints, schemas, try-it-out</td></tr>
+      <tr><td>New Member</td><td>Reads scattered docs and Slack</td><td>Reads spec + docs, productive fast</td></tr>
+    </tbody>
+  </table>
+  <div class="slide-number">11 / 12</div>
+</div>
+
+
+
+<!-- slide 12: Next Steps -->
+
+<div class="slide s10">
+  <div class="accent-bar-left"></div>
+  <div class="section-label">NEXT STEPS</div>
+  <h1 class="slide-title">One contract.<br>Everything else is generated.</h1>
+  <div class="accent-line"></div>
+  <div class="actions">
+    <div class="action-row">
+      <div class="action-badge">30 days</div>
+      <div class="action-text">Pick a pilot API. Adopt Spectral. Evaluate Prism. Add Schemathesis to CI.</div>
+    </div>
+    <div class="action-row">
+      <div class="action-badge">1 quarter</div>
+      <div class="action-text">Hands-on workshop. Expand to more APIs. Internal API catalog. Measure results.</div>
+    </div>
+    <div class="action-row">
+      <div class="action-badge">Now</div>
+      <div class="action-text">Clone the scaffold repo. Run npm install. Start building.</div>
+    </div>
+  </div>
+  <div class="repo-callout">
+    <div>
+      <div class="repo-name">scaffold-api/</div>
+      <div class="repo-desc">Clone it. Run it. Make it yours.</div>
+    </div>
+  </div>
+  <div class="questions">Questions?</div>
+  <div class="dot-grid" id="dots10"></div>
+  <div class="slide-number">12 / 12</div>
+</div>
+
+
+
+<script>
+// ── Initialize Lucide icons ──
+  lucide.createIcons();
+
+  // ── Generate dot grids ──
+  function fillDotGrid(id, cols, rows) {
+    const grid = document.getElementById(id);
+    if (!grid) return;
+    grid.style.gridTemplateColumns = `repeat(${cols}, 4px)`;
+    grid.style.gridTemplateRows = `repeat(${rows}, 4px)`;
+    for (let i = 0; i < cols * rows; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot';
+      grid.appendChild(d);
+    }
+  }
+  fillDotGrid('dots1', 8, 12);
+  fillDotGrid('dots10', 5, 8);
+
+  // ── Agenda items ──
+  const agendaCategories = [
+    { header: "Design & Validate", color: "green", items: [
+      { n: 1, label: "The Contract", sub: "OpenAPI spec" },
+      { n: 2, label: "Linting", sub: "Spectral" },
+      { n: 3, label: "Mock Server", sub: "Prism" }
+    ]},
+    { header: "Generate Code", color: "blue", items: [
+      { n: 4, label: "Client Codegen", sub: "TypeScript" },
+      { n: 5, label: "Server Stubs", sub: "Spring Boot" }
+    ]},
+    { header: "Test & Guard", color: "amber", items: [
+      { n: 6, label: "Contract Tests", sub: "Schemathesis" },
+      { n: 7, label: "Breaking Changes", sub: "oasdiff" },
+      { n: 8, label: "Functional Tests", sub: "Hurl" },
+      { n: 9, label: "API Docs", sub: "Scalar" }
+    ]},
+    { header: "Run & Ship", color: "slate", items: [
+      { n: 10, label: "CI Pipeline", sub: "GitHub Actions" }
+    ]}
+  ];
+  const cardsEl = document.getElementById('agenda-cards');
+  agendaCategories.forEach(cat => {
+    const col = document.createElement('div');
+    col.className = 'card-col';
+    col.dataset.color = cat.color;
+    col.innerHTML = `<div class="card-col-header">${cat.header}</div>`;
+    cat.items.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'card-item';
+      card.innerHTML = `<div class="card-num">${item.n}</div><div class="card-text"><div class="card-label">${item.label}</div><div class="card-sub">${item.sub}</div></div>`;
+      col.appendChild(card);
+    });
+    cardsEl.appendChild(col);
+  });
+
+  // ── Hub diagram connection lines ──
+  const svg = document.getElementById('connections-svg');
+  const cx = 480, cy = 270;
+  for (let i = 0; i < 8; i++) {
+    const node = document.getElementById('sat' + i);
+    const rect = node.getBoundingClientRect();
+    const slideRect = node.closest('.slide').getBoundingClientRect();
+    const nx = rect.left + rect.width / 2 - slideRect.left;
+    const ny = rect.top + rect.height / 2 - slideRect.top;
+    // Scale to viewBox
+    const sx = nx / slideRect.width * 960;
+    const sy = ny / slideRect.height * 540;
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+    line.setAttribute('x2', sx); line.setAttribute('y2', sy);
+    line.setAttribute('stroke', '#006039');
+    line.setAttribute('stroke-width', '1.2');
+    line.setAttribute('stroke-dasharray', '6 4');
+    line.setAttribute('opacity', '0.5');
+    svg.appendChild(line);
+  }
+
+  // ── Fullscreen presentation mode ──
+  const slides = document.querySelectorAll('.slide');
+  let currentSlide = 0;
+  let presenting = false;
+
+  function scaleSlides() {
+    const scaleX = window.innerWidth / 960;
+    const scaleY = window.innerHeight / 540;
+    const scale = Math.min(scaleX, scaleY);
+    slides.forEach(s => {
+      s.style.transform = presenting ? `scale(${scale})` : '';
+    });
+  }
+
+  function enterPresentation() {
+    presenting = true;
+    document.body.classList.add('presenting');
+    slides.forEach((s, i) => s.classList.toggle('active', i === currentSlide));
+    document.documentElement.requestFullscreen?.();
+    setTimeout(scaleSlides, 100);
+  }
+
+  function exitPresentation() {
+    presenting = false;
+    document.body.classList.remove('presenting');
+    slides.forEach(s => { s.classList.remove('active'); s.style.display = ''; s.style.transform = ''; });
+    document.exitFullscreen?.();
+  }
+
+  window.addEventListener('resize', () => { if (presenting) scaleSlides(); });
+
+  function showSlide(n) {
+    currentSlide = Math.max(0, Math.min(n, slides.length - 1));
+    if (presenting) {
+      slides.forEach((s, i) => s.classList.toggle('active', i === currentSlide));
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'f' || e.key === 'F') {
+      if (!presenting) enterPresentation();
+    } else if (e.key === 'Escape') {
+      if (presenting) exitPresentation();
+    } else if (e.key === 'ArrowRight' || e.key === ' ') {
+      if (presenting) showSlide(currentSlide + 1);
+    } else if (e.key === 'ArrowLeft') {
+      if (presenting) showSlide(currentSlide - 1);
+    }
+  });
+
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement && presenting) exitPresentation();
+  });
+
+  // ── Slide 6: cross-zone arrows ──
+  function drawS6Arrows() {
+    const wrap = document.querySelector('.s6 .arch-grid-wrap');
+    const svg = document.getElementById('s6-arrows');
+    if (!wrap || !svg) return;
+    const wr = wrap.getBoundingClientRect();
+    svg.setAttribute('viewBox', `0 0 ${wr.width} ${wr.height}`);
+
+    // Arrow connections
+    const arrows = [
+      // DEV: frontend -> apic -> mock, then adapter -> connector -> mock backend
+      ['d-fe', 'd-apic'],
+      ['d-apic', 'd-mock'],
+      ['d-adapt', 'd-conn'],
+      ['d-conn', 'd-be'],
+      // PROD: full chain
+      ['p-fe', 'p-apic'],
+      ['p-apic', 'p-adapt'],
+      ['p-adapt', 'p-conn'],
+      ['p-conn', 'p-be']
+    ];
+
+    svg.innerHTML = '<defs><marker id="ah6" markerWidth="6" markerHeight="5" refX="5" refY="2.5" orient="auto"><path d="M0,0 L6,2.5 L0,5" fill="#bbb"/></marker></defs>';
+
+    arrows.forEach(([fromId, toId]) => {
+      const fromEl = document.getElementById(fromId);
+      const toEl = document.getElementById(toId);
+      if (!fromEl || !toEl) return;
+      const fr = fromEl.getBoundingClientRect();
+      const tr = toEl.getBoundingClientRect();
+      const x1 = fr.right - wr.left + 2;
+      const y1 = fr.top + fr.height / 2 - wr.top;
+      const x2 = tr.left - wr.left - 2;
+      const y2 = tr.top + tr.height / 2 - wr.top;
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x1);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2);
+      line.setAttribute('y2', y2);
+      line.setAttribute('stroke', '#ccc');
+      line.setAttribute('stroke-width', '1');
+      line.setAttribute('marker-end', 'url(#ah6)');
+      svg.appendChild(line);
+    });
+  }
+  // Remove inline arrows from prod ace-flow (SVG handles them now)
+  drawS6Arrows();
+  window.addEventListener('resize', drawS6Arrows);
+</script>
+
+</body>
+</html>

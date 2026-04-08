@@ -1,0 +1,72 @@
+# ─────────────────────────────────────────────
+# Slide Builder - Project Configuration
+# ─────────────────────────────────────────────
+
+title: "API-First: One Contract, Everything Generated"
+author: "Victor Hueni"
+date_label: "April 2026"
+
+canvas:
+  width: 960
+  height: 540
+
+fonts:
+  - family: "Syne"
+    weights: [700, 800]
+  - family: "Space Grotesk"
+    weights: [400, 500, 600]
+  - family: "DM Mono"
+    weights: [400, 500]
+
+external_scripts:
+  - "https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"
+
+slides:
+  - file: "00-title.html"
+    class: "s1"
+    label: "Title"
+  - file: "01-disclaimer.html"
+    class: "s-disc"
+    label: "Disclaimer"
+  - file: "02-wall-of-pain.html"
+    class: "s2"
+    label: "Wall of Pain"
+  - file: "03-code-vs-contract.html"
+    class: "s-compare"
+    label: "Code vs Contract"
+  - file: "04-the-shift.html"
+    class: "s4"
+    label: "The Shift"
+  - file: "05-demo-agenda.html"
+    class: "s5"
+    label: "Demo Agenda"
+  - file: "06-ibm-challenges.html"
+    class: "s-ibm-ch"
+    label: "IBM Challenges"
+  - file: "07-ibm-architecture.html"
+    class: "s6"
+    label: "IBM Architecture"
+  - file: "08-ace-cicd.html"
+    class: "s7"
+    label: "ACE CI/CD"
+  - file: "09-maturity-model.html"
+    class: "s8"
+    label: "Maturity Model"
+  - file: "10-role-impact.html"
+    class: "s9"
+    label: "Role Impact"
+  - file: "11-next-steps.html"
+    class: "s10"
+    label: "Next Steps"
+
+# Paths relative to this config file
+paths:
+  slides_dir: "output/slides"
+  styles_file: "design/styles.css"
+  script_file: "design/script.js"
+  output_dir: "output/slide-deck"
+  output_filename: "presentation.html"
+
+numbering:
+  enabled: true
+  format: "{current} / {total}"

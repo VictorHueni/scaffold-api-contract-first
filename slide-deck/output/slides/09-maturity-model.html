@@ -1,0 +1,193 @@
+<div class="slide s8">
+  <div class="section-label">GOING FURTHER</div>
+  <h2 class="slide-title">Contract-First Maturity Model</h2>
+  <div class="mc-wrap">
+    <div class="mc-rings">
+      <!-- Rings from outer (L4) to inner (L1) -->
+      <div class="mc-ring r1"><div class="mc-ring-label">L4 Mastery</div></div>
+      <div class="mc-ring r2"><div class="mc-ring-label">L3 Scale</div></div>
+      <div class="mc-ring r3"><div class="mc-ring-label">L2 Automate</div></div>
+      <div class="mc-ring r4"><div class="mc-ring-label">L1</div></div>
+
+      <!-- L1 dots (inner) -->
+      <div class="mc-dot" style="top:42%; left:44%; border-left:3px solid var(--accent);">
+        <i data-lucide="blocks"></i>Mocks
+        <div class="mc-tip">
+          <div class="mc-tip-level tl1">L1 Foundation</div>
+          <div class="mc-tip-hdr">Shared Mock Server</div>
+          <div class="mc-tip-desc">Centralized Prism instance fed from spec examples. Frontend, ACE, and QA share the same mock. No more diverging stubs.</div>
+          <div class="mc-tip-links">
+            <a href="https://stoplight.io/open-source/prism" target="_blank">Prism</a>
+            <a href="https://docs.stoplight.io/docs/prism" target="_blank">Prism docs</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot tip-left" style="top:48%; left:55%; border-left:3px solid var(--accent);">
+        <i data-lucide="sparkles"></i>AI Spec
+        <div class="mc-tip">
+          <div class="mc-tip-level tl1">L1 Foundation</div>
+          <div class="mc-tip-hdr">AI-Assisted Specification</div>
+          <div class="mc-tip-desc">Claude Code scaffold with business context and contract-first tools injected. Devs and BAs design specs with AI guidance, linting, and best practices built in.</div>
+          <div class="mc-tip-links">
+            <a href="https://docs.anthropic.com/en/docs/claude-code" target="_blank">Claude Code</a>
+            <a href="https://spectral.stoplight.io/" target="_blank">Spectral</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot" style="top:53%; left:44%; border-left:3px solid var(--accent);">
+        <i data-lucide="key-round"></i>Auth
+        <div class="mc-tip">
+          <div class="mc-tip-level tl1">L1 Foundation</div>
+          <div class="mc-tip-hdr">Seamless Auth</div>
+          <div class="mc-tip-desc">Wire existing Vault credentials into Scalar try-it-out, Hurl tests, and Schemathesis runs. No more hunting for tokens on Slack.</div>
+          <div class="mc-tip-links">
+            <a href="https://developer.hashicorp.com/vault" target="_blank">Vault</a>
+            <a href="https://docs.scalar.com/openapi-editor/authentication" target="_blank">Scalar Auth</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- L2 dots -->
+      <div class="mc-dot" style="top:30%; left:35%; border-left:3px solid #1d4ed8;">
+        <i data-lucide="shield-alert"></i>ZAP Scan
+        <div class="mc-tip">
+          <div class="mc-tip-level tl2">L2 Automate</div>
+          <div class="mc-tip-hdr">Dynamic Security Scanning</div>
+          <div class="mc-tip-desc">OWASP ZAP runs active attacks against the mock or running API. Catches injection, auth bypass, and OWASP API Top 10 vulnerabilities at runtime. Complements the static Spectral OWASP ruleset already in the pipeline.</div>
+          <div class="mc-tip-links">
+            <a href="https://www.zaproxy.org/" target="_blank">ZAP</a>
+            <a href="https://www.zaproxy.org/docs/docker/" target="_blank">ZAP Docker</a>
+            <a href="https://www.zaproxy.org/docs/automate/" target="_blank">ZAP Automation</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot tip-left" style="top:62%; left:56%; border-left:3px solid #1d4ed8;">
+        <i data-lucide="activity"></i>Observability
+        <div class="mc-tip">
+          <div class="mc-tip-level tl2">L2 Automate</div>
+          <div class="mc-tip-hdr">API Observability</div>
+          <div class="mc-tip-desc">Pipe APIC gateway logs and ACE monitoring events into the existing ELK stack. Build Kibana dashboards for call volume, latency percentiles, error rates, and deprecation signals per endpoint.</div>
+          <div class="mc-tip-links">
+            <a href="https://www.elastic.co/kibana" target="_blank">Kibana</a>
+            <a href="https://www.elastic.co/beats/filebeat" target="_blank">Filebeat</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- L3 dots -->
+      <div class="mc-dot" style="top:18%; left:28%; border-left:3px solid #7c3aed;">
+        <i data-lucide="zap"></i>AsyncAPI
+        <div class="mc-tip">
+          <div class="mc-tip-level tl3">L3 Scale</div>
+          <div class="mc-tip-hdr">AsyncAPI Events</div>
+          <div class="mc-tip-desc">Apply the same contract-first philosophy to event-driven APIs: Kafka topics, MQ queues, MQTT. Lint with Spectral, generate docs, and produce typed consumers from AsyncAPI specs.</div>
+          <div class="mc-tip-links">
+            <a href="https://www.asyncapi.com/" target="_blank">AsyncAPI</a>
+            <a href="https://www.asyncapi.com/tools/generator" target="_blank">Generator</a>
+            <a href="https://github.com/asyncapi/studio" target="_blank">Studio</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot" style="top:72%; left:40%; border-left:3px solid #7c3aed;">
+        <i data-lucide="library"></i>Registry
+        <div class="mc-tip">
+          <div class="mc-tip-level tl3">L3 Scale</div>
+          <div class="mc-tip-hdr">Schema Registry</div>
+          <div class="mc-tip-desc">Central versioned catalog for all contracts: OpenAPI, AsyncAPI, GraphQL, Protobuf. Discover existing schemas, detect duplicates, and govern shared definitions across teams.</div>
+          <div class="mc-tip-links">
+            <a href="https://www.apicur.io/registry/" target="_blank">Apicurio</a>
+            <a href="https://backstage.io/" target="_blank">Backstage</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot tip-left" style="top:22%; left:50%; border-left:3px solid #7c3aed;">
+        <i data-lucide="package"></i>SDK Gen
+        <div class="mc-tip">
+          <div class="mc-tip-level tl3">L3 Scale</div>
+          <div class="mc-tip-hdr">SDK Generation</div>
+          <div class="mc-tip-desc">Auto-generate typed client SDKs (TypeScript, Java) from the spec and publish to internal registries. Requires consumer coordination and a distribution pipeline.</div>
+          <div class="mc-tip-links">
+            <a href="https://openapi-generator.tech/" target="_blank">OpenAPI Generator</a>
+            <a href="https://learn.microsoft.com/en-us/openapi/kiota/" target="_blank">Kiota</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot" style="top:75%; left:22%; border-left:3px solid #7c3aed;">
+        <i data-lucide="flask-conical"></i>Prod Data
+        <div class="mc-tip">
+          <div class="mc-tip-level tl3">L3 Scale</div>
+          <div class="mc-tip-hdr">Prod Data as Fixtures</div>
+          <div class="mc-tip-desc">Capture real production payloads, classify and strip PII, then feed anonymized data back as spec examples and test fixtures. Realistic tests, zero compliance risk.</div>
+          <div class="mc-tip-links">
+            <a href="https://www.tonic.ai/" target="_blank">Tonic.ai</a>
+            <a href="https://github.com/ARXDeid/ARX" target="_blank">ARX Anonymizer</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- L4 dots (outer) -->
+      <div class="mc-dot" style="top:8%; left:38%; border-left:3px solid #475569;">
+        <i data-lucide="rocket"></i>Full CI/CD
+        <div class="mc-tip">
+          <div class="mc-tip-level tl4">L4 Mastery</div>
+          <div class="mc-tip-hdr">Full CI/CD Pipeline</div>
+          <div class="mc-tip-desc">End-to-end automation: PR triggers lint, mock, contract tests, BAR build, deploy to CP4i, smoke test, and promote to production. No human in the loop from merge to prod.</div>
+          <div class="mc-tip-links">
+            <a href="https://github.com/features/actions" target="_blank">GitHub Actions</a>
+            <a href="https://tekton.dev/" target="_blank">Tekton</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot tip-left" style="top:12%; left:56%; border-left:3px solid #475569;">
+        <i data-lucide="map"></i>Mapping IDE
+        <div class="mc-tip">
+          <div class="mc-tip-level tl4">L4 Mastery</div>
+          <div class="mc-tip-hdr">Visual Mapping IDE</div>
+          <div class="mc-tip-desc">Vendor-neutral OSS tool to import any contract (OpenAPI, WSDL, AsyncAPI), visually link fields, define transformations, and generate output for any runtime: ACE maps, DataPower, MuleSoft, etc.</div>
+          <div class="mc-tip-links">
+            <a href="#">OSS Project (WIP)</a>
+          </div>
+        </div>
+      </div>
+      <div class="mc-dot" style="top:85%; left:42%; border-left:3px solid #475569;">
+        <i data-lucide="scan-search"></i>Traffic Val.
+        <div class="mc-tip">
+          <div class="mc-tip-level tl4">L4 Mastery</div>
+          <div class="mc-tip-hdr">Traffic Validation</div>
+          <div class="mc-tip-desc">Proxy or sidecar captures live traffic in non-prod and validates against the spec. Catches contract drift that tests miss. Less critical with solid CI, but ultimate safety net at scale.</div>
+          <div class="mc-tip-links">
+            <a href="https://www.useoptic.com/" target="_blank">Optic</a>
+            <a href="https://github.com/openclarity/apiclarity" target="_blank">APIClarity</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mc-legend">
+      <div class="mc-leg-group">
+        <div class="mc-leg-hdr l1">L1 Foundation</div>
+        <div class="mc-leg-item"><i data-lucide="blocks"></i><span class="mc-leg-text">Shared Mocks</span><span class="mc-leg-sub">Centralized Prism</span></div>
+        <div class="mc-leg-item"><i data-lucide="sparkles"></i><span class="mc-leg-text">AI-Assisted Spec</span><span class="mc-leg-sub">Claude Code + context</span></div>
+        <div class="mc-leg-item"><i data-lucide="key-round"></i><span class="mc-leg-text">Seamless Auth</span><span class="mc-leg-sub">Docs, tests, try-it-out</span></div>
+      </div>
+      <div class="mc-leg-group">
+        <div class="mc-leg-hdr l2">L2 Automate</div>
+        <div class="mc-leg-item"><i data-lucide="shield-alert"></i><span class="mc-leg-text">Dynamic Security</span><span class="mc-leg-sub">OWASP ZAP</span></div>
+        <div class="mc-leg-item"><i data-lucide="activity"></i><span class="mc-leg-text">API Observability</span><span class="mc-leg-sub">ELK + Kibana dashboards</span></div>
+      </div>
+      <div class="mc-leg-group">
+        <div class="mc-leg-hdr l3">L3 Scale</div>
+        <div class="mc-leg-item"><i data-lucide="zap"></i><span class="mc-leg-text">AsyncAPI Events</span><span class="mc-leg-sub">Kafka, MQ</span></div>
+        <div class="mc-leg-item"><i data-lucide="library"></i><span class="mc-leg-text">Schema Registry</span><span class="mc-leg-sub">Central catalog</span></div>
+        <div class="mc-leg-item"><i data-lucide="package"></i><span class="mc-leg-text">SDK Generation</span><span class="mc-leg-sub">Typed clients</span></div>
+        <div class="mc-leg-item"><i data-lucide="flask-conical"></i><span class="mc-leg-text">Prod Data as Fixtures</span><span class="mc-leg-sub">Anonymized, classified</span></div>
+      </div>
+      <div class="mc-leg-group">
+        <div class="mc-leg-hdr l4">L4 Mastery</div>
+        <div class="mc-leg-item"><i data-lucide="rocket"></i><span class="mc-leg-text">Full CI/CD</span><span class="mc-leg-sub">PR to prod</span></div>
+        <div class="mc-leg-item"><i data-lucide="map"></i><span class="mc-leg-text">Mapping IDE</span><span class="mc-leg-sub">Visual, vendor-neutral OSS</span></div>
+        <div class="mc-leg-item"><i data-lucide="scan-search"></i><span class="mc-leg-text">Traffic Validation</span><span class="mc-leg-sub">Live vs spec drift</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-number">10 / 12</div>
+</div>

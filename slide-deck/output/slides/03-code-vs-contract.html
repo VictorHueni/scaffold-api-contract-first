@@ -1,0 +1,126 @@
+<div class="slide s-compare">
+  <div class="section-label">THE APPROACH</div>
+  <h2 class="slide-title">Code First vs Contract First</h2>
+
+  <div class="lanes">
+    <!-- Code First Lane -->
+    <div class="lane code-first">
+      <div class="lane-label">Code First</div>
+      <div class="lane-track">
+        <div class="flow-nodes">
+          <div class="flow-node">
+            <div class="node-week">W1</div>
+            <div class="node-circle"><i data-lucide="file-text"></i></div>
+            <div class="node-label">Specify API</div>
+            <div class="node-sub">Confluence</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W2-3</div>
+            <div class="node-circle"><i data-lucide="server"></i></div>
+            <div class="node-label">Develop Provider API</div>
+            <div class="node-sub">Backend</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W3-4</div>
+            <div class="node-circle"><i data-lucide="workflow"></i></div>
+            <div class="node-label">Develop ESB Artefact</div>
+            <div class="node-sub">Middleware</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W5</div>
+            <div class="node-circle"><i data-lucide="plug"></i></div>
+            <div class="node-label">Consumer Integration</div>
+            <div class="node-sub">Blocked until now</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W6</div>
+            <div class="node-circle"><i data-lucide="file-pen"></i></div>
+            <div class="node-label">Update Docs + Tests</div>
+            <div class="node-sub">Write and execute</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W7</div>
+            <div class="node-circle"><i data-lucide="rocket"></i></div>
+            <div class="node-label">Deploy</div>
+            <div class="node-sub">Hope nothing breaks</div>
+          </div>
+        </div>
+        <div class="duration-badge">~7 weeks</div>
+      </div>
+    </div>
+
+    <!-- Separator -->
+    <div class="vs-divider" style="position:absolute;top:170px;left:0;width:100%;">
+      <div class="line"></div>
+      <div class="vs-text">VS</div>
+      <div class="line"></div>
+    </div>
+
+    <!-- Contract First Lane -->
+    <div class="lane contract-first">
+      <div class="lane-label">Contract First</div>
+      <div class="lane-track">
+        <div class="flow-nodes">
+          <div class="flow-node">
+            <div class="node-week">W1</div>
+            <div class="node-circle"><i data-lucide="file-text"></i></div>
+            <div class="node-label">Design Contract</div>
+            <div class="node-sub">OpenAPI spec</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W1</div>
+            <div class="node-circle"><i data-lucide="eye"></i></div>
+            <div class="node-label">Review + Mock</div>
+            <div class="node-sub">Validate early</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="parallel-group">
+            <div class="parallel-badge">in parallel</div>
+            <div class="node-week" style="position:absolute;top:-12px;right:12px;">W2</div>
+            <div class="parallel-row">
+              <div class="flow-node">
+                <div class="node-circle"><i data-lucide="monitor"></i></div>
+                <div class="node-label">Frontend</div>
+                <div class="node-sub">Uses mock</div>
+              </div>
+              <div class="flow-node">
+                <div class="node-circle"><i data-lucide="server"></i></div>
+                <div class="node-label">Backend</div>
+                <div class="node-sub">Implements spec</div>
+              </div>
+              <div class="flow-node">
+                <div class="node-circle"><i data-lucide="workflow"></i></div>
+                <div class="node-label">MoEx</div>
+                <div class="node-sub">Implement ESB artefact</div>
+              </div>
+            </div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W2</div>
+            <div class="node-circle"><i data-lucide="shield-check"></i></div>
+            <div class="node-label">Auto Tests + Docs</div>
+            <div class="node-sub">From the contract</div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-node">
+            <div class="node-week">W3</div>
+            <div class="node-circle"><i data-lucide="check-circle"></i></div>
+            <div class="node-label">Deploy</div>
+            <div class="node-sub">CI catches breaks</div>
+          </div>
+        </div>
+        <div class="duration-badge">~3 weeks</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout-bar">The contract is the handshake. Design it first, and everything else falls into place.</div>
+  <div class="slide-number">4 / 12</div>
+</div>
