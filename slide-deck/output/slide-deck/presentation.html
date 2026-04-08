@@ -62,6 +62,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100vw;
+    height: 100vh;
   }
   body.presenting .slide {
     display: none;
@@ -70,6 +72,10 @@
     box-shadow: none;
     border-radius: 0;
     transform-origin: center center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: 0;
   }
   body.presenting .slide.active { display: flex; }
   body.presenting .controls-hint,
@@ -1029,60 +1035,396 @@
   /* ════════════════════════════════════════════
      SLIDE 10: NEXT STEPS
      ════════════════════════════════════════════ */
-  .s10 .section-label { position: absolute; top: 48px; left: 64px; }
-  .s10 .slide-title { position: absolute; top: 76px; left: 64px; font-size: 30px; max-width: 560px; }
-  .s10 .accent-line { position: absolute; top: 168px; left: 64px; }
-  .s10 .actions {
+  /* ════════════════════════════════════════════
+     SLIDE 10b: VISION (inspirational timeline)
+     ════════════════════════════════════════════ */
+  .s-vision .section-label { position: absolute; top: 32px; left: 64px; }
+  .s-vision .slide-title {
+    position: absolute; top: 56px; left: 64px;
+    font-size: 30px;
+  }
+  /* ── V1: Narrative timeline (vertical story) ── */
+  .s-vision .vision-story {
     position: absolute;
-    top: 192px; left: 64px;
+    top: 104px; left: 80px; right: 80px;
+    bottom: 72px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .s-vision .vision-chapter {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .s-vision .ch-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    padding-top: 4px;
+  }
+  .s-vision .ch-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+  .s-vision .ch-line {
+    width: 2px;
+    flex: 1;
+    min-height: 20px;
+    background: var(--border);
+  }
+  .s-vision .ch-now .ch-dot { border-color: var(--red); background: var(--red-lt); }
+  .s-vision .ch-soon .ch-dot { border-color: var(--accent); background: var(--accent-lt); }
+  .s-vision .ch-later .ch-dot { border-color: #1d4ed8; background: #eef2ff; }
+  .s-vision .ch-far .ch-dot { border-color: #7c3aed; background: #f5f3ff; }
+  .s-vision .ch-content { flex: 1; }
+  .s-vision .ch-time {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .s-vision .ch-now .ch-time { color: var(--red); }
+  .s-vision .ch-text {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .s-vision .ch-text em {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 600;
+  }
+  .s-vision .ch-now .ch-text em { color: var(--muted); }
+  .s-vision .vision-tagline {
+    position: absolute;
+    bottom: 16px; left: 80px; right: 80px;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── V2: Two Futures (contrast layout) ── */
+  .s-vision-v2 .section-label { position: absolute; top: 32px; left: 64px; }
+  .s-vision-v2 .slide-title {
+    position: absolute; top: 56px; left: 64px;
+    font-size: 30px;
+  }
+  .s-vision-v2 .futures-wrap {
+    position: absolute;
+    top: 108px; left: 40px; right: 40px;
+    bottom: 68px;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+  .s-vision-v2 .future-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 20px;
+    border-radius: 6px;
+  }
+  .s-vision-v2 .future-without {
+    background: var(--red-lt);
+    border: 1px solid rgba(185,28,28,0.15);
+  }
+  .s-vision-v2 .future-with {
+    background: var(--accent-lt);
+    border: 1px solid rgba(0,96,57,0.15);
+  }
+  .s-vision-v2 .future-hdr { margin-bottom: 14px; }
+  .s-vision-v2 .future-label {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+  .s-vision-v2 .future-without .future-label { color: var(--red); }
+  .s-vision-v2 .future-with .future-label { color: var(--accent); }
+  .s-vision-v2 .future-body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    flex: 1;
   }
-  .action-row {
+  .s-vision-v2 .future-line {
     display: flex;
-    align-items: center;
-    gap: 16px;
+    align-items: flex-start;
+    gap: 10px;
   }
-  .action-badge {
-    font-family: var(--font-mono);
+  .s-vision-v2 .future-line [data-lucide] {
+    width: 18px; height: 18px;
+    flex-shrink: 0;
+    stroke-width: 1.75;
+    margin-top: 1px;
+  }
+  .s-vision-v2 .future-without .future-line [data-lucide] { color: var(--red); }
+  .s-vision-v2 .future-with .future-line [data-lucide] { color: var(--accent); }
+  .s-vision-v2 .future-line span {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .s-vision-v2 .future-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    flex-shrink: 0;
+  }
+  .s-vision-v2 .divider-line {
+    flex: 1;
+    width: 1px;
+    background: var(--border);
+  }
+  .s-vision-v2 .divider-or {
+    font-family: var(--font-heading);
     font-size: 11px;
+    font-weight: 800;
+    color: var(--dim);
+    padding: 8px 0;
+    letter-spacing: 2px;
+  }
+  .s-vision-v2 .vision-v2-tagline {
+    position: absolute;
+    bottom: 16px; left: 64px; right: 64px;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1.5;
+  }
+
+  /* ── V3: Crescendo (progressive typography) ── */
+  .s-vision-v3 .section-label { position: absolute; top: 32px; left: 64px; }
+  .s-vision-v3 .crescendo-stack {
+    position: absolute;
+    top: 100px; left: 80px; right: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .s-vision-v3 .crescendo-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .s-vision-v3 .c-prefix {
+    font-family: var(--font-mono);
     font-weight: 500;
-    color: #fff;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .s-vision-v3 .c-body {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+  .s-vision-v3 .c-small .c-prefix { font-size: 10px; color: var(--muted); }
+  .s-vision-v3 .c-small .c-body { font-size: 18px; color: var(--muted); }
+  .s-vision-v3 .c-medium .c-prefix { font-size: 11px; }
+  .s-vision-v3 .c-medium .c-body { font-size: 22px; }
+  .s-vision-v3 .c-large .c-prefix { font-size: 12px; }
+  .s-vision-v3 .c-large .c-body { font-size: 28px; }
+  .s-vision-v3 .c-hero .c-body {
+    font-size: 16px;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+  }
+  .s-vision-v3 .crescendo-bottom {
+    position: absolute;
+    bottom: 48px; left: 80px; right: 80px;
+  }
+  .s-vision-v3 .crescendo-accent-line {
+    width: 48px;
+    height: 4px;
     background: var(--accent);
-    padding: 6px 16px;
-    white-space: nowrap;
-    min-width: 90px;
+    margin-bottom: 14px;
+  }
+  .s-vision-v3 .crescendo-coda {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .s-vision-v3 .dot-grid {
+    right: 60px; top: 40px;
+    grid-template-columns: repeat(5, 4px);
+    grid-template-rows: repeat(6, 4px);
+  }
+
+  .s10 .section-label { position: absolute; top: 32px; left: 64px; }
+  .s10 .slide-title { position: absolute; top: 56px; left: 64px; font-size: 28px; }
+
+  /* Horizontal timeline */
+  .s10 .ns-timeline {
+    position: absolute;
+    top: 110px; left: 40px; right: 40px;
+    height: 300px;
+  }
+  .s10 .ns-track {
+    position: absolute;
+    top: 22px;
+    left: 30px; right: 30px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+  }
+  .s10 .ns-track::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent) 100%);
+    border-radius: 2px;
+    opacity: 0.25;
+  }
+  .s10 .ns-step {
+    position: absolute;
+    top: 0;
+    width: 170px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
   }
-  .action-text {
-    font-size: 13px;
-    color: var(--text);
+  .s10 .ns-node {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
-  .s10 .repo-callout {
+  .s10 .ns-node [data-lucide] {
+    width: 20px; height: 20px;
+    color: var(--accent);
+    stroke-width: 2;
+  }
+  .s10 .ns-node.node-accent {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .s10 .ns-node.node-accent [data-lucide] {
+    color: #fff;
+  }
+  .s10 .ns-label {
+    margin-top: 12px;
+    font-family: var(--font-heading);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .s10 .ns-desc {
+    margin-top: 6px;
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .s10 .ns-time {
+    margin-top: 8px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--accent);
+    padding: 2px 10px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Stakeholder strip */
+  .s10 .ns-stakeholders {
     position: absolute;
-    bottom: 48px; left: 64px;
-    width: 600px;
-    padding: 16px 24px;
-    background: var(--card-bg);
+    bottom: 80px; left: 64px; right: 64px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .s10 .ns-stake-label {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    font-weight: 600;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .s10 .ns-stake-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .s10 .ns-tag {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    background: var(--accent-lt);
+    border: 1px solid rgba(0,96,57,0.15);
+    border-radius: 12px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .s10 .ns-tag [data-lucide] {
+    width: 12px; height: 12px;
+    stroke-width: 2;
+    color: var(--accent);
+  }
+
+  /* Bottom bar */
+  .s10 .ns-bottom {
+    position: absolute;
+    bottom: 32px; left: 64px; right: 64px;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
+  .s10 .repo-callout {
+    padding: 12px 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
   .repo-callout .repo-name {
     font-family: var(--font-mono);
-    font-size: 15px;
+    font-size: 14px;
     color: var(--accent);
     font-weight: 500;
   }
   .repo-callout .repo-desc {
-    font-size: 12px;
+    font-size: 11px;
     color: var(--muted);
     margin-top: 2px;
   }
   .s10 .questions {
-    position: absolute;
-    bottom: 48px; right: 64px;
     font-family: var(--font-heading);
     font-size: 22px;
     color: var(--accent);
@@ -1092,6 +1434,70 @@
     right: 60px; top: 40px;
     grid-template-columns: repeat(5, 4px);
     grid-template-rows: repeat(8, 4px);
+  }
+
+  /* ════════════════════════════════════════════
+     SLIDE: CLOSING
+     ════════════════════════════════════════════ */
+  .s-closing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .s-closing .closing-quote {
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.55;
+    letter-spacing: 0.01em;
+    max-width: 700px;
+    margin-top: -40px;
+  }
+  .s-closing .closing-accent-line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 60px);
+    width: 48px;
+    height: 4px;
+    background: var(--accent);
+  }
+  .s-closing .closing-bottom {
+    position: absolute;
+    bottom: 36px; left: 64px; right: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .s-closing .repo-callout {
+    padding: 10px 18px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+  }
+  .s-closing .repo-callout .repo-name {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .s-closing .repo-callout .repo-desc {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .s-closing .closing-questions {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 800;
+  }
+  .s-closing .dot-grid {
+    right: 60px; top: 40px;
+    grid-template-columns: repeat(8, 4px);
+    grid-template-rows: repeat(12, 4px);
   }
 </style>
 </head>
@@ -1112,7 +1518,7 @@
   <div class="subtitle">A demo for the IT department</div>
   <div class="author">Victor Hüni &nbsp;/&nbsp; April 2026</div>
   <div class="dot-grid" id="dots1"></div>
-  <div class="slide-number">1 / 12</div>
+  <div class="slide-number">1 / 14</div>
 </div>
 
 
@@ -1128,7 +1534,7 @@
     </div>
     <div class="disc-footer">Demo first, then we talk</div>
   </div>
-  <div class="slide-number">2 / 12</div>
+  <div class="slide-number">2 / 14</div>
 </div>
 
 
@@ -1168,7 +1574,7 @@
       <span>Hunting for an up-to-date Postman collection with the right version and env variables, shared via Teams</span>
     </div>
   </div>
-  <div class="slide-number">3 / 12</div>
+  <div class="slide-number">3 / 14</div>
 </div>
 
 
@@ -1299,7 +1705,7 @@
   </div>
 
   <div class="callout-bar">The contract is the handshake. Design it first, and everything else falls into place.</div>
-  <div class="slide-number">4 / 12</div>
+  <div class="slide-number">4 / 14</div>
 </div>
 
 
@@ -1379,7 +1785,7 @@
     </a>
   </div>
   <div class="tagline">One file. Everything else is generated.</div>
-  <div class="slide-number">5 / 12</div>
+  <div class="slide-number">5 / 14</div>
 </div>
 
 
@@ -1390,7 +1796,7 @@
   <div class="section-label">DEMO AGENDA</div>
   <h2 class="slide-title">What we'll cover</h2>
   <div class="cards-wrap" id="agenda-cards"></div>
-  <div class="slide-number">6 / 12</div>
+  <div class="slide-number">6 / 14</div>
 </div>
 
 
@@ -1427,7 +1833,7 @@
     </div>
   </div>
   <div class="ch-bottom">These are real constraints. The demo works within them.</div>
-  <div class="slide-number">7 / 12</div>
+  <div class="slide-number">7 / 14</div>
 </div>
 
 
@@ -1498,7 +1904,7 @@
       <div class="usecase"><strong>Test payloads</strong>Use spec examples as test data for ACE connector apps from day one</div>
     </div>
   </div>
-  <div class="slide-number">8 / 12</div>
+  <div class="slide-number">8 / 14</div>
 </div>
 
 
@@ -1573,7 +1979,7 @@
       </div>
     </div>
   </div>
-  <div class="slide-number">9 / 12</div>
+  <div class="slide-number">9 / 14</div>
 </div>
 
 
@@ -1771,7 +2177,7 @@
       </div>
     </div>
   </div>
-  <div class="slide-number">10 / 12</div>
+  <div class="slide-number">10 / 14</div>
 </div>
 
 
@@ -1794,41 +2200,152 @@
       <tr><td>New Member</td><td>Reads scattered docs and Slack</td><td>Reads spec + docs, productive fast</td></tr>
     </tbody>
   </table>
-  <div class="slide-number">11 / 12</div>
+  <div class="slide-number">11 / 14</div>
 </div>
 
 
 
-<!-- slide 12: Next Steps -->
+<!-- slide 12: The Vision -->
+
+<div class="slide s-vision">
+  <div class="accent-bar-left"></div>
+  <div class="section-label">THE VISION</div>
+  <h2 class="slide-title">Imagine This</h2>
+
+  <div class="vision-story">
+    <div class="vision-chapter ch-now">
+      <div class="ch-marker">
+        <div class="ch-dot"></div>
+        <div class="ch-line"></div>
+      </div>
+      <div class="ch-content">
+        <div class="ch-time">Today</div>
+        <div class="ch-text">A new developer joins. They ask on Slack:<br><em>"Where's the API doc? How do I get a token?"</em> Three people answer. None agree.</div>
+      </div>
+    </div>
+    <div class="vision-chapter ch-soon">
+      <div class="ch-marker">
+        <div class="ch-dot"></div>
+        <div class="ch-line"></div>
+      </div>
+      <div class="ch-content">
+        <div class="ch-time">3 months from now</div>
+        <div class="ch-text">Same developer joins. Opens the spec. Clicks "try it out."<br>Mocks respond. Tests pass. First PR by end of day. <em>Nobody had to answer anything.</em></div>
+      </div>
+    </div>
+    <div class="vision-chapter ch-later">
+      <div class="ch-marker">
+        <div class="ch-dot"></div>
+        <div class="ch-line"></div>
+      </div>
+      <div class="ch-content">
+        <div class="ch-time">1 year from now</div>
+        <div class="ch-text">A breaking change lands. The pipeline catches it. The SDK rebuilds.<br>Every API on one dashboard. A PO browses the registry and scopes the next feature alone.<br><em>Production never flinches.</em></div>
+      </div>
+    </div>
+    <div class="vision-chapter ch-far">
+      <div class="ch-marker">
+        <div class="ch-dot"></div>
+      </div>
+      <div class="ch-content">
+        <div class="ch-time">3 years from now</div>
+        <div class="ch-text">Every contract is discoverable. Every integration is tested.<br>Every deployment is automatic. Every mapping is visual.<br><em>The system runs itself. You design what matters.</em></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-number">12 / 14</div>
+</div>
+
+
+
+<!-- slide 13: Next Steps -->
 
 <div class="slide s10">
   <div class="accent-bar-left"></div>
   <div class="section-label">NEXT STEPS</div>
-  <h1 class="slide-title">One contract.<br>Everything else is generated.</h1>
-  <div class="accent-line"></div>
-  <div class="actions">
-    <div class="action-row">
-      <div class="action-badge">30 days</div>
-      <div class="action-text">Pick a pilot API. Adopt Spectral. Evaluate Prism. Add Schemathesis to CI.</div>
+  <h2 class="slide-title">The Road to L1</h2>
+
+  <div class="ns-timeline">
+    <div class="ns-track"></div>
+
+    <div class="ns-step" style="left: 6%;">
+      <div class="ns-node">
+        <i data-lucide="wrench"></i>
+      </div>
+      <div class="ns-label">Finalize the scaffold</div>
+      <div class="ns-desc">Spectral rules, Prism mocks, Hurl tests,<br>Schemathesis, oasdiff &mdash; all wired up.</div>
+      <div class="ns-time">Now</div>
     </div>
-    <div class="action-row">
-      <div class="action-badge">1 quarter</div>
-      <div class="action-text">Hands-on workshop. Expand to more APIs. Internal API catalog. Measure results.</div>
+
+    <div class="ns-step" style="left: 30%;">
+      <div class="ns-node">
+        <i data-lucide="flask-conical"></i>
+      </div>
+      <div class="ns-label">Pilot on one API</div>
+      <div class="ns-desc">Pick a real API. Write the spec first.<br>Let the team feel the workflow end-to-end.</div>
+      <div class="ns-time">Week 1&ndash;2</div>
     </div>
-    <div class="action-row">
-      <div class="action-badge">Now</div>
-      <div class="action-text">Clone the scaffold repo. Run npm install. Start building.</div>
+
+    <div class="ns-step" style="left: 56%;">
+      <div class="ns-node">
+        <i data-lucide="layers"></i>
+      </div>
+      <div class="ns-label">Add L1 capabilities</div>
+      <div class="ns-desc">Shared mocks for the team. AI-assisted spec design.<br>Seamless auth in docs and tests.</div>
+      <div class="ns-time">Month 1&ndash;2</div>
+    </div>
+
+    <div class="ns-step" style="left: 82%;">
+      <div class="ns-node node-accent">
+        <i data-lucide="rocket"></i>
+      </div>
+      <div class="ns-label">Roll out in production</div>
+      <div class="ns-desc">CI guardrails on every PR. Contract-first<br>becomes the default way to build APIs.</div>
+      <div class="ns-time">Month 3</div>
     </div>
   </div>
-  <div class="repo-callout">
-    <div>
+
+  <div class="ns-stakeholders">
+    <div class="ns-stake-label">Who's on this journey</div>
+    <div class="ns-stake-tags">
+      <div class="ns-tag"><i data-lucide="shield-check"></i>QA</div>
+      <div class="ns-tag"><i data-lucide="search"></i>System Analyst</div>
+      <div class="ns-tag"><i data-lucide="cable"></i>Integration Dev</div>
+      <div class="ns-tag"><i data-lucide="monitor"></i>Web Team</div>
+      <div class="ns-tag"><i data-lucide="compass"></i>Tech Lead</div>
+    </div>
+  </div>
+
+  <div class="dot-grid" id="dots10"></div>
+  <div class="slide-number">13 / 14</div>
+</div>
+
+
+
+<!-- slide 14: Closing -->
+
+<div class="slide s-closing">
+  <div class="accent-bar-left"></div>
+
+  <div class="closing-quote">
+    Great engineering isn't writing more code.<br>
+    It's writing the right contract<br>
+    and letting the machines do the rest.
+  </div>
+
+  <div class="closing-accent-line"></div>
+
+  <div class="closing-bottom">
+    <div class="repo-callout">
       <div class="repo-name">scaffold-api/</div>
       <div class="repo-desc">Clone it. Run it. Make it yours.</div>
     </div>
+    <div class="closing-questions">Questions?</div>
   </div>
-  <div class="questions">Questions?</div>
-  <div class="dot-grid" id="dots10"></div>
-  <div class="slide-number">12 / 12</div>
+
+  <div class="dot-grid" id="dots-closing"></div>
+  <div class="slide-number">14 / 14</div>
 </div>
 
 
@@ -1851,6 +2368,7 @@
   }
   fillDotGrid('dots1', 8, 12);
   fillDotGrid('dots10', 5, 8);
+  fillDotGrid('dots-closing', 8, 12);
 
   // ── Agenda items ──
   const agendaCategories = [
@@ -1916,11 +2434,12 @@
   let presenting = false;
 
   function scaleSlides() {
-    const scaleX = window.innerWidth / 960;
-    const scaleY = window.innerHeight / 540;
+    const margin = 40;
+    const scaleX = (window.innerWidth - margin * 2) / 960;
+    const scaleY = (window.innerHeight - margin * 2) / 540;
     const scale = Math.min(scaleX, scaleY);
     slides.forEach(s => {
-      s.style.transform = presenting ? `scale(${scale})` : '';
+      s.style.transform = presenting ? `translate(-50%, -50%) scale(${scale})` : '';
     });
   }
 

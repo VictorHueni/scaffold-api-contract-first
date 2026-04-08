@@ -15,6 +15,7 @@
   }
   fillDotGrid('dots1', 8, 12);
   fillDotGrid('dots10', 5, 8);
+  fillDotGrid('dots-closing', 8, 12);
 
   // ── Agenda items ──
   const agendaCategories = [
@@ -80,11 +81,12 @@
   let presenting = false;
 
   function scaleSlides() {
-    const scaleX = window.innerWidth / 960;
-    const scaleY = window.innerHeight / 540;
+    const margin = 40;
+    const scaleX = (window.innerWidth - margin * 2) / 960;
+    const scaleY = (window.innerHeight - margin * 2) / 540;
     const scale = Math.min(scaleX, scaleY);
     slides.forEach(s => {
-      s.style.transform = presenting ? `scale(${scale})` : '';
+      s.style.transform = presenting ? `translate(-50%, -50%) scale(${scale})` : '';
     });
   }
 

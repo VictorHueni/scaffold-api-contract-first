@@ -55,9 +55,15 @@ slides:
   - file: "10-role-impact.html"
     class: "s9"
     label: "Role Impact"
+  - file: "10b-vision.html"
+    class: "s-vision"
+    label: "The Vision"
   - file: "11-next-steps.html"
     class: "s10"
     label: "Next Steps"
+  - file: "12-closing.html"
+    class: "s-closing"
+    label: "Closing"
 
 # Paths relative to this config file
 paths:
