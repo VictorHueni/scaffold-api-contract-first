@@ -1,0 +1,69 @@
+<div class="slide s-micro">
+  <div class="section-label">ARCHITECTURE</div>
+  <h2 class="slide-title">Contract-First in a Microservice Landscape</h2>
+
+  <div class="micro-diagram">
+    <!-- DEV / QA -->
+    <div class="micro-env">
+      <div class="micro-env-label dev">DEV / QA</div>
+      <div class="micro-lane">
+        <div class="micro-col">
+          <div class="micro-box consumer">Frontend App<div class="micro-sub">Consumer</div></div>
+          <div class="micro-box consumer">Mobile App<div class="micro-sub">Consumer</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box gateway">API Gateway<div class="micro-sub">Routes + Auth</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-grid-col">
+          <div class="micro-grid-row">
+            <div class="micro-box service">Service A<div class="micro-sub">owns /orders</div></div>
+            <div class="micro-box service">Service B<div class="micro-sub">owns /payments</div></div>
+          </div>
+          <div class="micro-box mock wide">Mock C<div class="micro-sub">Prism &middot; /inventory</div></div>
+          <div class="micro-box mock wide">Mock D<div class="micro-sub">Prism &middot; /shipping</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box datastore">Database<div class="micro-sub">Per service</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROD -->
+    <div class="micro-env">
+      <div class="micro-env-label prod">PRODUCTION</div>
+      <div class="micro-lane">
+        <div class="micro-col">
+          <div class="micro-box consumer">Frontend App<div class="micro-sub">Consumer</div></div>
+          <div class="micro-box consumer">Mobile App<div class="micro-sub">Consumer</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box gateway">API Gateway<div class="micro-sub">Routes + Auth</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col services">
+          <div class="micro-box service">Service A<div class="micro-sub">/orders</div></div>
+          <div class="micro-box service">Service B<div class="micro-sub">/payments</div></div>
+          <div class="micro-box service">Service C<div class="micro-sub">/inventory</div></div>
+          <div class="micro-box service">Service D<div class="micro-sub">/shipping</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box datastore">Database<div class="micro-sub">Per service</div></div>
+          <div class="micro-box external">External API<div class="micro-sub">3rd party</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="micro-usecases">
+    <div class="micro-uc"><strong>Develop in isolation</strong>Each team builds against the contract, mocks replace unready services</div>
+    <div class="micro-uc"><strong>Catch breaking changes</strong>oasdiff + Schemathesis in CI validate every PR against every consumer</div>
+    <div class="micro-uc"><strong>One spec, full stack</strong>Docs, client SDKs, tests, and mocks all generated from the same source</div>
+  </div>
+
+  <div class="slide-number"></div>
+</div>

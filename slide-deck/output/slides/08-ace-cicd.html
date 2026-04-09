@@ -1,70 +1,47 @@
 <div class="slide s7">
-  <div class="section-label">IBM STACK</div>
-  <h2 class="slide-title">ACE CI/CD - Small Increments, Pick Our Battles</h2>
+  <div class="section-label">MIDDLEWARE CI/CD</div>
+  <h2 class="slide-title">ESB CI/CD - Small Increments, Pick Our Battles</h2>
   <div class="cicd-wrap">
     <div class="cicd-item">
       <div class="cicd-status ready">&#9679;</div>
       <div class="cicd-body">
-        <div class="cicd-title"><a href="https://github.com/ot4i/ace-maven-plugin" target="_blank">BAR file build via Maven</a></div>
-        <div class="cicd-desc">Compile message flows and package BAR artifacts in a repeatable pipeline step. No Toolkit required.</div>
-        <div class="cicd-links">
-          <a href="https://github.com/ot4i/ace-maven-plugin" target="_blank">ace-maven-plugin</a>
-          <a href="https://github.com/ot4i/ace-demo-pipeline" target="_blank">ace-demo-pipeline</a>
-          <a href="https://github.com/jpcasas/ibm-maven-plugin" target="_blank">ibm-maven-plugin (ACE+MQ+APIC)</a>
-        </div>
+        <div class="cicd-title">Artifact build via CLI / Maven</div>
+        <div class="cicd-desc">Compile message flows and package deployable artifacts in a repeatable pipeline step. No desktop IDE required.</div>
         <div class="cicd-tag ready">READY</div>
       </div>
     </div>
     <div class="cicd-item">
       <div class="cicd-status ready">&#9679;</div>
       <div class="cicd-body">
-        <div class="cicd-title"><a href="https://github.com/IBM/cloudpak-gitops" target="_blank">GitOps-driven deployment to CP4i</a></div>
-        <div class="cicd-desc">IntegrationServer CRs stored in Git, ArgoCD syncs to OpenShift. Promotes across DEV, QA, ACP, PROD.</div>
-        <div class="cicd-links">
-          <a href="https://github.com/IBM/cloudpak-gitops" target="_blank">cloudpak-gitops (ArgoCD)</a>
-          <a href="https://github.com/dalelane/app-connect-tekton-pipeline" target="_blank">ace-tekton-pipeline</a>
-          <a href="https://github.com/sreckoj/CP4I-ACE-CI-CD-Jenkins" target="_blank">CP4I-ACE-CI-CD-Jenkins</a>
-        </div>
+        <div class="cicd-title">GitOps-driven deployment</div>
+        <div class="cicd-desc">Deployment configs stored in Git, synced to the runtime environment via ArgoCD or equivalent. Promotes across DEV, QA, STAGING, PROD.</div>
         <div class="cicd-tag ready">READY</div>
       </div>
     </div>
     <div class="cicd-item">
       <div class="cicd-status wip">&#9679;</div>
       <div class="cicd-body">
-        <div class="cicd-title"><a href="https://github.com/ot4i/ace-demo-pipeline" target="_blank">Contract-based smoke tests post-deploy</a></div>
-        <div class="cicd-desc">Run Hurl / Schemathesis against deployed ACE endpoints to validate the contract after each release.</div>
-        <div class="cicd-links">
-          <a href="https://hurl.dev/docs/manual.html" target="_blank">Hurl docs</a>
-          <a href="https://schemathesis.readthedocs.io/" target="_blank">Schemathesis docs</a>
-          <a href="https://community.ibm.com/community/user/blogs/trevor-dolby/2023/03/20/app-connect-enterprise-ace-unit-and-component-test" target="_blank">ACE unit &amp; component tests</a>
-        </div>
+        <div class="cicd-title">Contract-based smoke tests post-deploy</div>
+        <div class="cicd-desc">Run Hurl / Schemathesis against deployed ESB endpoints to validate the contract after each release.</div>
         <div class="cicd-tag wip">IN PROGRESS</div>
       </div>
     </div>
     <div class="cicd-item">
       <div class="cicd-status wip">&#9679;</div>
       <div class="cicd-body">
-        <div class="cicd-title"><a href="https://www.ibm.com/docs/en/app-connect/12.0.x?topic=cra-creating-rest-api-from-imported-openapi-30-document" target="_blank">OpenAPI spec import automation</a></div>
-        <div class="cicd-desc">Auto-import updated OpenAPI 3.0 spec into ACE project on pipeline trigger. Reduces manual Toolkit steps.</div>
-        <div class="cicd-links">
-          <a href="https://www.ibm.com/docs/en/app-connect/12.0.x?topic=cra-creating-rest-api-from-imported-openapi-30-document" target="_blank">IBM docs: OpenAPI 3.0 import</a>
-          <a href="https://github.com/abughali/ace-openapi3-sample" target="_blank">ace-openapi3-sample</a>
-        </div>
+        <div class="cicd-title">OpenAPI spec import automation</div>
+        <div class="cicd-desc">Auto-import updated OpenAPI 3.0 spec into the ESB project on pipeline trigger. Reduces manual steps.</div>
         <div class="cicd-tag wip">IN PROGRESS</div>
       </div>
     </div>
     <div class="cicd-item">
       <div class="cicd-status planned">&#9679;</div>
       <div class="cicd-body">
-        <div class="cicd-title"><a href="https://github.com/IBMRedbooks/SG248452-Accelerating-Modernization-with-Agile-Integration-CICD-infra" target="_blank">Full integration test environment on-demand</a></div>
-        <div class="cicd-desc">Spin up ephemeral CP4i namespace with mock backends for PR-level validation. Longer-term goal.</div>
-        <div class="cicd-links">
-          <a href="https://github.com/IBMRedbooks/SG248452-Accelerating-Modernization-with-Agile-Integration-CICD-infra" target="_blank">IBM Redbook: Agile Integration CI/CD</a>
-          <a href="https://github.com/apac-cp4i-demo/multi-tenancy-gitops" target="_blank">CP4i multi-tenancy GitOps</a>
-        </div>
+        <div class="cicd-title">Full integration test environment on-demand</div>
+        <div class="cicd-desc">Spin up ephemeral environments with mock backends for PR-level validation. Longer-term goal.</div>
         <div class="cicd-tag planned">PLANNED</div>
       </div>
     </div>
   </div>
-  <div class="slide-number">9 / 12</div>
+  <div class="slide-number"></div>
 </div>

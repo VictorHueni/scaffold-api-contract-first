@@ -1,32 +1,32 @@
 <div class="slide s-ibm-ch">
-  <div class="section-label">IBM STACK</div>
-  <h2 class="slide-title">Why this is tricky on IBM</h2>
+  <div class="section-label">MIDDLEWARE REALITY</div>
+  <h2 class="slide-title">Why this is tricky on an ESB</h2>
   <div class="ch-grid">
     <div class="ch-card">
       <div class="ch-num">01</div>
-      <div class="ch-body"><div class="ch-title">Manual OpenAPI Import</div><div class="ch-desc">ACE Toolkit requires a <a href="https://www.ibm.com/docs/en/app-connect/12.0.x?topic=cra-creating-rest-api-from-imported-openapi-30-document" target="_blank">manual import</a> of OpenAPI specs via file browser. No native watch or auto-sync from Git. Every spec change means a manual re-import with risk of version mismatch.</div></div>
+      <div class="ch-body"><div class="ch-title">Manual OpenAPI Import</div><div class="ch-desc">Most ESBs require a manual import of OpenAPI specs via a file browser or admin console. No native watch or auto-sync from Git. Every spec change means a manual re-import with risk of version mismatch.</div></div>
     </div>
     <div class="ch-card">
       <div class="ch-num">02</div>
-      <div class="ch-body"><div class="ch-title">ACE Scaffolding is Create-Oriented</div><div class="ch-desc">ACE can <a href="https://github.com/abughali/ace-openapi3-sample" target="_blank">scaffold a new REST API</a> from an OpenAPI spec, but the workflow focuses on initial creation. Updating existing flows, subflows, and mappings after a spec change is not a supported path today.</div></div>
+      <div class="ch-body"><div class="ch-title">Scaffolding is Create-Oriented</div><div class="ch-desc">ESBs can scaffold a new API project from an OpenAPI spec, but the workflow focuses on initial creation. Updating existing flows, mappings, and transformations after a spec change is rarely a supported path.</div></div>
     </div>
     <div class="ch-card">
       <div class="ch-num">03</div>
-      <div class="ch-body"><div class="ch-title">Spec Changes Can Ripple Through Flows</div><div class="ch-desc">Renaming a field or changing a response schema can affect ACE message maps, compute nodes, and connector logic. Flows reference schema fields directly, making the impact hard to predict without <a href="https://www.ibm.com/docs/en/app-connect/13.0.x?topic=apis-restrictions-openapi-30-documents" target="_blank">good test coverage</a>.</div></div>
+      <div class="ch-body"><div class="ch-title">Spec Changes Ripple Through Flows</div><div class="ch-desc">Renaming a field or changing a response schema can affect message maps, transformation nodes, and connector logic. Flows reference schema fields directly, making the impact hard to predict without good test coverage.</div></div>
     </div>
     <div class="ch-card">
       <div class="ch-num">04</div>
-      <div class="ch-body"><div class="ch-title">OpenAPI 3.0 Feature Restrictions</div><div class="ch-desc">ACE doesn't support the full OpenAPI 3.0 spec. Constructs like <a href="https://medium.com/@ivansla/how-to-work-with-polymorphism-when-implementing-rest-services-in-ibm-ace-13ccdb93853f" target="_blank">oneOf, anyOf, and polymorphism</a> have <a href="https://www.ibm.com/docs/en/app-connect/13.0.x?topic=apis-restrictions-openapi-30-documents" target="_blank">documented restrictions</a>. Your spec may be valid OpenAPI but ACE can't fully consume it.</div></div>
+      <div class="ch-body"><div class="ch-title">OpenAPI Feature Restrictions</div><div class="ch-desc">Many ESBs don't support the full OpenAPI 3.0 spec. Constructs like oneOf, anyOf, and polymorphism have limited or no support. Your spec may be valid OpenAPI but the middleware can't fully consume it.</div></div>
     </div>
     <div class="ch-card">
       <div class="ch-num">05</div>
-      <div class="ch-body"><div class="ch-title">Flow Development Requires Desktop Toolkit</div><div class="ch-desc">ACE v12 added a <a href="https://croz.net/ibm-app-connect-enterprise-v12/" target="_blank">web editor for API design</a>, but message flow development (node wiring, maps, compute nodes) still requires the <a href="https://www.ibm.com/docs/en/app-connect/11.0.0?topic=overview-app-connect-enterprise-toolkit" target="_blank">Eclipse-based desktop toolkit</a>. Harder to integrate into a modern Git-based workflow.</div></div>
+      <div class="ch-body"><div class="ch-title">Flow Development Requires Proprietary Tooling</div><div class="ch-desc">Message flow development (node wiring, maps, transformations) typically requires a vendor-specific desktop IDE or studio. Harder to integrate into a modern Git-based workflow.</div></div>
     </div>
     <div class="ch-card">
       <div class="ch-num">06</div>
-      <div class="ch-body"><div class="ch-title">CI/CD for On-Prem ACE is Exploratory</div><div class="ch-desc">No official IBM CI/CD product for on-prem ACE. BAR builds rely on community tools like <a href="https://github.com/ot4i/ace-maven-plugin" target="_blank">ace-maven-plugin</a> and <a href="https://github.com/ot4i/ace-demo-pipeline" target="_blank">ace-demo-pipeline</a>, provided AS-IS with no warranty. Teams assemble their own pipelines.</div></div>
+      <div class="ch-body"><div class="ch-title">CI/CD is Assemble-It-Yourself</div><div class="ch-desc">Most ESB vendors don't ship an official CI/CD pipeline. Artifact builds rely on community tools or custom scripts. Teams assemble their own pipelines from scratch.</div></div>
     </div>
   </div>
   <div class="ch-bottom">These are real constraints. The demo works within them.</div>
-  <div class="slide-number">7 / 12</div>
+  <div class="slide-number"></div>
 </div>

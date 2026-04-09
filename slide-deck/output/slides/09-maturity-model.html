@@ -15,7 +15,7 @@
         <div class="mc-tip">
           <div class="mc-tip-level tl1">L1 Foundation</div>
           <div class="mc-tip-hdr">Shared Mock Server</div>
-          <div class="mc-tip-desc">Centralized Prism instance fed from spec examples. Frontend, ACE, and QA share the same mock. No more diverging stubs.</div>
+          <div class="mc-tip-desc">Centralized Prism instance fed from spec examples. Frontend, ESB, and QA share the same mock. No more diverging stubs.</div>
           <div class="mc-tip-links">
             <a href="https://stoplight.io/open-source/prism" target="_blank">Prism</a>
             <a href="https://docs.stoplight.io/docs/prism" target="_blank">Prism docs</a>
@@ -66,7 +66,7 @@
         <div class="mc-tip">
           <div class="mc-tip-level tl2">L2 Automate</div>
           <div class="mc-tip-hdr">API Observability</div>
-          <div class="mc-tip-desc">Pipe APIC gateway logs and ACE monitoring events into the existing ELK stack. Build Kibana dashboards for call volume, latency percentiles, error rates, and deprecation signals per endpoint.</div>
+          <div class="mc-tip-desc">Pipe API gateway logs and ESB monitoring events into the existing ELK stack. Build Kibana dashboards for call volume, latency percentiles, error rates, and deprecation signals per endpoint.</div>
           <div class="mc-tip-links">
             <a href="https://www.elastic.co/kibana" target="_blank">Kibana</a>
             <a href="https://www.elastic.co/beats/filebeat" target="_blank">Filebeat</a>
@@ -80,7 +80,7 @@
         <div class="mc-tip">
           <div class="mc-tip-level tl3">L3 Scale</div>
           <div class="mc-tip-hdr">AsyncAPI Events</div>
-          <div class="mc-tip-desc">Apply the same contract-first philosophy to event-driven APIs: Kafka topics, MQ queues, MQTT. Lint with Spectral, generate docs, and produce typed consumers from AsyncAPI specs.</div>
+          <div class="mc-tip-desc">Apply the same contract-first philosophy to event-driven APIs: Kafka topics, message queues, MQTT. Lint with Spectral, generate docs, and produce typed consumers from AsyncAPI specs.</div>
           <div class="mc-tip-links">
             <a href="https://www.asyncapi.com/" target="_blank">AsyncAPI</a>
             <a href="https://www.asyncapi.com/tools/generator" target="_blank">Generator</a>
@@ -131,7 +131,7 @@
         <div class="mc-tip">
           <div class="mc-tip-level tl4">L4 Mastery</div>
           <div class="mc-tip-hdr">Full CI/CD Pipeline</div>
-          <div class="mc-tip-desc">End-to-end automation: PR triggers lint, mock, contract tests, BAR build, deploy to CP4i, smoke test, and promote to production. No human in the loop from merge to prod.</div>
+          <div class="mc-tip-desc">End-to-end automation: PR triggers lint, mock, contract tests, artifact build, deploy, smoke test, and promote to production. No human in the loop from merge to prod.</div>
           <div class="mc-tip-links">
             <a href="https://github.com/features/actions" target="_blank">GitHub Actions</a>
             <a href="https://tekton.dev/" target="_blank">Tekton</a>
@@ -143,7 +143,7 @@
         <div class="mc-tip">
           <div class="mc-tip-level tl4">L4 Mastery</div>
           <div class="mc-tip-hdr">Visual Mapping IDE</div>
-          <div class="mc-tip-desc">Vendor-neutral OSS tool to import any contract (OpenAPI, WSDL, AsyncAPI), visually link fields, define transformations, and generate output for any runtime: ACE maps, DataPower, MuleSoft, etc.</div>
+          <div class="mc-tip-desc">Vendor-neutral OSS tool to import any contract (OpenAPI, WSDL, AsyncAPI), visually link fields, define transformations, and generate output for any runtime: ESB maps, DataWeave, XSLT, and more.</div>
           <div class="mc-tip-links">
             <a href="#">OSS Project (WIP)</a>
           </div>
@@ -176,7 +176,7 @@
       </div>
       <div class="mc-leg-group">
         <div class="mc-leg-hdr l3">L3 Scale</div>
-        <div class="mc-leg-item"><i data-lucide="zap"></i><span class="mc-leg-text">AsyncAPI Events</span><span class="mc-leg-sub">Kafka, MQ</span></div>
+        <div class="mc-leg-item"><i data-lucide="zap"></i><span class="mc-leg-text">AsyncAPI Events</span><span class="mc-leg-sub">Kafka, queues</span></div>
         <div class="mc-leg-item"><i data-lucide="library"></i><span class="mc-leg-text">Schema Registry</span><span class="mc-leg-sub">Central catalog</span></div>
         <div class="mc-leg-item"><i data-lucide="package"></i><span class="mc-leg-text">SDK Generation</span><span class="mc-leg-sub">Typed clients</span></div>
         <div class="mc-leg-item"><i data-lucide="flask-conical"></i><span class="mc-leg-text">Prod Data as Fixtures</span><span class="mc-leg-sub">Anonymized, classified</span></div>

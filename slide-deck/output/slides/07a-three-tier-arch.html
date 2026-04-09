@@ -1,0 +1,62 @@
+<div class="slide s-micro">
+  <div class="section-label">ARCHITECTURE</div>
+  <h2 class="slide-title">Contract-First in a Classic Three-Tier App</h2>
+
+  <div class="micro-diagram">
+    <!-- DEV / QA -->
+    <div class="micro-env">
+      <div class="micro-env-label dev">DEV / QA</div>
+      <div class="micro-lane">
+        <div class="micro-col">
+          <div class="micro-box consumer">Frontend<div class="micro-sub">SPA / Mobile</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box mock">Mock Server<div class="micro-sub">Prism / examples</div></div>
+        </div>
+        <div class="micro-spacer"></div>
+        <div class="micro-col">
+          <div class="micro-box generated">Server Stubs<div class="micro-sub">Generated from spec</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box service">Business Logic<div class="micro-sub">You implement this</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box datastore">Database<div class="micro-sub">SQL / NoSQL</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROD -->
+    <div class="micro-env">
+      <div class="micro-env-label prod">PRODUCTION</div>
+      <div class="micro-lane">
+        <div class="micro-col">
+          <div class="micro-box consumer">Frontend<div class="micro-sub">SPA / Mobile</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box gateway">API Layer<div class="micro-sub">Controllers + DTOs</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box service">Business Logic<div class="micro-sub">Domain services</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box datastore">Database<div class="micro-sub">SQL / NoSQL</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="micro-usecases">
+    <div class="micro-uc"><strong>Unblock the frontend</strong>Mock server serves realistic responses before the backend exists</div>
+    <div class="micro-uc"><strong>Generate server stubs</strong>Controllers and DTOs scaffolded from the spec — implement, don't invent</div>
+    <div class="micro-uc"><strong>Test the contract</strong>Schemathesis and Hurl validate every endpoint against the spec in CI</div>
+  </div>
+
+  <div class="slide-number"></div>
+</div>

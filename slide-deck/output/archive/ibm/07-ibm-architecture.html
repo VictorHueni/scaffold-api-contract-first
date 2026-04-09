@@ -1,32 +1,32 @@
 <div class="slide s6">
-  <div class="section-label">ARCHITECTURE</div>
-  <h2 class="slide-title">Contract-First in the Integration Layer</h2>
+  <div class="section-label">IBM STACK</div>
+  <h2 class="slide-title">Contract-First in the IBM Integration Layer</h2>
   <div class="arch-wrap">
     <!-- Zone headers -->
     <div class="zone-headers">
       <div class="zone-hdr"></div>
       <div class="zone-hdr">Consumer</div>
       <div class="zone-hdr">API Gateway</div>
-      <div class="zone-hdr" style="grid-column: span 2">Integration (ESB)</div>
+      <div class="zone-hdr" style="grid-column: span 2">Integration (ACE)</div>
       <div class="zone-hdr">Backend</div>
     </div>
     <!-- Grid wrapper for SVG overlay -->
     <div class="arch-grid-wrap">
       <svg class="cross-arrows" id="s6-arrows"></svg>
       <div class="arch-grid">
-        <!-- DEV / QA row -->
+        <!-- DEV / QA row: 6 cells -->
         <div class="env-cell dev">DEV / QA</div>
         <div class="zone dev-bg sep-right">
           <div class="arch-box frontend" id="d-fe">Frontend App<div class="arch-box-sub">Consumer</div></div>
         </div>
         <div class="zone dev-bg sep-right">
-          <div class="arch-box apic" id="d-apic">API Gateway<div class="arch-box-sub">Gateway + Portal</div></div>
+          <div class="arch-box apic" id="d-apic">API Connect<div class="arch-box-sub">Gateway + Portal</div></div>
         </div>
         <div class="zone dev-bg sep-right span2">
           <div class="ace-row">
             <div class="arch-box mock" id="d-mock">Mock Server<div class="arch-box-sub">Prism / examples</div></div>
-            <div class="arch-box ace" id="d-adapt">ESB Adapter<div class="arch-box-sub">Canonical model</div></div>
-            <div class="arch-box ace-conn" id="d-conn">ESB Connector<div class="arch-box-sub">Backend format</div></div>
+            <div class="arch-box ace" id="d-adapt">ACE Adapter<div class="arch-box-sub">Canonical model</div></div>
+            <div class="arch-box ace-conn" id="d-conn">ACE Connector<div class="arch-box-sub">Backend format</div></div>
           </div>
         </div>
         <div class="zone dev-bg">
@@ -34,18 +34,18 @@
             <div class="arch-box backend-mock" id="d-be">Mock Backend<div class="arch-box-sub">Test payloads</div></div>
           </div>
         </div>
-        <!-- STAGING / PROD row -->
-        <div class="env-cell prod">STG / PROD</div>
+        <!-- ACP / PROD row: 6 cells -->
+        <div class="env-cell prod">ACP / PROD</div>
         <div class="zone prod-bg sep-right">
           <div class="arch-box frontend" id="p-fe">Frontend App<div class="arch-box-sub">Consumer</div></div>
         </div>
         <div class="zone prod-bg sep-right">
-          <div class="arch-box apic" id="p-apic">API Gateway<div class="arch-box-sub">Gateway + Portal</div></div>
+          <div class="arch-box apic" id="p-apic">API Connect<div class="arch-box-sub">Gateway + Portal</div></div>
         </div>
         <div class="zone prod-bg sep-right span2">
           <div class="ace-row align-right">
-            <div class="arch-box ace" id="p-adapt">ESB Adapter<div class="arch-box-sub">Canonical model</div></div>
-            <div class="arch-box ace-conn" id="p-conn">ESB Connector<div class="arch-box-sub">Backend format</div></div>
+            <div class="arch-box ace" id="p-adapt">ACE Adapter<div class="arch-box-sub">Canonical model</div></div>
+            <div class="arch-box ace-conn" id="p-conn">ACE Connector<div class="arch-box-sub">Backend format</div></div>
           </div>
         </div>
         <div class="zone prod-bg">
@@ -58,9 +58,9 @@
     <!-- Use cases -->
     <div class="usecases">
       <div class="usecase"><strong>Unblock consumers</strong>Publish consumed API YAML so frontend teams can work independently</div>
-      <div class="usecase"><strong>Unblock ESB dev</strong>Mock the provided API so adapter flows can be built before the backend is ready</div>
-      <div class="usecase"><strong>Test payloads</strong>Use spec examples as test data for ESB connector apps from day one</div>
+      <div class="usecase"><strong>Unblock ACE dev</strong>Mock the provided API so adapter flows can be built before the backend is ready</div>
+      <div class="usecase"><strong>Test payloads</strong>Use spec examples as test data for ACE connector apps from day one</div>
     </div>
   </div>
-  <div class="slide-number"></div>
+  <div class="slide-number">8 / 12</div>
 </div>

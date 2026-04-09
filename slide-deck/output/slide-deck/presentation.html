@@ -675,6 +675,148 @@
   }
 
   /* ════════════════════════════════════════════
+     SLIDE: MICROSERVICE ARCHITECTURE
+     ════════════════════════════════════════════ */
+  .s-micro .section-label { position: absolute; top: 32px; left: 48px; }
+  .s-micro .slide-title { position: absolute; top: 52px; left: 48px; font-size: 22px; }
+  .s-micro .micro-diagram {
+    position: absolute;
+    top: 92px; left: 32px; right: 32px;
+    bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .s-micro .micro-env {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    min-height: 0;
+  }
+  .s-micro .micro-env-label {
+    width: 36px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    border-radius: 6px 0 0 6px;
+  }
+  .s-micro .micro-env-label.dev { background: #eef2ff; color: #4338ca; }
+  .s-micro .micro-env-label.prod { background: #ecfdf5; color: #065f46; }
+  .s-micro .micro-lane {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-left: none;
+    border-radius: 0 6px 6px 0;
+  }
+  .s-micro .micro-env:first-child .micro-lane { background: #fafafe; }
+  .s-micro .micro-env:last-child .micro-lane { background: #f8fdfb; }
+  .s-micro .micro-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+  }
+  .s-micro .micro-col.services {
+    flex: 1;
+  }
+  .s-micro .micro-arrow {
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+  }
+  .s-micro .micro-arrow [data-lucide] {
+    width: 16px; height: 16px;
+    color: var(--border);
+    stroke-width: 2;
+  }
+  .s-micro .micro-box {
+    width: 108px;
+    padding: 6px 8px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.25;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .s-micro .micro-sub {
+    font-size: 7px;
+    font-family: var(--font-mono);
+    font-weight: 400;
+    opacity: 0.8;
+    margin-top: 1px;
+  }
+  .s-micro .micro-box.consumer { background: #1d4ed8; color: #fff; }
+  .s-micro .micro-box.gateway { background: var(--accent); color: #fff; }
+  .s-micro .micro-box.service { background: #fefce8; color: #854d0e; border: 1px solid #fde68a; }
+  .s-micro .micro-box.mock { background: #eef2ff; color: #4338ca; border: 2px dashed #818cf8; }
+  .s-micro .micro-box.datastore { background: #111; color: #fff; }
+  .s-micro .micro-box.external { background: #f0fdf4; color: #166534; border: 2px dashed #86efac; }
+  .s-micro .micro-box.wide { width: 100%; }
+  .s-micro .micro-spacer {
+    width: 1px;
+    align-self: stretch;
+    margin: 8px 6px;
+    background: var(--border);
+  }
+  .s-micro .micro-grid-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    flex: 1;
+  }
+  .s-micro .micro-grid-row {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+  }
+  .s-micro .micro-grid-row .micro-box {
+    flex: 1;
+    width: auto;
+  }
+  .s-micro .micro-box.generated { background: #ecfdf5; color: #065f46; border: 2px dashed var(--accent); }
+  .s-micro .micro-usecases {
+    position: absolute;
+    bottom: 14px; left: 32px; right: 32px;
+    display: flex;
+    gap: 8px;
+  }
+  .s-micro .micro-uc {
+    flex: 1;
+    padding: 6px 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 3px;
+    font-size: 8px;
+    color: var(--muted);
+    line-height: 1.35;
+  }
+  .s-micro .micro-uc strong {
+    display: block;
+    font-size: 9px;
+    color: var(--text);
+    margin-bottom: 1px;
+  }
+
+  /* ════════════════════════════════════════════
      SLIDE 6: IBM STACK ARCHITECTURE
      ════════════════════════════════════════════ */
   .s6 .section-label { position: absolute; top: 32px; left: 48px; }
@@ -1488,6 +1630,24 @@
     color: var(--muted);
     margin-top: 2px;
   }
+  .s-closing .closing-contact {
+    text-align: center;
+  }
+  .s-closing .closing-contact-label {
+    font-family: var(--font-body);
+    font-size: 8px;
+    font-weight: 500;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 3px;
+  }
+  .s-closing .closing-contact-url {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+  }
   .s-closing .closing-questions {
     font-family: var(--font-heading);
     font-size: 22px;
@@ -1801,74 +1961,104 @@
 
 
 
-<!-- slide 7: IBM Challenges -->
+<!-- slide 7: Three-Tier Architecture -->
 
-<div class="slide s-ibm-ch">
-  <div class="section-label">IBM STACK</div>
-  <h2 class="slide-title">Why this is tricky on IBM</h2>
-  <div class="ch-grid">
-    <div class="ch-card">
-      <div class="ch-num">01</div>
-      <div class="ch-body"><div class="ch-title">Manual OpenAPI Import</div><div class="ch-desc">ACE Toolkit requires a <a href="https://www.ibm.com/docs/en/app-connect/12.0.x?topic=cra-creating-rest-api-from-imported-openapi-30-document" target="_blank">manual import</a> of OpenAPI specs via file browser. No native watch or auto-sync from Git. Every spec change means a manual re-import with risk of version mismatch.</div></div>
+<div class="slide s-micro">
+  <div class="section-label">ARCHITECTURE</div>
+  <h2 class="slide-title">Contract-First in a Classic Three-Tier App</h2>
+
+  <div class="micro-diagram">
+    <!-- DEV / QA -->
+    <div class="micro-env">
+      <div class="micro-env-label dev">DEV / QA</div>
+      <div class="micro-lane">
+        <div class="micro-col">
+          <div class="micro-box consumer">Frontend<div class="micro-sub">SPA / Mobile</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box mock">Mock Server<div class="micro-sub">Prism / examples</div></div>
+        </div>
+        <div class="micro-spacer"></div>
+        <div class="micro-col">
+          <div class="micro-box generated">Server Stubs<div class="micro-sub">Generated from spec</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box service">Business Logic<div class="micro-sub">You implement this</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box datastore">Database<div class="micro-sub">SQL / NoSQL</div></div>
+        </div>
+      </div>
     </div>
-    <div class="ch-card">
-      <div class="ch-num">02</div>
-      <div class="ch-body"><div class="ch-title">ACE Scaffolding is Create-Oriented</div><div class="ch-desc">ACE can <a href="https://github.com/abughali/ace-openapi3-sample" target="_blank">scaffold a new REST API</a> from an OpenAPI spec, but the workflow focuses on initial creation. Updating existing flows, subflows, and mappings after a spec change is not a supported path today.</div></div>
-    </div>
-    <div class="ch-card">
-      <div class="ch-num">03</div>
-      <div class="ch-body"><div class="ch-title">Spec Changes Can Ripple Through Flows</div><div class="ch-desc">Renaming a field or changing a response schema can affect ACE message maps, compute nodes, and connector logic. Flows reference schema fields directly, making the impact hard to predict without <a href="https://www.ibm.com/docs/en/app-connect/13.0.x?topic=apis-restrictions-openapi-30-documents" target="_blank">good test coverage</a>.</div></div>
-    </div>
-    <div class="ch-card">
-      <div class="ch-num">04</div>
-      <div class="ch-body"><div class="ch-title">OpenAPI 3.0 Feature Restrictions</div><div class="ch-desc">ACE doesn't support the full OpenAPI 3.0 spec. Constructs like <a href="https://medium.com/@ivansla/how-to-work-with-polymorphism-when-implementing-rest-services-in-ibm-ace-13ccdb93853f" target="_blank">oneOf, anyOf, and polymorphism</a> have <a href="https://www.ibm.com/docs/en/app-connect/13.0.x?topic=apis-restrictions-openapi-30-documents" target="_blank">documented restrictions</a>. Your spec may be valid OpenAPI but ACE can't fully consume it.</div></div>
-    </div>
-    <div class="ch-card">
-      <div class="ch-num">05</div>
-      <div class="ch-body"><div class="ch-title">Flow Development Requires Desktop Toolkit</div><div class="ch-desc">ACE v12 added a <a href="https://croz.net/ibm-app-connect-enterprise-v12/" target="_blank">web editor for API design</a>, but message flow development (node wiring, maps, compute nodes) still requires the <a href="https://www.ibm.com/docs/en/app-connect/11.0.0?topic=overview-app-connect-enterprise-toolkit" target="_blank">Eclipse-based desktop toolkit</a>. Harder to integrate into a modern Git-based workflow.</div></div>
-    </div>
-    <div class="ch-card">
-      <div class="ch-num">06</div>
-      <div class="ch-body"><div class="ch-title">CI/CD for On-Prem ACE is Exploratory</div><div class="ch-desc">No official IBM CI/CD product for on-prem ACE. BAR builds rely on community tools like <a href="https://github.com/ot4i/ace-maven-plugin" target="_blank">ace-maven-plugin</a> and <a href="https://github.com/ot4i/ace-demo-pipeline" target="_blank">ace-demo-pipeline</a>, provided AS-IS with no warranty. Teams assemble their own pipelines.</div></div>
+
+    <!-- PROD -->
+    <div class="micro-env">
+      <div class="micro-env-label prod">PRODUCTION</div>
+      <div class="micro-lane">
+        <div class="micro-col">
+          <div class="micro-box consumer">Frontend<div class="micro-sub">SPA / Mobile</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box gateway">API Layer<div class="micro-sub">Controllers + DTOs</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box service">Business Logic<div class="micro-sub">Domain services</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box datastore">Database<div class="micro-sub">SQL / NoSQL</div></div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="ch-bottom">These are real constraints. The demo works within them.</div>
+
+  <div class="micro-usecases">
+    <div class="micro-uc"><strong>Unblock the frontend</strong>Mock server serves realistic responses before the backend exists</div>
+    <div class="micro-uc"><strong>Generate server stubs</strong>Controllers and DTOs scaffolded from the spec — implement, don't invent</div>
+    <div class="micro-uc"><strong>Test the contract</strong>Schemathesis and Hurl validate every endpoint against the spec in CI</div>
+  </div>
+
   <div class="slide-number">7 / 14</div>
 </div>
 
 
 
-<!-- slide 8: IBM Architecture -->
+<!-- slide 8: ESB Architecture -->
 
 <div class="slide s6">
-  <div class="section-label">IBM STACK</div>
-  <h2 class="slide-title">Contract-First in the IBM Integration Layer</h2>
+  <div class="section-label">ARCHITECTURE</div>
+  <h2 class="slide-title">Contract-First in the Integration Layer</h2>
   <div class="arch-wrap">
     <!-- Zone headers -->
     <div class="zone-headers">
       <div class="zone-hdr"></div>
       <div class="zone-hdr">Consumer</div>
       <div class="zone-hdr">API Gateway</div>
-      <div class="zone-hdr" style="grid-column: span 2">Integration (ACE)</div>
+      <div class="zone-hdr" style="grid-column: span 2">Integration (ESB)</div>
       <div class="zone-hdr">Backend</div>
     </div>
     <!-- Grid wrapper for SVG overlay -->
     <div class="arch-grid-wrap">
       <svg class="cross-arrows" id="s6-arrows"></svg>
       <div class="arch-grid">
-        <!-- DEV / QA row: 6 cells -->
+        <!-- DEV / QA row -->
         <div class="env-cell dev">DEV / QA</div>
         <div class="zone dev-bg sep-right">
           <div class="arch-box frontend" id="d-fe">Frontend App<div class="arch-box-sub">Consumer</div></div>
         </div>
         <div class="zone dev-bg sep-right">
-          <div class="arch-box apic" id="d-apic">API Connect<div class="arch-box-sub">Gateway + Portal</div></div>
+          <div class="arch-box apic" id="d-apic">API Gateway<div class="arch-box-sub">Gateway + Portal</div></div>
         </div>
         <div class="zone dev-bg sep-right span2">
           <div class="ace-row">
             <div class="arch-box mock" id="d-mock">Mock Server<div class="arch-box-sub">Prism / examples</div></div>
-            <div class="arch-box ace" id="d-adapt">ACE Adapter<div class="arch-box-sub">Canonical model</div></div>
-            <div class="arch-box ace-conn" id="d-conn">ACE Connector<div class="arch-box-sub">Backend format</div></div>
+            <div class="arch-box ace" id="d-adapt">ESB Adapter<div class="arch-box-sub">Canonical model</div></div>
+            <div class="arch-box ace-conn" id="d-conn">ESB Connector<div class="arch-box-sub">Backend format</div></div>
           </div>
         </div>
         <div class="zone dev-bg">
@@ -1876,18 +2066,18 @@
             <div class="arch-box backend-mock" id="d-be">Mock Backend<div class="arch-box-sub">Test payloads</div></div>
           </div>
         </div>
-        <!-- ACP / PROD row: 6 cells -->
-        <div class="env-cell prod">ACP / PROD</div>
+        <!-- STAGING / PROD row -->
+        <div class="env-cell prod">STG / PROD</div>
         <div class="zone prod-bg sep-right">
           <div class="arch-box frontend" id="p-fe">Frontend App<div class="arch-box-sub">Consumer</div></div>
         </div>
         <div class="zone prod-bg sep-right">
-          <div class="arch-box apic" id="p-apic">API Connect<div class="arch-box-sub">Gateway + Portal</div></div>
+          <div class="arch-box apic" id="p-apic">API Gateway<div class="arch-box-sub">Gateway + Portal</div></div>
         </div>
         <div class="zone prod-bg sep-right span2">
           <div class="ace-row align-right">
-            <div class="arch-box ace" id="p-adapt">ACE Adapter<div class="arch-box-sub">Canonical model</div></div>
-            <div class="arch-box ace-conn" id="p-conn">ACE Connector<div class="arch-box-sub">Backend format</div></div>
+            <div class="arch-box ace" id="p-adapt">ESB Adapter<div class="arch-box-sub">Canonical model</div></div>
+            <div class="arch-box ace-conn" id="p-conn">ESB Connector<div class="arch-box-sub">Backend format</div></div>
           </div>
         </div>
         <div class="zone prod-bg">
@@ -1900,8 +2090,8 @@
     <!-- Use cases -->
     <div class="usecases">
       <div class="usecase"><strong>Unblock consumers</strong>Publish consumed API YAML so frontend teams can work independently</div>
-      <div class="usecase"><strong>Unblock ACE dev</strong>Mock the provided API so adapter flows can be built before the backend is ready</div>
-      <div class="usecase"><strong>Test payloads</strong>Use spec examples as test data for ACE connector apps from day one</div>
+      <div class="usecase"><strong>Unblock ESB dev</strong>Mock the provided API so adapter flows can be built before the backend is ready</div>
+      <div class="usecase"><strong>Test payloads</strong>Use spec examples as test data for ESB connector apps from day one</div>
     </div>
   </div>
   <div class="slide-number">8 / 14</div>
@@ -1909,76 +2099,75 @@
 
 
 
-<!-- slide 9: ACE CI/CD -->
+<!-- slide 9: Microservice Architecture -->
 
-<div class="slide s7">
-  <div class="section-label">IBM STACK</div>
-  <h2 class="slide-title">ACE CI/CD - Small Increments, Pick Our Battles</h2>
-  <div class="cicd-wrap">
-    <div class="cicd-item">
-      <div class="cicd-status ready">&#9679;</div>
-      <div class="cicd-body">
-        <div class="cicd-title"><a href="https://github.com/ot4i/ace-maven-plugin" target="_blank">BAR file build via Maven</a></div>
-        <div class="cicd-desc">Compile message flows and package BAR artifacts in a repeatable pipeline step. No Toolkit required.</div>
-        <div class="cicd-links">
-          <a href="https://github.com/ot4i/ace-maven-plugin" target="_blank">ace-maven-plugin</a>
-          <a href="https://github.com/ot4i/ace-demo-pipeline" target="_blank">ace-demo-pipeline</a>
-          <a href="https://github.com/jpcasas/ibm-maven-plugin" target="_blank">ibm-maven-plugin (ACE+MQ+APIC)</a>
+<div class="slide s-micro">
+  <div class="section-label">ARCHITECTURE</div>
+  <h2 class="slide-title">Contract-First in a Microservice Landscape</h2>
+
+  <div class="micro-diagram">
+    <!-- DEV / QA -->
+    <div class="micro-env">
+      <div class="micro-env-label dev">DEV / QA</div>
+      <div class="micro-lane">
+        <div class="micro-col">
+          <div class="micro-box consumer">Frontend App<div class="micro-sub">Consumer</div></div>
+          <div class="micro-box consumer">Mobile App<div class="micro-sub">Consumer</div></div>
         </div>
-        <div class="cicd-tag ready">READY</div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box gateway">API Gateway<div class="micro-sub">Routes + Auth</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-grid-col">
+          <div class="micro-grid-row">
+            <div class="micro-box service">Service A<div class="micro-sub">owns /orders</div></div>
+            <div class="micro-box service">Service B<div class="micro-sub">owns /payments</div></div>
+          </div>
+          <div class="micro-box mock wide">Mock C<div class="micro-sub">Prism &middot; /inventory</div></div>
+          <div class="micro-box mock wide">Mock D<div class="micro-sub">Prism &middot; /shipping</div></div>
+        </div>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box datastore">Database<div class="micro-sub">Per service</div></div>
+        </div>
       </div>
     </div>
-    <div class="cicd-item">
-      <div class="cicd-status ready">&#9679;</div>
-      <div class="cicd-body">
-        <div class="cicd-title"><a href="https://github.com/IBM/cloudpak-gitops" target="_blank">GitOps-driven deployment to CP4i</a></div>
-        <div class="cicd-desc">IntegrationServer CRs stored in Git, ArgoCD syncs to OpenShift. Promotes across DEV, QA, ACP, PROD.</div>
-        <div class="cicd-links">
-          <a href="https://github.com/IBM/cloudpak-gitops" target="_blank">cloudpak-gitops (ArgoCD)</a>
-          <a href="https://github.com/dalelane/app-connect-tekton-pipeline" target="_blank">ace-tekton-pipeline</a>
-          <a href="https://github.com/sreckoj/CP4I-ACE-CI-CD-Jenkins" target="_blank">CP4I-ACE-CI-CD-Jenkins</a>
+
+    <!-- PROD -->
+    <div class="micro-env">
+      <div class="micro-env-label prod">PRODUCTION</div>
+      <div class="micro-lane">
+        <div class="micro-col">
+          <div class="micro-box consumer">Frontend App<div class="micro-sub">Consumer</div></div>
+          <div class="micro-box consumer">Mobile App<div class="micro-sub">Consumer</div></div>
         </div>
-        <div class="cicd-tag ready">READY</div>
-      </div>
-    </div>
-    <div class="cicd-item">
-      <div class="cicd-status wip">&#9679;</div>
-      <div class="cicd-body">
-        <div class="cicd-title"><a href="https://github.com/ot4i/ace-demo-pipeline" target="_blank">Contract-based smoke tests post-deploy</a></div>
-        <div class="cicd-desc">Run Hurl / Schemathesis against deployed ACE endpoints to validate the contract after each release.</div>
-        <div class="cicd-links">
-          <a href="https://hurl.dev/docs/manual.html" target="_blank">Hurl docs</a>
-          <a href="https://schemathesis.readthedocs.io/" target="_blank">Schemathesis docs</a>
-          <a href="https://community.ibm.com/community/user/blogs/trevor-dolby/2023/03/20/app-connect-enterprise-ace-unit-and-component-test" target="_blank">ACE unit &amp; component tests</a>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box gateway">API Gateway<div class="micro-sub">Routes + Auth</div></div>
         </div>
-        <div class="cicd-tag wip">IN PROGRESS</div>
-      </div>
-    </div>
-    <div class="cicd-item">
-      <div class="cicd-status wip">&#9679;</div>
-      <div class="cicd-body">
-        <div class="cicd-title"><a href="https://www.ibm.com/docs/en/app-connect/12.0.x?topic=cra-creating-rest-api-from-imported-openapi-30-document" target="_blank">OpenAPI spec import automation</a></div>
-        <div class="cicd-desc">Auto-import updated OpenAPI 3.0 spec into ACE project on pipeline trigger. Reduces manual Toolkit steps.</div>
-        <div class="cicd-links">
-          <a href="https://www.ibm.com/docs/en/app-connect/12.0.x?topic=cra-creating-rest-api-from-imported-openapi-30-document" target="_blank">IBM docs: OpenAPI 3.0 import</a>
-          <a href="https://github.com/abughali/ace-openapi3-sample" target="_blank">ace-openapi3-sample</a>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col services">
+          <div class="micro-box service">Service A<div class="micro-sub">/orders</div></div>
+          <div class="micro-box service">Service B<div class="micro-sub">/payments</div></div>
+          <div class="micro-box service">Service C<div class="micro-sub">/inventory</div></div>
+          <div class="micro-box service">Service D<div class="micro-sub">/shipping</div></div>
         </div>
-        <div class="cicd-tag wip">IN PROGRESS</div>
-      </div>
-    </div>
-    <div class="cicd-item">
-      <div class="cicd-status planned">&#9679;</div>
-      <div class="cicd-body">
-        <div class="cicd-title"><a href="https://github.com/IBMRedbooks/SG248452-Accelerating-Modernization-with-Agile-Integration-CICD-infra" target="_blank">Full integration test environment on-demand</a></div>
-        <div class="cicd-desc">Spin up ephemeral CP4i namespace with mock backends for PR-level validation. Longer-term goal.</div>
-        <div class="cicd-links">
-          <a href="https://github.com/IBMRedbooks/SG248452-Accelerating-Modernization-with-Agile-Integration-CICD-infra" target="_blank">IBM Redbook: Agile Integration CI/CD</a>
-          <a href="https://github.com/apac-cp4i-demo/multi-tenancy-gitops" target="_blank">CP4i multi-tenancy GitOps</a>
+        <div class="micro-arrow"><i data-lucide="arrow-right"></i></div>
+        <div class="micro-col">
+          <div class="micro-box datastore">Database<div class="micro-sub">Per service</div></div>
+          <div class="micro-box external">External API<div class="micro-sub">3rd party</div></div>
         </div>
-        <div class="cicd-tag planned">PLANNED</div>
       </div>
     </div>
   </div>
+
+  <div class="micro-usecases">
+    <div class="micro-uc"><strong>Develop in isolation</strong>Each team builds against the contract, mocks replace unready services</div>
+    <div class="micro-uc"><strong>Catch breaking changes</strong>oasdiff + Schemathesis in CI validate every PR against every consumer</div>
+    <div class="micro-uc"><strong>One spec, full stack</strong>Docs, client SDKs, tests, and mocks all generated from the same source</div>
+  </div>
+
   <div class="slide-number">9 / 14</div>
 </div>
 
@@ -2003,7 +2192,7 @@
         <div class="mc-tip">
           <div class="mc-tip-level tl1">L1 Foundation</div>
           <div class="mc-tip-hdr">Shared Mock Server</div>
-          <div class="mc-tip-desc">Centralized Prism instance fed from spec examples. Frontend, ACE, and QA share the same mock. No more diverging stubs.</div>
+          <div class="mc-tip-desc">Centralized Prism instance fed from spec examples. Frontend, ESB, and QA share the same mock. No more diverging stubs.</div>
           <div class="mc-tip-links">
             <a href="https://stoplight.io/open-source/prism" target="_blank">Prism</a>
             <a href="https://docs.stoplight.io/docs/prism" target="_blank">Prism docs</a>
@@ -2054,7 +2243,7 @@
         <div class="mc-tip">
           <div class="mc-tip-level tl2">L2 Automate</div>
           <div class="mc-tip-hdr">API Observability</div>
-          <div class="mc-tip-desc">Pipe APIC gateway logs and ACE monitoring events into the existing ELK stack. Build Kibana dashboards for call volume, latency percentiles, error rates, and deprecation signals per endpoint.</div>
+          <div class="mc-tip-desc">Pipe API gateway logs and ESB monitoring events into the existing ELK stack. Build Kibana dashboards for call volume, latency percentiles, error rates, and deprecation signals per endpoint.</div>
           <div class="mc-tip-links">
             <a href="https://www.elastic.co/kibana" target="_blank">Kibana</a>
             <a href="https://www.elastic.co/beats/filebeat" target="_blank">Filebeat</a>
@@ -2068,7 +2257,7 @@
         <div class="mc-tip">
           <div class="mc-tip-level tl3">L3 Scale</div>
           <div class="mc-tip-hdr">AsyncAPI Events</div>
-          <div class="mc-tip-desc">Apply the same contract-first philosophy to event-driven APIs: Kafka topics, MQ queues, MQTT. Lint with Spectral, generate docs, and produce typed consumers from AsyncAPI specs.</div>
+          <div class="mc-tip-desc">Apply the same contract-first philosophy to event-driven APIs: Kafka topics, message queues, MQTT. Lint with Spectral, generate docs, and produce typed consumers from AsyncAPI specs.</div>
           <div class="mc-tip-links">
             <a href="https://www.asyncapi.com/" target="_blank">AsyncAPI</a>
             <a href="https://www.asyncapi.com/tools/generator" target="_blank">Generator</a>
@@ -2119,7 +2308,7 @@
         <div class="mc-tip">
           <div class="mc-tip-level tl4">L4 Mastery</div>
           <div class="mc-tip-hdr">Full CI/CD Pipeline</div>
-          <div class="mc-tip-desc">End-to-end automation: PR triggers lint, mock, contract tests, BAR build, deploy to CP4i, smoke test, and promote to production. No human in the loop from merge to prod.</div>
+          <div class="mc-tip-desc">End-to-end automation: PR triggers lint, mock, contract tests, artifact build, deploy, smoke test, and promote to production. No human in the loop from merge to prod.</div>
           <div class="mc-tip-links">
             <a href="https://github.com/features/actions" target="_blank">GitHub Actions</a>
             <a href="https://tekton.dev/" target="_blank">Tekton</a>
@@ -2131,7 +2320,7 @@
         <div class="mc-tip">
           <div class="mc-tip-level tl4">L4 Mastery</div>
           <div class="mc-tip-hdr">Visual Mapping IDE</div>
-          <div class="mc-tip-desc">Vendor-neutral OSS tool to import any contract (OpenAPI, WSDL, AsyncAPI), visually link fields, define transformations, and generate output for any runtime: ACE maps, DataPower, MuleSoft, etc.</div>
+          <div class="mc-tip-desc">Vendor-neutral OSS tool to import any contract (OpenAPI, WSDL, AsyncAPI), visually link fields, define transformations, and generate output for any runtime: ESB maps, DataWeave, XSLT, and more.</div>
           <div class="mc-tip-links">
             <a href="#">OSS Project (WIP)</a>
           </div>
@@ -2164,7 +2353,7 @@
       </div>
       <div class="mc-leg-group">
         <div class="mc-leg-hdr l3">L3 Scale</div>
-        <div class="mc-leg-item"><i data-lucide="zap"></i><span class="mc-leg-text">AsyncAPI Events</span><span class="mc-leg-sub">Kafka, MQ</span></div>
+        <div class="mc-leg-item"><i data-lucide="zap"></i><span class="mc-leg-text">AsyncAPI Events</span><span class="mc-leg-sub">Kafka, queues</span></div>
         <div class="mc-leg-item"><i data-lucide="library"></i><span class="mc-leg-text">Schema Registry</span><span class="mc-leg-sub">Central catalog</span></div>
         <div class="mc-leg-item"><i data-lucide="package"></i><span class="mc-leg-text">SDK Generation</span><span class="mc-leg-sub">Typed clients</span></div>
         <div class="mc-leg-item"><i data-lucide="flask-conical"></i><span class="mc-leg-text">Prod Data as Fixtures</span><span class="mc-leg-sub">Anonymized, classified</span></div>
@@ -2340,6 +2529,10 @@
     <div class="repo-callout">
       <div class="repo-name">scaffold-api/</div>
       <div class="repo-desc">Clone it. Run it. Make it yours.</div>
+    </div>
+    <div class="closing-contact">
+      <div class="closing-contact-label">Let's talk</div>
+      <div class="closing-contact-url">victorhuni.ch</div>
     </div>
     <div class="closing-questions">Questions?</div>
   </div>
