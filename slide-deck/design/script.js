@@ -1,6 +1,18 @@
 // ── Initialize Lucide icons ──
   lucide.createIcons();
 
+  // ── Mobile responsive scaling ──
+  function setMobileScale() {
+    if (window.innerWidth < 980) {
+      const scale = (window.innerWidth - 16) / 960;
+      document.documentElement.style.setProperty('--slide-scale', scale);
+    } else {
+      document.documentElement.style.removeProperty('--slide-scale');
+    }
+  }
+  setMobileScale();
+  window.addEventListener('resize', setMobileScale);
+
   // ── Generate dot grids ──
   function fillDotGrid(id, cols, rows) {
     const grid = document.getElementById(id);
