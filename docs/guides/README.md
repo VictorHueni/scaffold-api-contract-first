@@ -1,6 +1,8 @@
 # Guides
 
-Practical how-to guides organized by role. Each guide follows a consistent structure: Quick Start, Overview, Prerequisites, How It Works, Configuration, Common Pitfalls, Multi-Environment Usage, Alternatives, References.
+Practical how-to guides organized by role. For prerequisites, scripts, and folder structure, see [`scaffold-api/README.md`](../../scaffold-api/README.md). For the WHY behind contract-first, see the [PRD problem statement](../product-specs/0001_prd_api-first-scaffold.md#1-problem-statement).
+
+> **New here?** Start with the [Manual Smoke Test](manual-smoke-test.md) — a 10-minute copy-paste walkthrough that exercises every feature. Then read the guide for your role below.
 
 ## For Everyone
 
@@ -35,7 +37,9 @@ Practical how-to guides organized by role. Each guide follows a consistent struc
 |---|---|
 | [CI Testing & Quality Gates](ci-testing.md) | CI pipeline configuration — Schemathesis, Hurl, Spectral, oasdiff in GitHub Actions |
 
-## Quick Reference
+## Quick Reference (task-oriented)
+
+For the full command reference, see [`scaffold-api/README.md`](../../scaffold-api/README.md#available-scripts).
 
 | I want to... | Guide | Command |
 |---|---|---|
@@ -49,13 +53,7 @@ Practical how-to guides organized by role. Each guide follows a consistent struc
 | Check for breaking changes | [CI Testing](ci-testing.md) | `npm run breaking:docker` |
 | Explore the API interactively | [QA Testing](qa-testing.md) | `npm run docs` → "Try it out" |
 | Run a quick manual smoke test | [Manual Smoke Test](manual-smoke-test.md) | Follow the curl walkthrough |
-| Start mock server | All guides | `npm run mock` |
 
 ## Reference Material
 
-For specifications, standards, and pattern catalogs, see [`docs/reference/`](../reference/):
-
-| Reference | Description |
-|---|---|
-| [EIP Patterns for API Mediation](../reference/eip-patterns-for-api-mediation.md) | 20 Enterprise Integration Patterns translated to API mediation |
-| [OpenAPI Overlay Specification](../reference/openapi-overlay-specification.md) | Full Overlay spec reference for annotating specs you don't own |
+For specifications, standards, and pattern catalogs, see [`../reference/`](../reference/).
