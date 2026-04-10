@@ -29,7 +29,7 @@ registry, so the audience sees this as an investment, not a one-off demo.
 
 | Attribute            | Description                                                       |
 |----------------------|-------------------------------------------------------------------|
-| **Who**              | IT department: backend devs, frontend/MoEx devs, QA engineers, DevOps, tech leads, product owners, security |
+| **Who**              | IT department: backend devs, frontend/integration team devs, QA engineers, DevOps, tech leads, product owners, security |
 | **Technical level**  | Mixed: developers are technical, POs and management are not       |
 | **Familiarity**      | Some context on APIs, but most have never worked contract-first. Familiar with IBM tooling (ACE Toolkit, APIC portal) |
 | **Decision power**   | Influences decision. Final approval likely from IT leadership after the session |
