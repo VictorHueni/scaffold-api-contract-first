@@ -1,6 +1,6 @@
 # API-First Demo: Presentation & Delivery Guide
 
-This document covers everything non-technical about delivering the API-first demo: narrative structure, slide requirements, video recording plan, scripted talking points, and follow-up strategy. For the technical implementation, see the [exec plan](exec-plans/active/0001_exec_api-first-scaffold.md) and [PRD](product-specs/0001_prd_api-first-scaffold.md).
+This document covers everything non-technical about delivering the API-first demo: narrative structure, slide requirements, video recording plan, scripted talking points, and follow-up strategy. For the technical implementation, see the [exec plan](../docs/exec-plans/active/0001_api-first-scaffold/0001_exec_api-first-scaffold.md) and [PRD](../docs/product-specs/0001_prd_api-first-scaffold.md).
 
 ---
 
@@ -392,7 +392,7 @@ Share these alongside the video so viewers can explore on their own:
 
 ## Delivery Checklist
 
-This checklist tracks video recording and presentation delivery. The scaffold implementation is tracked separately in the [exec plan](exec-plans/active/0001_exec_api-first-scaffold.md).
+This checklist tracks video recording and presentation delivery. The scaffold implementation is tracked separately in the [exec plan](../docs/exec-plans/active/0001_api-first-scaffold/0001_exec_api-first-scaffold.md).
 
 ### Pre-recording
 

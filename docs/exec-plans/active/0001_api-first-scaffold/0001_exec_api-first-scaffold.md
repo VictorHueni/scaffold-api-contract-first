@@ -2,7 +2,7 @@
 
 ## Summary
 
-Build a reusable API-first scaffold repository (`scaffold-api/`) with a fictional Order Management API as the running example. This plan covers scaffold implementation only (code + config). Video recording and presentation delivery are tracked in the [Presentation & Delivery Guide](../../api-first-demo-structure.md).
+Build a reusable API-first scaffold repository (`scaffold-api/`) with a fictional Order Management API as the running example. This plan covers scaffold implementation only (code + config). Video recording and presentation delivery are tracked in the [Presentation & Delivery Guide](../../../../slide-deck/api-first-demo-structure.md).
 
 **Source PRD:** [`docs/product-specs/0001_prd_api-first-scaffold.md`](../../../docs/product-specs/0001_prd_api-first-scaffold.md)
 
@@ -560,7 +560,7 @@ Exit criteria:
 2. The full workflow works end-to-end from a clean `npm install`
 3. No manual steps required — everything is reproducible
 
-*Video recording and presentation delivery are covered in the [Presentation & Delivery Guide](../../api-first-demo-structure.md), not in this exec plan.*
+*Video recording and presentation delivery are covered in the [Presentation & Delivery Guide](../../../../slide-deck/api-first-demo-structure.md), not in this exec plan.*
 
 ---
 
@@ -577,7 +577,7 @@ Exit criteria:
 4. The OpenAPI spec source lives in `specs/api.yaml` + `specs/components/` (multi-file, committed). The bundled file `specs/api.bundled.yaml` is generated and gitignored — all downstream tools consume the bundled file.
 5. API exploration tooling is bring-your-own — the scaffold is opinionated about automation (Spectral, Prism, Schemathesis, Hurl, Scalar, CI) and unopinionated about personal clients (Bruno, Postman, Insomnia, etc.).
 6. All tools used are open source and free tier. No paid licenses required.
-7. This plan covers scaffold implementation only (code + config). Video recording and presentation delivery are tracked separately in the [Presentation & Delivery Guide](../../api-first-demo-structure.md).
+7. This plan covers scaffold implementation only (code + config). Video recording and presentation delivery are tracked separately in the [Presentation & Delivery Guide](../../../../slide-deck/api-first-demo-structure.md).
 
 ---
 

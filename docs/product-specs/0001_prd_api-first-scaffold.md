@@ -235,7 +235,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 ---
 
-*Video recording and slide production are covered in the [Presentation & Delivery Guide](../api-first-demo-structure.md), not in this PRD. This PRD covers the scaffold implementation only.*
+*Video recording and slide production are covered in the [Presentation & Delivery Guide](../../slide-deck/api-first-demo-structure.md), not in this PRD. This PRD covers the scaffold implementation only.*
 
 ---
 
