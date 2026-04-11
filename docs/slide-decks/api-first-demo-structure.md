@@ -345,7 +345,79 @@ Record each section as a **separate video file**. This lets you re-record a sing
 
 ---
 
-### Clip 13: The Payoff (3 min)
+### Clip 13: Agentic Engineering — AI Builds the Refunds Feature (10-12 min)
+
+**Format:** Terminal (Claude Code session) + editor + browser. This is the hero moment of the demo — take your time and let the loop breathe.
+
+**Why this clip exists:** Every previous clip showed a human driving the contract-first workflow. This one shows Claude Code driving the same workflow end-to-end — write the PRD, plan the increments, implement them, run the gates, commit, push, open the PR. The point is not "AI is magic." The point is: **the same contract-first guardrails that protect humans protect the agent.** Spectral, Schemathesis, Hurl, oasdiff — every gate fires whether a human or an agent is at the keyboard.
+
+**Why a Refunds sub-resource:** It's REST-clean (refunds are a real noun, not a verb-disguised-as-noun), it forms a natural collection under an order, and it justifies the full surface — `POST /orders/{orderId}/refunds`, `GET /orders/{orderId}/refunds`, `GET /orders/{orderId}/refunds/{refundId}`. New schemas, new examples, new error responses (404, 409 already-refunded, 422 amount-exceeds-total), new Hurl tests. Coherent enough for management to understand, big enough that the regeneration story (mock + types + docs + contract tests all updating from one spec change) actually lands.
+
+**Pre-recording setup (off-camera):**
+
+- Branch from `main`: `git checkout -b feat/order-refunds`
+- Confirm `docs/product-specs/0003_*.md` and `docs/exec-plans/active/0003_*/` do not exist (next free slot)
+- Skills already installed and discoverable: `/spec-prd-creator`, `/spec-implementation-planner`, `/ralph-loop-runner`, `/git-commit`, `/pr-creator`
+- Terminal cleared, dark theme, 16pt+ font, browser open to the GitHub repo in a second tab
+- Dry-run the full loop once before the real recording — Ralph timing is the biggest unknown
+
+**What to show:**
+
+1. **Frame the segment (~30s).** "Everything you've seen so far was me driving the workflow. Now I'm going to show you what happens when Claude Code drives it. One feature idea, three slash commands, every gate green at the end. Watch."
+
+2. **Generate the PRD with `/spec-prd-creator` (~3 min).** Run the slash command. Brief Claude with the feature in one sentence:
+   > "Add a Refunds sub-resource to the Order API. Customers can request a full or partial refund on a delivered order, view the status of refunds, and list all refunds for an order. Refunds have a reason, an amount, and a processing status."
+
+   Let Claude run its interview (1-2 clarifying questions). Answer concisely on camera. When the PRD is written to `docs/product-specs/0003_prd_order-refunds.md`, open it and scroll through it slowly. Highlight: problem statement, user stories with acceptance criteria, non-goals, success metrics. **Key line:** "Same PRD format we use for human-driven work. The AI followed the convention without being asked, because the convention lives in the skill."
+
+3. **Generate the exec plan with `/spec-implementation-planner` (~2 min).** Reference the PRD path. Claude reads it and produces `docs/exec-plans/active/0003_order-refunds/0003_exec_order-refunds.md` with atomic increments, each with a test gate and exit criteria. Open it, scroll through. Point out: every increment ends with `npm run lint` or a Schemathesis check or a Hurl assertion — the same gates from the manual workflow. The plan is machine-checkable because the gates are commands, not vibes.
+
+4. **Run the Ralph loop with `/ralph-loop-runner` (~10 min raw, cut heavily in editing).** Claude starts executing the plan autonomously: read increment → edit files → run the test gate → commit → move to the next. Let the first increment play out in full so viewers see the rhythm. Cut between subsequent increments in editing, but keep the visible moments where:
+   - Claude edits `specs/api.yaml` and creates `specs/components/schemas/Refund.yaml`
+   - Claude runs `npm run lint` and Spectral passes
+   - Claude runs `npm run test:hurl` against the mock and the new tests pass
+   - Claude commits each increment with a conventional commit message (`feat: add Refund schema and examples`, `feat: add POST /orders/{id}/refunds`, `test: add Hurl tests for refunds`, …)
+   - `progress.txt` updates after each increment
+
+5. **Show the result (~1 min).** When the loop finishes:
+   ```bash
+   git log --oneline -10                                            # one clean commit per increment
+   cat docs/exec-plans/active/0003_order-refunds/progress.txt       # execution log
+   ls specs/components/schemas/ specs/components/examples/responses/  # new artifacts
+   cat tests/refunds.hurl                                            # functional tests Claude wrote
+   ```
+
+6. **Run the local CI gates manually (~2 min).** This is the credibility moment. The AI wrote code; now we run the same gates the GitHub Action runs:
+   ```bash
+   npm run lint                       # Spectral — passes
+   npm run mock &                     # Start Prism on 4010
+   sleep 3
+   npm run test:hurl                  # Hurl functional tests — pass
+   npm run test:contract              # Schemathesis (600+ generated cases) — pass
+   kill $(lsof -t -i:4010) 2>/dev/null
+   ```
+   All green. **Key line:** "The AI didn't bypass the safety net. It ran through it. Every gate fired."
+
+7. **Commit anything outstanding and push (~1 min).** If Ralph left uncommitted state, run `/git-commit`. Then:
+   ```bash
+   git push -u origin feat/order-refunds
+   ```
+
+8. **Open the PR with `/pr-creator` (~1 min).** Claude reads the commits, drafts the PR title and body following the repo template, opens it via `gh pr create`. Show the PR URL printed in the terminal. Switch to the browser, open the PR, show the **Checks** tab — the same lint + contract test + breaking-change jobs from Clip 11 are running on the AI's branch.
+
+**Key line:** "One feature idea. Three slash commands. Claude wrote the PRD, planned the work, implemented it, tested it, and opened the PR — and every safety gate from the contract-first pipeline still fired."
+
+**Teaching point:** "Without a contract, an AI editing your codebase is terrifying — you have no automated way to know what it broke. With a contract, the agent operates inside the same guardrails as a human: lint, contract tests, breaking change detection, functional tests. The bigger the safety net, the more autonomy you can safely give the agent. **Contract-first is the prerequisite for agentic engineering, not a parallel investment.**"
+
+**Risks and how to handle them on the day:**
+
+- **Ralph stalls or asks for confirmation mid-loop.** Pre-flight by running the exact same prompt the day before; if it stalled then, adjust the exec plan increments (smaller scope). Have a fallback recording from the dry run that you can splice in.
+- **A test gate genuinely fails.** That's not a disaster — narrate it as proof the gates work. Let Claude diagnose and fix in the next loop iteration. Edit the dead time out.
+- **PR creation fails (`gh` auth, network).** Have `gh auth status` in your pre-recording checklist. Worst case, fall back to pushing the branch and showing the PR creation in the GitHub UI.
+
+---
+
+### Clip 14: The Payoff (3 min)
 
 **Format:** Slides only. No terminal.
 
@@ -362,14 +434,15 @@ Record each section as a **separate video file**. This lets you re-record a sing
 
 ## Editing Notes
 
-- **Total raw recording:** roughly 40-50 minutes of clips
-- **Target final video:** 35-40 minutes after cutting pauses and retakes
+- **Total raw recording:** roughly 55-65 minutes of clips (Clip 13 dominates — Ralph loop is the long pole)
+- **Target final video:** 45-55 minutes after cutting pauses and retakes
 - **Title cards:** Add section title cards between clips. Simple text on dark background, 2 seconds each. Match the slide deck theme.
 - **Command highlights:** When showing a long terminal command, zoom in or add a highlight box so viewers can read it.
 - **Progress bar:** Add a progress bar or chapter markers so viewers can jump to sections they care about.
 - **Export:** 1080p minimum, 30fps (fine for screen recordings).
 - **Background music:** Subtle background music during slide sections only — not during terminal work, where the viewer needs to focus on commands and output.
-- **Chapter markers for YouTube/SharePoint:** 0:00 The Problem, 2:00 The Contract, 7:00 Linting, 10:00 Mock Server, 14:00 Code Generation, 17:00 Backend Stubs, 20:00 Contract Testing, 25:00 Breaking Changes, 28:00 Documentation & Exploration, 31:00 Hurl Tests, 33:00 CI Pipeline, 35:00 IBM Stack, 38:00 The Payoff
+- **Cutting the Ralph loop (Clip 13):** Keep the first increment in full so viewers see the rhythm. Cut between subsequent increments aggressively — keep file edits, command runs, and commit moments; cut model "thinking" pauses. Aim for 5-7 min final length on the loop itself.
+- **Chapter markers for YouTube/SharePoint:** 0:00 The Problem, 2:00 The Contract, 7:00 Linting, 10:00 Mock Server, 14:00 Code Generation, 17:00 Backend Stubs, 20:00 Contract Testing, 25:00 Breaking Changes, 28:00 Documentation & Exploration, 31:00 Hurl Tests, 33:00 CI Pipeline, 35:00 IBM Stack, 38:00 Agentic Engineering, 50:00 The Payoff
 
 ---
 
@@ -417,7 +490,8 @@ This checklist tracks video recording and presentation delivery. The scaffold im
 - [ ] Clip 10: Hurl Functional Tests (2 min)
 - [ ] Clip 11: CI Pipeline (2 min, pipeline.yaml walkthrough)
 - [ ] Clip 12: IBM Stack + AsyncAPI (3-5 min, slides only)
-- [ ] Clip 13: The Payoff (3 min, timeline + role impact matrix)
+- [ ] Clip 13: Agentic Engineering — AI builds Refunds (10-12 min, terminal + editor + browser; dry-run beforehand)
+- [ ] Clip 14: The Payoff (3 min, timeline + role impact matrix)
 
 ### Post-production
 
@@ -425,7 +499,7 @@ This checklist tracks video recording and presentation delivery. The scaffold im
 - [ ] Pauses and retakes cut
 - [ ] Progress bar or chapter markers added
 - [ ] Exported at 1080p, 30fps
-- [ ] Total runtime: 35-40 minutes
+- [ ] Total runtime: 45-55 minutes
 - [ ] Uploaded to internal platform
 - [ ] Companion materials shared (repo link, spec, ruleset, pipeline, tool links)
 - [ ] Q&A session scheduled
