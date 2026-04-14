@@ -225,12 +225,15 @@ With the mock server still running on :4010:
 > **Important:** Hurl tests assert on exact values from the spec examples (specific UUIDs, status `"pending"`, etc.). They only pass against **static mode** (`npm run mock`). If you started the mock with `npm run mock:dynamic`, the tests will fail because Prism returns randomized faker data instead of the fixed examples.
 
 ```bash
-# Native (requires hurl binary)
+# Native — requires the hurl binary installed on your machine
+# Install: https://hurl.dev/docs/installation.html
 npm run test:hurl
 
-# Docker fallback (no install needed)
+# Docker fallback — no local install needed, just Docker
 npm run test:hurl:docker
 ```
+
+> **Note:** `npm run test:hurl` calls `hurl` directly and will fail with `hurl: not found` if it isn't on your PATH. If you don't want to install Hurl, use `npm run test:hurl:docker` instead — it runs the same tests inside a Docker container.
 
 ## Step 8 — Run contract tests (Docker)
 
@@ -242,17 +245,19 @@ Schemathesis generates ~600 requests from the spec and validates all responses. 
 
 > **Mock vs real API:** `test:contract` uses a reduced set of checks (schema conformance, status codes, content types, no server errors) that are meaningful against a stateless mock. Prism doesn't enforce auth, doesn't track state (use-after-free), and returns 405 without `Allow` headers — so checks like `ignored_auth`, `use_after_free`, and `unsupported_method` will false-positive against it. When testing against a **real API implementation**, use `npm run test:contract:full` which enables all checks.
 
+> **Why no fuzzing/stateful phases against the mock?** Schemathesis fuzzing sends payloads with non-ASCII characters. Prism tries to include the validation violations in an `sl-violations` HTTP response header, but Node.js's `setHeader()` rejects non-ASCII header values and **crashes the Prism process**. All subsequent requests then fail with "Connection refused." This is a [known Prism limitation](https://github.com/stoplightio/prism/issues) (as of v5.14.2). The `test:contract` command therefore runs only the `examples` and `coverage` phases. Use `test:contract:full` against a real API to get fuzzing and stateful testing.
+
 For negative testing (sends invalid data, verifies the API rejects it):
 
 ```bash
 npm run test:contract:negative
 ```
 
-| Command | Use against | Checks |
-|---|---|---|
-| `npm run test:contract` | Mock server (Prism) | Mock-compatible subset |
-| `npm run test:contract:full` | Real API implementation | All checks |
-| `npm run test:contract:negative` | Mock server (Prism) | Mock-compatible subset, invalid data |
+| Command | Use against | Phases | Checks |
+|---|---|---|---|
+| `npm run test:contract` | Mock server (Prism) | examples, coverage | Mock-compatible subset |
+| `npm run test:contract:full` | Real API implementation | examples, coverage, fuzzing, stateful | All checks |
+| `npm run test:contract:negative` | Mock server (Prism) | all (default) | Mock-compatible subset, invalid data |
 
 ## Step 9 — Breaking change detection (Docker)
 

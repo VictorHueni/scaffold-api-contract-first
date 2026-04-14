@@ -17,7 +17,7 @@
     "docs": "scalar document serve specs/api.bundled.yaml --port 8081 --watch",
     "docs:build": "echo 'Static docs: open docs/index.html (CDN-based Scalar wrapper). Requires bundled spec: npm run bundle'",
     "------- TEST -------": "",
-    "test:contract": "docker run --rm --network host -v $(pwd)/specs:/specs schemathesis/schemathesis run /specs/api.bundled.yaml --url http://host.docker.internal:4010 --checks not_a_server_error,status_code_conformance,content_type_conformance,response_schema_conformance --phases examples,coverage,fuzzing,stateful --max-examples 100 -H 'X-API-Key: test-key'",
+    "test:contract": "docker run --rm --network host -v $(pwd)/specs:/specs schemathesis/schemathesis run /specs/api.bundled.yaml --url http://host.docker.internal:4010 --checks not_a_server_error,status_code_conformance,content_type_conformance,response_schema_conformance --phases examples,coverage --max-examples 100 -H 'X-API-Key: test-key'",
     "test:contract:full": "docker run --rm --network host -v $(pwd)/specs:/specs schemathesis/schemathesis run /specs/api.bundled.yaml --url http://host.docker.internal:4010 --checks all --phases examples,coverage,fuzzing,stateful --max-examples 100 -H 'X-API-Key: test-key'",
     "test:contract:negative": "docker run --rm --network host -v $(pwd)/specs:/specs schemathesis/schemathesis run /specs/api.bundled.yaml --url http://host.docker.internal:4010 --checks not_a_server_error,status_code_conformance,content_type_conformance,response_schema_conformance --mode negative --max-examples 50 -H 'X-API-Key: test-key'",
     "test:hurl": "hurl --test --variable base_url=http://localhost:4010 tests/**/*.hurl",
