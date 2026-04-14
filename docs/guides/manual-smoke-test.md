@@ -40,7 +40,7 @@ Leave this running. Open a **second terminal** for the curl commands below.
 ### List orders (GET /orders)
 
 ```bash
-curl -s http://localhost:4010/orders?page=1&limit=20 \
+curl -s "http://localhost:4010/orders?page=1&limit=20" \
   -H "X-API-Key: test-key" | jq .
 ```
 
