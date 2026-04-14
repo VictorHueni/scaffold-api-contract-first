@@ -176,6 +176,7 @@ rules:
   request-body-must-ref-component:
     description: Request body schemas should use $ref to component schemas, not inline definitions.
     severity: warn
+    resolved: false
     given: "$.paths[*][post,put,patch].requestBody.content[*]"
     then:
       field: "schema.$ref"
