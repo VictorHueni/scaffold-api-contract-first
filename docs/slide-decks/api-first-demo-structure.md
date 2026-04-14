@@ -319,7 +319,7 @@ Record each section as a **separate video file**. This lets you re-record a sing
 
 ### Clip 11: CI Pipeline (2 min)
 
-**Format:** Editor showing `ci/pipeline.yaml`
+**Format:** Editor showing `.github/workflows/ci.yml`
 
 **What to show:**
 1. Open the pipeline file. Walk through each job: lint, breaking changes (PR-only), contract test, generate clients, generate docs.
@@ -456,7 +456,7 @@ Share these alongside the video so viewers can explore on their own:
 | `scaffold-api/` | Copy into your own repo | API scaffold — `npm install`, start building |
 | `scaffold-api/specs/api.yaml` | In the scaffold | The spec itself — explore it, import it, generate from it |
 | `scaffold-api/rules/.spectral.yaml` | In the scaffold | Teams can adopt the ruleset immediately |
-| `scaffold-api/ci/pipeline.yaml` | In the scaffold | DevOps can evaluate and adapt for their CI |
+| `scaffold-api/.github/workflows/ci.yml` | In the scaffold | DevOps can evaluate and adapt for their CI — activates out-of-the-box once the scaffold is extracted as a project root |
 | `scaffold-integration/` | Copy into your own repo | Integration mapping scaffold (PRD 0002, future) |
 | Interactive training app | To be built post-implementation | Hands-on walkthrough of the API-first workflow (scoped after all increments are delivered) |
 | Tool links | In the README or a shared doc | Prism, Spectral, openapi-generator, Scalar, Schemathesis, Hurl, oasdiff + desktop client options (Bruno, Postman, Insomnia, Hoppscotch, Yaak) |

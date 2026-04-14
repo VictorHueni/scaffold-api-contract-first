@@ -29,7 +29,7 @@ Principles:
 
 Scope:
 
-1. Create the `scaffold-api/` directory as the scaffold root, with subdirectories: `specs/`, `specs/components/`, `rules/`, `mocks/`, `tests/`, `examples/`, `docs/`, `ci/`
+1. Create the `scaffold-api/` directory as the scaffold root, with subdirectories: `specs/`, `specs/components/`, `rules/`, `mocks/`, `tests/`, `examples/`, `docs/`, `.github/workflows/`
 2. Create `package.json` with all Node.js tools as `devDependencies`:
    - `@stoplight/prism-cli`, `@stoplight/spectral-cli`, `@stoplight/spectral-owasp-ruleset`
    - `@scalar/cli`
@@ -59,7 +59,7 @@ Primary files:
 
 Test gate:
 
-1. `ls scaffold-api/specs scaffold-api/rules scaffold-api/mocks scaffold-api/tests scaffold-api/examples scaffold-api/docs scaffold-api/ci` — all directories exist
+1. `ls scaffold-api/specs scaffold-api/rules scaffold-api/mocks scaffold-api/tests scaffold-api/examples scaffold-api/docs scaffold-api/.github/workflows` — all directories exist
 2. `cd scaffold-api && npm install` — exits 0, `node_modules/` populated
 3. `cd scaffold-api && npm run` — lists all available scripts
 4. `grep "npm install" scaffold-api/README.md` — quick start documented
@@ -489,20 +489,20 @@ Exit criteria:
 
 Scope:
 
-1. Create `ci/pipeline.yaml` as a GitHub Actions workflow triggering on push/PR to `specs/**`
-2. Jobs: `lint` (Spectral), `breaking-changes` (oasdiff, PR-only), `contract-test` (Schemathesis against Prism), `generate-types` (openapi-typescript), `generate-docs` (Scalar)
-3. Remove the IBM `publish-apic` job (out of scope — slides only)
+1. Create `.github/workflows/ci.yml` as a GitHub Actions workflow triggering on push to `main` and PRs touching `specs/**`, `rules/**`, `tests/**`, or `package.json`. Paths are relative to the scaffold root so the workflow activates out-of-the-box when scaffold-api is used as a project root.
+2. Jobs: `lint` (Scalar validate + Spectral), `breaking-changes` (oasdiff, PR-only), `contract-test` (Schemathesis against Prism), `functional-test` (Hurl against Prism), `security-scan` (OWASP ZAP, non-blocking), `generate-artifacts` (TypeScript types + bundled spec + docs HTML)
+3. Install CLI tools natively on the runner (Schemathesis via pipx, Hurl via `.deb`, oasdiff via GitHub-release binary) — avoid the Docker-based npm scripts because `host.docker.internal` doesn't resolve on GitHub Actions Linux runners
 4. Validate the YAML is syntactically correct
 
 Primary files:
 
-1. `ci/pipeline.yaml`
+1. `.github/workflows/ci.yml`
 
 Test gate:
 
-1. `node -e "require('js-yaml').load(require('fs').readFileSync('ci/pipeline.yaml','utf8'))"` — valid YAML (js-yaml is a dependency of Spectral, already installed)
-2. `grep -c "jobs:" ci/pipeline.yaml` — contains jobs section
-3. `grep "spectral\|oasdiff\|schemathesis\|scalar\|openapi-typescript" ci/pipeline.yaml | wc -l` — all 5 tools referenced
+1. `node -e "require('js-yaml').load(require('fs').readFileSync('.github/workflows/ci.yml','utf8'))"` — valid YAML (js-yaml is a dependency of Spectral, already installed)
+2. `grep -c "jobs:" .github/workflows/ci.yml` — contains jobs section
+3. `grep "spectral\|oasdiff\|schemathesis\|hurl\|zap" .github/workflows/ci.yml | wc -l` — all 5 contract gates referenced
 
 Alternatives:
 

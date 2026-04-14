@@ -417,8 +417,9 @@ scaffold-integration/                  # Integration scaffold template
   scripts/
     sync-apis.sh                       # Download/sync API specs from lock file
     generate-docs.js                   # Generate mapping documentation (HTML/Markdown)
-  ci/
-    pipeline.yaml                      # CI pipeline
+  .github/
+    workflows/
+      ci.yml                           # CI pipeline (out-of-the-box)
   .vscode/
     settings.json                      # YAML schema association for IDE
   .gitignore                           # apis/, generated/
@@ -581,7 +582,7 @@ For v1, build one bridge adapter for the team's primary integration platform. Ad
 ### 6.4 CI Pipeline Integration
 
 ```yaml
-# In ci/pipeline.yaml
+# In .github/workflows/ci.yml
 mapping-validation:
   runs-on: ubuntu-latest
   steps:

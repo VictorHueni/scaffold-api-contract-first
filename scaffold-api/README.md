@@ -36,7 +36,7 @@ tests/                       # Hurl functional tests
 examples/                    # openapi-fetch usage example (TypeScript)
 mocks/                       # Saved Prism response samples
 docs/                        # Scalar API reference (generated + CDN wrapper)
-ci/                          # GitHub Actions pipeline
+.github/workflows/           # GitHub Actions CI (ci.yml — out-of-the-box)
 generated/                   # TypeScript types, Spring stubs (gitignored)
 ```
 

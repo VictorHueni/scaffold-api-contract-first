@@ -48,7 +48,7 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 **Acceptance Criteria:**
 
 - [ ] Repo has a clear README explaining the folder structure and purpose of each directory
-- [ ] The scaffold lives in `scaffold-api/` — running `ls scaffold-api/` reveals an intuitive layout: `specs/` (with `components/` subdirectories), `rules/`, `tests/`, `docs/`, `ci/`
+- [ ] The scaffold lives in `scaffold-api/` — running `ls scaffold-api/` reveals an intuitive layout: `specs/` (with `components/` subdirectories), `rules/`, `tests/`, `docs/`, `.github/workflows/`
 - [ ] `scaffold-api/package.json` exists with all Node.js tools as `devDependencies` (no global installs)
 - [ ] `npm install` is the single setup command — installs Spectral, Prism, Scalar CLI, openapi-typescript, openapi-fetch, openapi-generator-cli
 - [ ] `npm run` (no args) lists all available commands, organized by category
@@ -227,9 +227,9 @@ The API-first approach solves this by making a single OpenAPI contract the sourc
 
 **Acceptance Criteria:**
 
-- [ ] `ci/pipeline.yaml` exists as a valid GitHub Actions workflow
-- [ ] Pipeline triggers on push/PR to `specs/**`
-- [ ] Jobs include: `lint` (Spectral), `breaking-changes` (oasdiff on PRs), `contract-test` (Schemathesis against Prism), `generate-types` (openapi-typescript), `generate-docs` (Scalar)
+- [ ] `.github/workflows/ci.yml` exists as a valid GitHub Actions workflow (activates out-of-the-box when the scaffold is used as a project root)
+- [ ] Pipeline triggers on push to main and PR touching `specs/**`, `rules/**`, `tests/**`, or `package.json`
+- [ ] Jobs include: `lint` (Scalar validate + Spectral), `breaking-changes` (oasdiff on PRs), `contract-test` (Schemathesis against Prism), `functional-test` (Hurl against Prism), `security-scan` (OWASP ZAP, non-blocking), `generate-artifacts` (TypeScript types + bundled spec + docs HTML)
 - [ ] Lint failure blocks merge
 - [ ] Breaking change detection runs only on PRs and fails if breaking changes are found
 
