@@ -2,6 +2,8 @@
 
 Copy-paste curl commands to walk through every scaffold feature locally. Start to finish in ~10 minutes.
 
+> **Slide deck:** [https://victorhueni.github.io/scaffold-api-contract-first/](https://victorhueni.github.io/scaffold-api-contract-first/)
+
 ## Prerequisites
 
 - Node.js 18+
