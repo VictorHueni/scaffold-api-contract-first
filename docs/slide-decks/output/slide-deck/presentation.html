@@ -1674,6 +1674,112 @@
     grid-template-columns: repeat(8, 4px);
     grid-template-rows: repeat(12, 4px);
   }
+
+  /* ════════════════════════════════════════════
+     PROTOTYPE — Priority Context Components
+     Used in The Shift (04) priority variants.
+     ════════════════════════════════════════════ */
+
+  /* Shared: priority pill badge (top-right corner of sat-node) */
+  .prio-badge {
+    position: absolute;
+    top: -8px; right: -8px;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    font-weight: 500;
+    padding: 2px 5px;
+    border-radius: 10px;
+    line-height: 1;
+    z-index: 10;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+  }
+  .prio-badge.prio-p1 { background: var(--accent); color: #fff; }
+  .prio-badge.prio-p2 { background: #1d4ed8; color: #fff; }
+  .prio-badge.prio-p3 { background: #94a3b8; color: #fff; }
+
+  /* V1: bottom legend strip */
+  .prio-legend-strip {
+    position: absolute;
+    bottom: 24px; left: 48px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .prio-legend-strip .prio-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: var(--muted);
+    letter-spacing: 0.3px;
+  }
+  .prio-legend-strip .prio-pill {
+    font-family: var(--font-mono);
+    font-size: 7px;
+    font-weight: 500;
+    padding: 1px 5px;
+    border-radius: 10px;
+    line-height: 14px;
+  }
+  .prio-legend-strip .prio-pill.prio-p1 { background: var(--accent); color: #fff; }
+  .prio-legend-strip .prio-pill.prio-p2 { background: #1d4ed8; color: #fff; }
+  .prio-legend-strip .prio-pill.prio-p3 { background: #94a3b8; color: #fff; }
+
+  /* V2: Emphasis + Fade */
+  .s4-v2 .sat-node.prio-core {
+    border: 2px solid var(--accent);
+    background: var(--accent-lt);
+  }
+  .s4-v2 .sat-node.prio-secondary { opacity: 0.4; }
+  .s4-v2 .sat-node.prio-optional  { opacity: 0.2; }
+  .s4-v2 .prio-reason {
+    font-family: var(--font-mono);
+    font-size: 7px;
+    color: var(--muted);
+    letter-spacing: 0.3px;
+    text-align: center;
+    margin-top: 2px;
+    font-style: italic;
+    display: block;
+  }
+  .s4-v2 .prio-note {
+    position: absolute;
+    bottom: 24px; left: 48px;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: var(--dim);
+    letter-spacing: 0.5px;
+  }
+
+  /* V3: Colored border rings + SVG-line legend */
+  .s4-v3 .sat-node.prio-core      { border: 2px solid var(--accent); }
+  .s4-v3 .sat-node.prio-secondary { border: 2px dashed #1d4ed8; }
+  .s4-v3 .sat-node.prio-optional  { border: 1px dashed #94a3b8; opacity: 0.6; }
+  .s4-v3 .prio-legend {
+    position: absolute;
+    bottom: 24px; left: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .s4-v3 .prio-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: var(--muted);
+  }
+  .s4-v3 .prio-legend-swatch {
+    width: 22px;
+    height: 0;
+    flex-shrink: 0;
+  }
+  .s4-v3 .prio-legend-swatch.l-p1 { border-top: 2px solid var(--accent); }
+  .s4-v3 .prio-legend-swatch.l-p2 { border-top: 2px dashed #1d4ed8; }
+  .s4-v3 .prio-legend-swatch.l-p3 { border-top: 1px dashed #94a3b8; }
 /* ── Baseline: mobile responsive scaling ── */
 @media (max-width: 980px) {
   body:not(.presenting) {
@@ -1907,72 +2013,93 @@
     <div class="hub-file">openapi.yaml</div>
     <div class="hub-label">OpenAPI Spec</div>
   </div>
-  <!-- Satellites positioned via JS -->
-  <!-- Prism (Stoplight/SmartBear) -->
+
+  <!-- Prism — P1 -->
   <div class="sat-node" id="sat0" style="left:82%;top:47%">
+    <div class="prio-badge prio-p1">P1</div>
     <a href="https://docs.stoplight.io/docs/prism/674b27b261c3c-overview" target="_blank">
       <div class="sat-icon icon-lg"><img src="https://cdn.prod.website-files.com/6320e912264435aca2ab0351/64e3b752b85041d8632ea08c_Stoplight%20SmartBear%20Logo_Light.svg" alt="Prism"></div>
       <span class="sat-tool">Prism</span>
       <span class="sat-desc">Mock Server</span>
     </a>
   </div>
-  <!-- TypeScript -->
+
+  <!-- TypeScript — P3 -->
   <div class="sat-node" id="sat1" style="left:76%;top:72%">
+    <div class="prio-badge prio-p3">P3</div>
     <a href="https://www.typescriptlang.org/docs/" target="_blank">
       <div class="sat-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg" alt="TypeScript"></div>
       <span class="sat-tool">TypeScript</span>
       <span class="sat-desc">Client SDK</span>
     </a>
   </div>
-  <!-- Spring Boot (Server Stubs) -->
+
+  <!-- Spring Boot — P3 -->
   <div class="sat-node" id="sat2" style="left:50%;top:84%">
+    <div class="prio-badge prio-p3">P3</div>
     <a href="https://openapi-generator.tech/docs/generators" target="_blank">
       <div class="sat-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/7/79/Spring_Boot.svg" alt="Spring Boot"></div>
       <span class="sat-tool">Server Stubs</span>
       <span class="sat-desc">Spring Boot</span>
     </a>
   </div>
-  <!-- Schemathesis -->
+
+  <!-- Schemathesis — P1 -->
   <div class="sat-node" id="sat3" style="left:24%;top:72%">
+    <div class="prio-badge prio-p1">P1</div>
     <a href="https://schemathesis.readthedocs.io/" target="_blank">
       <div class="sat-icon icon-lg"><img src="https://schemathesis.io/images/logo.svg" alt="Schemathesis"></div>
       <span class="sat-tool">Schemathesis</span>
       <span class="sat-desc">Contract Tests</span>
     </a>
   </div>
-  <!-- Hurl -->
+
+  <!-- Hurl — P2 -->
   <div class="sat-node" id="sat4" style="left:18%;top:47%">
+    <div class="prio-badge prio-p2">P2</div>
     <a href="https://hurl.dev/docs/manual.html" target="_blank">
       <div class="sat-icon"><img src="https://hurl.dev/assets/img/logo-light.svg" alt="Hurl"></div>
       <span class="sat-tool">Hurl</span>
       <span class="sat-desc">Functional Tests</span>
     </a>
   </div>
-  <!-- oasdiff -->
+
+  <!-- oasdiff — P1 -->
   <div class="sat-node" id="sat5" style="left:24%;top:22%">
+    <div class="prio-badge prio-p1">P1</div>
     <a href="https://www.oasdiff.com/docs" target="_blank">
       <div class="sat-icon"><img src="https://avatars.githubusercontent.com/u/128153573?s=200&v=4" alt="oasdiff"></div>
       <span class="sat-tool">oasdiff</span>
       <span class="sat-desc">Breaking Changes</span>
     </a>
   </div>
-  <!-- Spectral (Stoplight/SmartBear) -->
+
+  <!-- Spectral — P1 -->
   <div class="sat-node" id="sat6" style="left:50%;top:12%">
+    <div class="prio-badge prio-p1">P1</div>
     <a href="https://docs.stoplight.io/docs/spectral/674b27b261c3c-overview" target="_blank">
       <div class="sat-icon icon-lg"><img src="https://cdn.prod.website-files.com/6320e912264435aca2ab0351/64e3b752b85041d8632ea08c_Stoplight%20SmartBear%20Logo_Light.svg" alt="Spectral"></div>
       <span class="sat-tool">Spectral</span>
       <span class="sat-desc">Linting</span>
     </a>
   </div>
-  <!-- Scalar -->
+
+  <!-- Scalar — P2 -->
   <div class="sat-node" id="sat7" style="left:76%;top:22%">
+    <div class="prio-badge prio-p2">P2</div>
     <a href="https://github.com/scalar/scalar" target="_blank">
       <div class="sat-icon icon-lg"><img src="https://cdn.scalar.com/marketing/landing/logo-light.svg" alt="Scalar"></div>
       <span class="sat-tool">Scalar</span>
       <span class="sat-desc">API Docs</span>
     </a>
   </div>
-  <div class="tagline">One file. Everything else is generated.</div>
+
+  <div class="prio-legend-strip">
+    <div class="prio-legend-item"><span class="prio-pill prio-p1">P1</span>Core — adopt now</div>
+    <div class="prio-legend-item"><span class="prio-pill prio-p2">P2</span>Covered — we have an alternative</div>
+    <div class="prio-legend-item"><span class="prio-pill prio-p3">P3</span>Scoped — specific teams only</div>
+  </div>
+
   <div class="slide-number">5 / 14</div>
 </div>
 
@@ -2639,40 +2766,45 @@
     ]}
   ];
   const cardsEl = document.getElementById('agenda-cards');
-  agendaCategories.forEach(cat => {
-    const col = document.createElement('div');
-    col.className = 'card-col';
-    col.dataset.color = cat.color;
-    col.innerHTML = `<div class="card-col-header">${cat.header}</div>`;
-    cat.items.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'card-item';
-      card.innerHTML = `<div class="card-num">${item.n}</div><div class="card-text"><div class="card-label">${item.label}</div><div class="card-sub">${item.sub}</div></div>`;
-      col.appendChild(card);
+  if (cardsEl) {
+    agendaCategories.forEach(cat => {
+      const col = document.createElement('div');
+      col.className = 'card-col';
+      col.dataset.color = cat.color;
+      col.innerHTML = `<div class="card-col-header">${cat.header}</div>`;
+      cat.items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card-item';
+        card.innerHTML = `<div class="card-num">${item.n}</div><div class="card-text"><div class="card-label">${item.label}</div><div class="card-sub">${item.sub}</div></div>`;
+        col.appendChild(card);
+      });
+      cardsEl.appendChild(col);
     });
-    cardsEl.appendChild(col);
-  });
+  }
 
   // ── Hub diagram connection lines ──
   const svg = document.getElementById('connections-svg');
-  const cx = 480, cy = 270;
-  for (let i = 0; i < 8; i++) {
-    const node = document.getElementById('sat' + i);
-    const rect = node.getBoundingClientRect();
-    const slideRect = node.closest('.slide').getBoundingClientRect();
-    const nx = rect.left + rect.width / 2 - slideRect.left;
-    const ny = rect.top + rect.height / 2 - slideRect.top;
-    // Scale to viewBox
-    const sx = nx / slideRect.width * 960;
-    const sy = ny / slideRect.height * 540;
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', cx); line.setAttribute('y1', cy);
-    line.setAttribute('x2', sx); line.setAttribute('y2', sy);
-    line.setAttribute('stroke', '#006039');
-    line.setAttribute('stroke-width', '1.2');
-    line.setAttribute('stroke-dasharray', '6 4');
-    line.setAttribute('opacity', '0.5');
-    svg.appendChild(line);
+  if (svg) {
+    const cx = 480, cy = 270;
+    for (let i = 0; i < 8; i++) {
+      const node = document.getElementById('sat' + i);
+      if (!node) continue;
+      const rect = node.getBoundingClientRect();
+      const slideRect = node.closest('.slide').getBoundingClientRect();
+      const nx = rect.left + rect.width / 2 - slideRect.left;
+      const ny = rect.top + rect.height / 2 - slideRect.top;
+      // Scale to viewBox
+      const sx = nx / slideRect.width * 960;
+      const sy = ny / slideRect.height * 540;
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+      line.setAttribute('x2', sx); line.setAttribute('y2', sy);
+      line.setAttribute('stroke', '#006039');
+      line.setAttribute('stroke-width', '1.2');
+      line.setAttribute('stroke-dasharray', '6 4');
+      line.setAttribute('opacity', '0.5');
+      svg.appendChild(line);
+    }
   }
 
   // ── Fullscreen presentation mode ──

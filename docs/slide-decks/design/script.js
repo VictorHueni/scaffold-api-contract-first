@@ -51,40 +51,45 @@
     ]}
   ];
   const cardsEl = document.getElementById('agenda-cards');
-  agendaCategories.forEach(cat => {
-    const col = document.createElement('div');
-    col.className = 'card-col';
-    col.dataset.color = cat.color;
-    col.innerHTML = `<div class="card-col-header">${cat.header}</div>`;
-    cat.items.forEach(item => {
-      const card = document.createElement('div');
-      card.className = 'card-item';
-      card.innerHTML = `<div class="card-num">${item.n}</div><div class="card-text"><div class="card-label">${item.label}</div><div class="card-sub">${item.sub}</div></div>`;
-      col.appendChild(card);
+  if (cardsEl) {
+    agendaCategories.forEach(cat => {
+      const col = document.createElement('div');
+      col.className = 'card-col';
+      col.dataset.color = cat.color;
+      col.innerHTML = `<div class="card-col-header">${cat.header}</div>`;
+      cat.items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card-item';
+        card.innerHTML = `<div class="card-num">${item.n}</div><div class="card-text"><div class="card-label">${item.label}</div><div class="card-sub">${item.sub}</div></div>`;
+        col.appendChild(card);
+      });
+      cardsEl.appendChild(col);
     });
-    cardsEl.appendChild(col);
-  });
+  }
 
   // ── Hub diagram connection lines ──
   const svg = document.getElementById('connections-svg');
-  const cx = 480, cy = 270;
-  for (let i = 0; i < 8; i++) {
-    const node = document.getElementById('sat' + i);
-    const rect = node.getBoundingClientRect();
-    const slideRect = node.closest('.slide').getBoundingClientRect();
-    const nx = rect.left + rect.width / 2 - slideRect.left;
-    const ny = rect.top + rect.height / 2 - slideRect.top;
-    // Scale to viewBox
-    const sx = nx / slideRect.width * 960;
-    const sy = ny / slideRect.height * 540;
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', cx); line.setAttribute('y1', cy);
-    line.setAttribute('x2', sx); line.setAttribute('y2', sy);
-    line.setAttribute('stroke', '#006039');
-    line.setAttribute('stroke-width', '1.2');
-    line.setAttribute('stroke-dasharray', '6 4');
-    line.setAttribute('opacity', '0.5');
-    svg.appendChild(line);
+  if (svg) {
+    const cx = 480, cy = 270;
+    for (let i = 0; i < 8; i++) {
+      const node = document.getElementById('sat' + i);
+      if (!node) continue;
+      const rect = node.getBoundingClientRect();
+      const slideRect = node.closest('.slide').getBoundingClientRect();
+      const nx = rect.left + rect.width / 2 - slideRect.left;
+      const ny = rect.top + rect.height / 2 - slideRect.top;
+      // Scale to viewBox
+      const sx = nx / slideRect.width * 960;
+      const sy = ny / slideRect.height * 540;
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+      line.setAttribute('x2', sx); line.setAttribute('y2', sy);
+      line.setAttribute('stroke', '#006039');
+      line.setAttribute('stroke-width', '1.2');
+      line.setAttribute('stroke-dasharray', '6 4');
+      line.setAttribute('opacity', '0.5');
+      svg.appendChild(line);
+    }
   }
 
   // ── Fullscreen presentation mode ──
