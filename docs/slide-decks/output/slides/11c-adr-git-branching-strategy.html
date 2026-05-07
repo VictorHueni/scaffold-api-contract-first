@@ -1,0 +1,214 @@
+<div class="slide s-git-strategy">
+  <div class="section-label">YOUR DECISIONS</div>
+  <h2 class="slide-title">Git Branching Strategy for the Contract</h2>
+
+  <div class="git-strategy-grid">
+
+    <!-- ── Option A ── -->
+    <div class="git-card git-a">
+      <div class="git-hdr">
+        <span class="git-letter">A</span>
+        <span class="git-name">Trunk + Short-lived<br>Feature Branches</span>
+        <span class="git-badge">Recommended</span>
+      </div>
+      <div class="git-diagram">
+        <svg viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+          <!-- main line -->
+          <line x1="16" y1="60" x2="184" y2="60" stroke="#006039" stroke-width="2.5"/>
+          <circle cx="16" cy="60" r="5" fill="#006039"/>
+          <circle cx="90" cy="60" r="5" fill="#006039"/>
+          <circle cx="154" cy="60" r="5" fill="#006039"/>
+          <circle cx="184" cy="60" r="5" fill="#e0e0e0" stroke="#006039" stroke-width="1.5"/>
+          <!-- feature 1 -->
+          <polyline points="38,60 44,110 80,110 90,60" stroke="#4ade80" stroke-width="2" fill="none" stroke-linejoin="round"/>
+          <circle cx="44" cy="110" r="4" fill="#4ade80"/>
+          <circle cx="62" cy="110" r="4" fill="#4ade80"/>
+          <circle cx="80" cy="110" r="4" fill="#4ade80"/>
+          <!-- feature 2 -->
+          <polyline points="108,60 114,110 144,110 154,60" stroke="#4ade80" stroke-width="2" fill="none" stroke-linejoin="round"/>
+          <circle cx="114" cy="110" r="4" fill="#4ade80"/>
+          <circle cx="129" cy="110" r="4" fill="#4ade80"/>
+          <circle cx="144" cy="110" r="4" fill="#4ade80"/>
+          <!-- Labels -->
+          <text x="18" y="48" font-size="9" fill="#006039" font-weight="700" font-family="monospace">main</text>
+          <text x="83" y="52" font-size="8" fill="#006039" font-family="monospace" font-weight="700">PR</text>
+          <text x="147" y="52" font-size="8" fill="#006039" font-family="monospace" font-weight="700">PR</text>
+          <text x="36" y="128" font-size="7.5" fill="#16a34a" font-family="monospace">contract/feat-1</text>
+          <text x="104" y="128" font-size="7.5" fill="#16a34a" font-family="monospace">contract/feat-2</text>
+          <!-- Role annotations -->
+          <text x="16" y="175" font-size="7" fill="#999" font-family="monospace">① SA creates branch</text>
+          <text x="16" y="192" font-size="7" fill="#999" font-family="monospace">② SA designs &amp; commits</text>
+          <text x="16" y="209" font-size="7" fill="#999" font-family="monospace">③ Opens PR → ESB reviews</text>
+          <text x="16" y="226" font-size="7" fill="#999" font-family="monospace">④ Merge → APIC Dev updated</text>
+        </svg>
+      </div>
+      <div class="git-traits">
+        <div class="git-trait pro">Small, reviewable diffs per PR</div>
+        <div class="git-trait pro">PR is the natural SA→ESB handoff</div>
+        <div class="git-trait warn">Branches must stay short-lived</div>
+      </div>
+    </div>
+
+    <!-- ── Option B ── -->
+    <div class="git-card git-b">
+      <div class="git-hdr">
+        <span class="git-letter">B</span>
+        <span class="git-name">Long-lived<br>Design Branch</span>
+      </div>
+      <div class="git-diagram">
+        <svg viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+          <!-- main line -->
+          <line x1="16" y1="50" x2="184" y2="50" stroke="#1d4ed8" stroke-width="2.5"/>
+          <circle cx="16" cy="50" r="5" fill="#1d4ed8"/>
+          <circle cx="110" cy="50" r="5" fill="#1d4ed8"/>
+          <circle cx="184" cy="50" r="5" fill="#1d4ed8"/>
+          <!-- design branch (long-lived, many commits) -->
+          <polyline points="16,50 22,95" stroke="#93c5fd" stroke-width="2" fill="none"/>
+          <line x1="22" y1="95" x2="178" y2="95" stroke="#93c5fd" stroke-width="2"/>
+          <circle cx="22" cy="95" r="3" fill="#93c5fd"/>
+          <circle cx="36" cy="95" r="3" fill="#93c5fd"/>
+          <circle cx="50" cy="95" r="3" fill="#93c5fd"/>
+          <circle cx="64" cy="95" r="3" fill="#93c5fd"/>
+          <circle cx="78" cy="95" r="3" fill="#93c5fd"/>
+          <circle cx="92" cy="95" r="3" fill="#93c5fd"/>
+          <circle cx="106" cy="95" r="3" fill="#93c5fd"/>
+          <circle cx="120" cy="95" r="3" fill="#93c5fd"/>
+          <circle cx="134" cy="95" r="3" fill="#93c5fd"/>
+          <circle cx="148" cy="95" r="3" fill="#93c5fd"/>
+          <circle cx="162" cy="95" r="3" fill="#93c5fd"/>
+          <circle cx="178" cy="95" r="3" fill="#93c5fd"/>
+          <!-- PR arrows (sprint boundaries) -->
+          <line x1="110" y1="92" x2="110" y2="54" stroke="#1d4ed8" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <polygon points="110,50 107,59 113,59" fill="#1d4ed8"/>
+          <line x1="184" y1="92" x2="184" y2="54" stroke="#1d4ed8" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <polygon points="184,50 181,59 187,59" fill="#1d4ed8"/>
+          <!-- Labels -->
+          <text x="18" y="38" font-size="9" fill="#1d4ed8" font-weight="700" font-family="monospace">main</text>
+          <text x="22" y="115" font-size="9" fill="#3b82f6" font-weight="700" font-family="monospace">design</text>
+          <text x="102" y="43" font-size="8" fill="#1d4ed8" font-family="monospace" font-weight="700">PR</text>
+          <text x="176" y="43" font-size="8" fill="#1d4ed8" font-family="monospace" font-weight="700">PR</text>
+          <!-- Sprint labels -->
+          <text x="80" y="140" font-size="7" fill="#999" font-family="monospace">sprint end</text>
+          <text x="154" y="140" font-size="7" fill="#999" font-family="monospace">sprint end</text>
+          <!-- Role annotations -->
+          <text x="16" y="175" font-size="7" fill="#999" font-family="monospace">① SA works freely on design</text>
+          <text x="16" y="192" font-size="7" fill="#999" font-family="monospace">② Batch PR at sprint end</text>
+          <text x="16" y="209" font-size="7" fill="#999" font-family="monospace">③ ESB reviews larger diff</text>
+          <text x="16" y="226" font-size="7" fill="#999" font-family="monospace">④ design never deleted</text>
+        </svg>
+      </div>
+      <div class="git-traits">
+        <div class="git-trait pro">SA iterates freely, no review friction</div>
+        <div class="git-trait warn">Large batch diffs, harder to review</div>
+        <div class="git-trait warn">Branch drifts, conflicts accumulate</div>
+      </div>
+    </div>
+
+    <!-- ── Option C ── -->
+    <div class="git-card git-c">
+      <div class="git-hdr">
+        <span class="git-letter">C</span>
+        <span class="git-name">Gitflow<br>(develop + features)</span>
+        <span class="git-badge">Multi-env</span>
+      </div>
+      <div class="git-diagram">
+        <svg viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+          <!-- main line -->
+          <line x1="16" y1="30" x2="184" y2="30" stroke="#7c3aed" stroke-width="2.5"/>
+          <circle cx="16" cy="30" r="5" fill="#7c3aed"/>
+          <circle cx="184" cy="30" r="5" fill="#7c3aed"/>
+          <!-- develop line -->
+          <polyline points="16,30 22,70 170,70 184,30" stroke="#a78bfa" stroke-width="2" fill="none" stroke-linejoin="round"/>
+          <circle cx="22" cy="70" r="4" fill="#a78bfa"/>
+          <circle cx="82" cy="70" r="4" fill="#a78bfa"/>
+          <circle cx="120" cy="70" r="4" fill="#a78bfa"/>
+          <circle cx="170" cy="70" r="4" fill="#a78bfa"/>
+          <!-- feat-1 (off develop) -->
+          <polyline points="32,70 38,115 76,115 82,70" stroke="#ddd6fe" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+          <circle cx="38" cy="115" r="3.5" fill="#ddd6fe"/>
+          <circle cx="57" cy="115" r="3.5" fill="#ddd6fe"/>
+          <circle cx="76" cy="115" r="3.5" fill="#ddd6fe"/>
+          <!-- feat-2 (off develop) -->
+          <polyline points="96,70 102,115 114,115 120,70" stroke="#ddd6fe" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+          <circle cx="102" cy="115" r="3.5" fill="#ddd6fe"/>
+          <circle cx="108" cy="115" r="3.5" fill="#ddd6fe"/>
+          <circle cx="114" cy="115" r="3.5" fill="#ddd6fe"/>
+          <!-- Labels -->
+          <text x="18" y="20" font-size="9" fill="#7c3aed" font-weight="700" font-family="monospace">main</text>
+          <text x="24" y="62" font-size="9" fill="#7c3aed" font-weight="700" font-family="monospace">develop</text>
+          <text x="30" y="132" font-size="7" fill="#7c3aed" font-family="monospace">contract/feat-1</text>
+          <text x="96" y="132" font-size="7" fill="#7c3aed" font-family="monospace">feat-2</text>
+          <!-- PR labels -->
+          <text x="74" y="63" font-size="7" fill="#7c3aed" font-family="monospace" font-weight="700">PR</text>
+          <text x="112" y="63" font-size="7" fill="#7c3aed" font-family="monospace" font-weight="700">PR</text>
+          <text x="167" y="22" font-size="7" fill="#7c3aed" font-family="monospace" font-weight="700">PR</text>
+          <!-- Role annotations -->
+          <text x="16" y="175" font-size="7" fill="#999" font-family="monospace">① SA branches off develop</text>
+          <text x="16" y="192" font-size="7" fill="#999" font-family="monospace">② PR to develop → ESB reviews</text>
+          <text x="16" y="209" font-size="7" fill="#999" font-family="monospace">③ develop→main = deploy gate</text>
+          <text x="16" y="226" font-size="7" fill="#999" font-family="monospace">④ Scales to STG/PROD APIC</text>
+        </svg>
+      </div>
+      <div class="git-traits">
+        <div class="git-trait pro">In-progress vs deployed clearly separated</div>
+        <div class="git-trait pro">Scales to Staging + Prod APIC envs</div>
+        <div class="git-trait warn">Two PR layers — overhead today</div>
+      </div>
+    </div>
+
+    <!-- ── Option D ── -->
+    <div class="git-card git-d">
+      <div class="git-hdr">
+        <span class="git-letter">D</span>
+        <span class="git-name">Separate Contract Repo<br>+ CI Deploy</span>
+        <span class="git-badge">Future</span>
+      </div>
+      <div class="git-diagram">
+        <svg viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg">
+          <!-- contract-repo lane header -->
+          <rect x="6" y="14" width="110" height="14" rx="3" fill="#f1f5f9"/>
+          <text x="10" y="25" font-size="7.5" fill="#475569" font-weight="700" font-family="monospace">contract-repo</text>
+          <!-- main line in contract-repo -->
+          <line x1="16" y1="55" x2="184" y2="55" stroke="#475569" stroke-width="2.5"/>
+          <circle cx="16" cy="55" r="5" fill="#475569"/>
+          <circle cx="90" cy="55" r="5" fill="#475569"/>
+          <circle cx="150" cy="55" r="5" fill="#475569"/>
+          <circle cx="184" cy="55" r="5" fill="#e0e0e0" stroke="#475569" stroke-width="1.5"/>
+          <!-- feature branch -->
+          <polyline points="38,55 44,100 80,100 90,55" stroke="#94a3b8" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+          <circle cx="44" cy="100" r="3.5" fill="#94a3b8"/>
+          <circle cx="62" cy="100" r="3.5" fill="#94a3b8"/>
+          <circle cx="80" cy="100" r="3.5" fill="#94a3b8"/>
+          <text x="36" y="116" font-size="7" fill="#64748b" font-family="monospace">contract/feat</text>
+          <text x="84" y="47" font-size="8" fill="#475569" font-family="monospace" font-weight="700">PR</text>
+          <!-- CI arrows -->
+          <line x1="90" y1="58" x2="90" y2="148" stroke="#475569" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <polygon points="90,153 87,145 93,145" fill="#475569"/>
+          <line x1="150" y1="58" x2="150" y2="148" stroke="#475569" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <polygon points="150,153 147,145 153,145" fill="#475569"/>
+          <text x="93" y="112" font-size="7.5" fill="#475569" font-family="monospace">CI</text>
+          <text x="153" y="112" font-size="7.5" fill="#475569" font-family="monospace">CI</text>
+          <!-- apic-bitbucket lane header -->
+          <rect x="6" y="156" width="150" height="14" rx="3" fill="#ecfdf5"/>
+          <text x="10" y="167" font-size="7.5" fill="#065f46" font-weight="700" font-family="monospace">apic-bitbucket (target)</text>
+          <!-- apic commits (CI-pushed) -->
+          <circle cx="90" cy="178" r="4.5" fill="#065f46"/>
+          <circle cx="150" cy="178" r="4.5" fill="#065f46"/>
+          <text x="66" y="195" font-size="7" fill="#065f46" font-family="monospace">auto-pushed</text>
+          <text x="126" y="195" font-size="7" fill="#065f46" font-family="monospace">auto-pushed</text>
+          <!-- Role annotations -->
+          <text x="16" y="225" font-size="7" fill="#999" font-family="monospace">① SA works in contract-repo</text>
+          <text x="16" y="242" font-size="7" fill="#999" font-family="monospace">② CI pushes spec to APIC on merge</text>
+        </svg>
+      </div>
+      <div class="git-traits">
+        <div class="git-trait pro">Contract decoupled from APIC infra</div>
+        <div class="git-trait warn">CI→APIC not yet available on IBM</div>
+        <div class="git-trait info">Best long-term target architecture</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="slide-number"></div>
+</div>
