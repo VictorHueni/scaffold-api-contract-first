@@ -555,7 +555,7 @@
 
   /* P1 nodes: dark background so white logos are visible */
   .s4 .sat-node:has(.prio-badge.prio-p1) {
-    background: #2d2d2d;
+    background: #696969;
     border-color: var(--accent);
   }
   .s4 .sat-node:has(.prio-badge.prio-p1) .sat-tool {
