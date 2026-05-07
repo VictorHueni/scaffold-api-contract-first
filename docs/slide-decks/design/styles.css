@@ -553,6 +553,21 @@
     font-style: italic;
   }
 
+  /* P1 nodes: dark background so white logos are visible */
+  .s4 .sat-node:has(.prio-badge.prio-p1) {
+    background: #111;
+    border-color: var(--accent);
+  }
+  .s4 .sat-node:has(.prio-badge.prio-p1) .sat-tool {
+    color: #fff;
+  }
+  .s4 .sat-node:has(.prio-badge.prio-p1) .sat-desc {
+    color: rgba(255,255,255,0.55);
+  }
+  .s4 .sat-node:has(.prio-badge.prio-p1) a:hover .sat-tool {
+    color: #4ade80;
+  }
+
   /* ════════════════════════════════════════════
      SLIDE 6: DEMO AGENDA
      ════════════════════════════════════════════ */
